@@ -110,7 +110,7 @@ Timestamp:  26 une
 ---------------------------------------------------------------------
 Username: samrat 2
 PC Name: DESKTOP-123BC
-SID: S-1
+SID: 
 Timestamp:  26 une
 ---------------------------------------------------------------------
 Username: gyt
@@ -176,4 +176,9 @@ Timestamp:  26 une
 Username: nikhil
 PC Name: DESKTOP-123BC
 SID: S-1-5-21-1096241393-3758042724-2573035531-1001
+Timestamp:  26 une
+---------------------------------------------------------------------
+Username: immortal
+PC Name: DESKTOP-123BC
+SID: S-1-5-21-1003439299-3064038423-3656614067-1000
 Timestamp:  26 une
