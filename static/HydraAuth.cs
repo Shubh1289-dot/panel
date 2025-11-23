@@ -8,8 +8,8 @@ public static class HydraAuth
 {
     public static dynamic response;
 
-    private static readonly string apiUrl = "https://hydraauth.onrender.com/client_login";
-    private static readonly string messageUrl = "https://hydraauth.onrender.com/get_messages";
+    private static readonly string apiUrl = "https://frconsole.onrender.com/client_login";
+    private static readonly string messageUrl = "https://frconsole.onrender.com/get_messages";
     private static readonly string category = "ADMIN"; // <- Change this if needed
 
     private static string GetHWID()
@@ -74,4 +74,5 @@ public static class HydraAuth
 
         return null;
     }
+
 }
