@@ -7,8 +7,8 @@ app = Flask(__name__)
 app.secret_key = os.urandom(24)
 
 # Admin credentials
-ADMIN_USERNAME = "RTX"
-ADMIN_PASSWORD = "3050"
+ADMIN_USERNAME = "FR"
+ADMIN_PASSWORD = "SHUBH"
 
 # JSONBin Config
 JSONBIN_API_KEY = "$2a$10$R74G8pPzaRy0kLrcmfIYO.jvMl0T8JA3XQVaRHQNqYWsyO8ltxLr."
