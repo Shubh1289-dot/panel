@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>User Management</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body { background-color: #eef1f7; font-family: 'Segoe UI', sans-serif; }
+    .sidebar {
+      width: 240px; height: 100vh; position: fixed; background-color: #fff;
+      border-right: 1px solid #ddd; padding: 20px 0; border-top-right-radius: 15px;
+      border-bottom-right-radius: 15px; box-shadow: 2px 0 8px rgba(0, 0, 0, 0.05);
+    }
+    .sidebar h5, .sidebar p { text-align: center; }
+    .sidebar a {
+      display: block; padding: 12px 20px; color: #333; text-decoration: none;
+      border-radius: 10px; margin: 6px 12px; transition: 0.3s;
+    }
+    .sidebar a.active, .sidebar a:hover { background-color: #007bff; color: white; }
+    .main {
+      margin-left: 260px; padding: 30px 40px; background-color: #f9fbff;
+      border-top-left-radius: 15px; border-bottom-left-radius: 15px; min-height: 100vh;
+    }
+    .form-label { font-weight: 600; }
+    .section { display: none; }
+    .section.active {
+      display: block; background-color: white; padding: 25px;
+      border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    }
+    .toast {
+      position: fixed; bottom: 20px; right: -300px; min-width: 250px;
+      background-color: #333; color: white; padding: 12px 24px;
+      border-radius: 6px; box-shadow: 0 0 10px rgba(0,0,0,0.3);
+      animation: slideIn 0.5s forwards; z-index: 1000;
+    }
+    @keyframes slideIn {
+      from { right: -300px; } to { right: 20px; }
+    }
+    .user-table { font-size: 14px; }
+
+
+  .download-title {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 1.1rem;
+    font-weight: bold;
+    color: #2c3e50;
+    margin-top: 1rem;
+    margin-bottom: 0.3rem;
+  }
+
+  .download-desc {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 0.95rem;
+    color: #34495e;
+    margin-bottom: 0.4rem;
+  }
+
+  .developer {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #e67e22;
+  background-color: #fdf2e9;
+  padding: 4px 8px;
+  border-radius: 4px;
+  display: inline-block;
+  margin-bottom: 1rem; /* Increase from 0.6rem to 1rem */
+}
+  }
+  </style>
+</head>
+<body>
+
+<div class="sidebar">
+  <h5 class="text-primary">User Manager</h5>
+  <p class="text-muted">Sagar</p>
+  <a href="#" onclick="showSection('add', event)">➕ Add User</a>
+  <a href="#" onclick="showSection('delete', event)">❌ Delete User</a>
+  <a href="#" onclick="showSection('pause', event)">⏸️ Pause User</a>
+  <a href="#" onclick="showSection('info', event)">ℹ️ Info User</a>
+  <a href="#" onclick="showSection('show', event)">📋 Show Users</a>
+  <a href="#" onclick="showSection('reset', event)">🔄 Reset HWID</a>
+ <a href="#" onclick="showSection('sendmsg', event)">✉️ Send Message</a>
+<a href="#" onclick="showSection('project', event)">📁 Project Name</a>
+
+</div>
+</div>
+
+<div class="main">
+  <div class="mb-4">
+    <label for="appSelect" class="form-label">Select Application</label>
+    <select class="form-select" id="appSelect" onchange="refreshUsers()">
+      <option value="SAGAR">SAGAR</option>
+      <option value="ADMIN">ADMIN</option>
+      <option value="TESTER">TESTER</option>
+    </select>
+  </div>
+
+  <!-- Add User -->
+  <div id="add" class="section active">
+    <h4>➕ Add User</h4>
+    <form onsubmit="addUser(event)">
+      <div class="mb-2"><input required type="text" class="form-control" placeholder="Username" id="add_username"></div>
+      <div class="mb-2"><input required type="password" class="form-control" placeholder="Password" id="add_password"></div>
+      <div class="mb-2"><input required type="date" class="form-control" id="add_expiry"></div>
+      <button class="btn btn-success">Add</button>
+    </form>
+  </div>
+
+  <!-- Delete User -->
+  <div id="delete" class="section">
+    <h4>❌ Delete User</h4>
+    <form onsubmit="deleteUser(event)">
+      <div class="mb-2"><input required type="text" class="form-control" placeholder="Username" id="delete_username"></div>
+      <button class="btn btn-danger">Delete</button>
+    </form>
+  </div>
+
+  <!-- Pause User -->
+  <div id="pause" class="section">
+    <h4>⏸️ Pause / Unpause User</h4>
+    <form onsubmit="pauseUser(event, 'pause')">
+      <div class="mb-2"><input required type="text" class="form-control" placeholder="Username" id="pause_username"></div>
+      <button class="btn btn-warning me-2">Pause</button>
+      <button type="button" class="btn btn-secondary" onclick="pauseUser(event, 'unpause')">Unpause</button>
+    </form>
+  </div>
+
+  <!-- Info User -->
+  <div id="info" class="section">
+    <h4>ℹ️ User Info</h4>
+    <form onsubmit="infoUser(event)">
+      <div class="mb-2"><input required type="text" class="form-control" placeholder="Username" id="info_username"></div>
+      <button class="btn btn-primary">Get Info</button>
+    </form>
+    <div id="infoPanel" class="mt-3"></div>
+  </div>
+
+  <!-- Show Users -->
+  <div id="show" class="section">
+    <h4>📋 All Users</h4>
+    <table class="table table-bordered user-table">
+      <thead class="table-light">
+        <tr>
+          <th>Username</th>
+          <th>Password</th>
+          <th>HWID</th>
+          <th>Expiry</th>
+          <th>Created</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody id="userList"></tbody>
+    </table>
+  </div>
+
+  <!-- Reset HWID -->
+  <div id="reset" class="section">
+    <h4>🔄 Reset HWID</h4>
+    <form onsubmit="resetHWID(event)">
+      <div class="mb-2">
+        <input required type="text" class="form-control" placeholder="Username" id="reset_username">
+      </div>
+      <button class="btn btn-dark">Reset HWID</button>
+    </form>
+  </div>
+
+<!-- Send Message -->
+<div id="sendmsg" class="section">
+  <h4>✉️ Send Message</h4>
+
+  <!-- Load Messages Form -->
+  <form onsubmit="loadUserMessages(event)" class="mb-3">
+    <div class="input-group">
+      <input required type="text" class="form-control" placeholder="Enter Username" id="message_username">
+      <button class="btn btn-secondary">🔄 Load</button>
+    </div>
+  </form>
+
+  <!-- Send Message Form -->
+  <form onsubmit="sendMessage(event)" class="mb-3">
+    <div class="mb-2">
+      <textarea required class="form-control" rows="2" placeholder="Type your message..." id="message_text"></textarea>
+    </div>
+    <button class="btn btn-primary">Send</button>
+  </form>
+
+  <!-- Message List -->
+  <div id="messageList" style="max-height: 400px; overflow-y: auto; border: 1px solid #ccc; padding: 10px; border-radius: 8px;">
+    <!-- Messages will appear here -->
+  </div>
+</div>
+
+<!-- Project Name -->
+<div id="project" class="section">
+  <h4>📁 Project Name</h4>
+  <div class="mb-3 position-relative">
+    <pre id="loginCode" class="bg-dark text-white p-3 rounded" style="font-family: monospace; white-space: pre-wrap; word-break: break-word; min-height: 180px;">
+HydraAuth.login(guna2TextBox1.Text, guna2TextBox2.Text);
+
+if (HydraAuth.response.status == "success")
+{
+    string message = HydraAuth.GetLatestMessage(guna2TextBox1.Text); // ← Username pass karo
+
+    if (!string.IsNullOrEmpty(message))
+    {
+        var msgDialog = new Guna2MessageDialog();
+        msgDialog.Caption = "Admin Message";
+        msgDialog.Text = message;
+        msgDialog.Icon = MessageDialogIcon.Warning; // Optional Icon
+        msgDialog.Buttons = MessageDialogButtons.OK;
+        msgDialog.Show();
+
+    }
+
+    Form2 main = new Form2();  // ← Proceed to Form2
+    main.Show();
+    this.Hide();
+}
+else
+{
+    status.Text = "Status: " + HydraAuth.response.message;
+}
+    </pre>
+    <button class="btn btn-sm btn-outline-light position-absolute top-0 end-0 m-2" onclick="copyCode()">📋</button>
+  </div>
+
+  <!-- 👇 Styled Description and Developer Info -->
+<p class="developer">Developer: Sagar</p>
+<div style="margin-bottom: 12px;"></div>
+<a href="/static/HydraAuth.cs" download class="btn btn-success btn-sm">⬇️ Download HydraAuth.cs</a>
+</div>
+</div>
+
+<div id="toast" class="toast" style="display:none;"></div>
+
+<script>
+function showSection(id, e) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  document.querySelectorAll('.sidebar a').forEach(a => a.classList.remove('active'));
+  if (e) e.target.classList.add('active');
+  if (id === 'show') refreshUsers();
+}
+
+function showToast(msg) {
+  const toast = document.getElementById('toast');
+  toast.innerText = msg;
+  toast.style.display = 'block';
+  toast.style.animation = 'slideIn 0.5s forwards';
+  setTimeout(() => toast.style.right = '-300px', 3000);
+}
+
+function getCategory() {
+  return document.getElementById('appSelect').value;
+}
+
+function addUser(e) {
+  e.preventDefault();
+  fetch('/add_user', {
+    method: 'POST',
+    body: new URLSearchParams({
+      category: getCategory(),
+      username: document.getElementById('add_username').value,
+      password: document.getElementById('add_password').value,
+      expiry: document.getElementById('add_expiry').value
+    })
+  }).then(res => res.json()).then(d => {
+    showToast(d.message);
+    if (d.status === 'success') refreshUsers();
+  });
+}
+
+function deleteUser(e) {
+  e.preventDefault();
+  fetch('/delete_user', {
+    method: 'POST',
+    body: new URLSearchParams({
+      category: getCategory(),
+      username: document.getElementById('delete_username').value
+    })
+  }).then(res => res.json()).then(d => {
+    showToast(d.message);
+    if (d.status === 'success') refreshUsers();
+  });
+}
+
+function pauseUser(e, action) {
+  e.preventDefault();
+  fetch('/pause_user', {
+    method: 'POST',
+    body: new URLSearchParams({
+      category: getCategory(),
+      username: document.getElementById('pause_username').value,
+      action: action
+    })
+  }).then(res => res.json()).then(d => showToast(d.message));
+}
+
+function infoUser(e) {
+  e.preventDefault();
+  fetch('/info_user', {
+    method: 'POST',
+    body: new URLSearchParams({
+      category: getCategory(),
+      username: document.getElementById('info_username').value
+    })
+  }).then(res => res.json()).then(d => {
+    if (d.status === 'success') {
+      const u = d.data;
+      document.getElementById('infoPanel').innerHTML = `
+        <div class="card mt-3"><div class="card-body">
+          <p><b>User:</b> ${u.Username}</p>
+          <p><b>Pass:</b> ${u.Password}</p>
+          <p><b>HWID:</b> ${u.HWID || 'None'}</p>
+          <p><b>Expiry:</b> ${u.Expiry}</p>
+          <p><b>Created:</b> ${u.CreatedAt}</p>
+          <p><b>Status:</b> ${u.Status || 'Unknown'}</p>
+        </div></div>
+      `;
+    } else {
+      showToast(d.message);
+    }
+  });
+}
+
+function refreshUsers() {
+  fetch('/get_users', {
+    method: 'POST',
+    body: new URLSearchParams({ category: getCategory() })
+  }).then(res => res.json()).then(users => {
+    const table = document.getElementById('userList');
+    table.innerHTML = '';
+    users.forEach(u => {
+      table.innerHTML += `<tr>
+        <td>${u.Username}</td>
+        <td>${u.Password}</td>
+        <td>${u.HWID || 'None'}</td>
+        <td>${u.Expiry}</td>
+        <td>${u.CreatedAt}</td>
+        <td>${u.Status || 'Unknown'}</td>
+      </tr>`;
+    });
+  });
+}
+
+function resetHWID(e) {
+  e.preventDefault();
+  fetch('/reset_hwid', {
+    method: 'POST',
+    body: new URLSearchParams({
+      category: getCategory(),
+      username: document.getElementById('reset_username').value
+    })
+  }).then(res => res.json()).then(d => showToast(d.message));
+}
+
+function sendMessage(e) {
+  e.preventDefault();
+  const user = document.getElementById("message_username").value.trim();
+  const msg = document.getElementById("message_text").value.trim();
+
+  fetch('/send_message', {
+    method: 'POST',
+    body: new URLSearchParams({
+      username: user,
+      message: msg
+    })
+  })
+  .then(res => res.json())
+  .then(d => {
+    showToast(d.message);
+    if (d.status === 'success') {
+      document.getElementById("message_text").value = '';
+      loadMessages(user);
+    }
+  });
+}
+function loadUserMessages(e) {
+  e.preventDefault();
+  const username = document.getElementById("message_username").value.trim();
+  if (username) {
+    loadMessages(username);
+  }
+}
+
+document.getElementById("message_username").addEventListener("input", () => {
+  const username = document.getElementById("message_username").value.trim();
+  if (username.length >= 3) loadMessages(username); // 3 char baad load
+});
+function loadMessages(username) {
+  const category = document.getElementById("appSelect").value;
+
+  fetch('/get_messages', {
+    method: 'POST',
+    body: new URLSearchParams({
+      category: category,
+      username: username
+    })
+  })
+  .then(res => res.json())
+  .then(data => {
+    const box = document.getElementById("messageList");
+    box.innerHTML = '';
+
+    if (data.status === 'success') {
+      data.messages.forEach((m, i) => {
+        const div = document.createElement("div");
+        div.className = "border rounded p-2 mb-2 position-relative";
+        div.innerHTML = `
+          <div>
+            <b>${m.status === "inactive" ? "<s>" : ""}${m.text}${m.status === "inactive" ? "</s>" : ""}</b><br>
+            <small>${m.time}</small>
+            <div style="position: absolute; top: 5px; right: 10px; cursor: pointer;" onclick="toggleMenu(${i})">⋮</div>
+            <div id="menu-${i}" class="bg-light border rounded p-1" style="position:absolute; top:25px; right:10px; display:none; z-index:99;">
+              <button onclick="updateMsg('${username}', ${i}, 'active')" class="btn btn-sm btn-success w-100">Active</button>
+              <button onclick="updateMsg('${username}', ${i}, 'inactive')" class="btn btn-sm btn-warning w-100">Inactive</button>
+              <button onclick="updateMsg('${username}', ${i}, 'delete')" class="btn btn-sm btn-danger w-100">Delete</button>
+            </div>
+          </div>
+        `;
+        box.appendChild(div);
+      });
+    } else {
+      box.innerHTML = '<div class="text-muted">No messages found.</div>';
+    }
+  });
+}
+
+function toggleMenu(i) {
+  const m = document.getElementById(`menu-${i}`);
+  m.style.display = m.style.display === "none" ? "block" : "none";
+}
+
+function updateMsg(username, index, action) {
+  const category = document.getElementById("appSelect").value;
+
+  fetch('/update_message_status', {
+    method: "POST",
+    body: new URLSearchParams({
+      username: username,
+      category: category,
+      index: index,
+      action: action
+    })
+  })
+  .then(res => res.json())
+  .then(d => {
+    showToast(d.message);
+    loadMessages(username);
+  });
+}
+function copyCode() {
+  console.log("clicked");
+  const code = document.getElementById("loginCode").innerText;
+  navigator.clipboard.writeText(code)
+    .then(() => showToast("Copied login code!"))
+    .catch(() => showToast("Copy failed!"));
+}
+</script>
+</body>
+</html>
