@@ -3,7 +3,7 @@ import requests
 from datetime import datetime
 import os
 
-app = Flask(__name__)
+app = Flask(_name_)
 app.secret_key = os.urandom(24)
 
 # Admin credentials
