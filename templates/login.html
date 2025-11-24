@@ -11,13 +11,13 @@
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 
 <!-- Particles.js -->
-<script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/tsparticles@2.12.0/tsparticles.bundle.min.js"></script>
 
 <style>
   body {
     margin: 0;
     padding: 0;
-    background: #0d1117;
+    background: #000000; /* PURE BLACK */
     height: 100vh;
     display: flex;
     justify-content: center;
@@ -58,7 +58,7 @@
 
   .auth-title {
     font-family: "Poppins", sans-serif;
-    font-size: 28px;  /* slightly smaller */
+    font-size: 28px;
     font-weight: 900;
     color: #ff1a1a;
     letter-spacing: 3px;
@@ -106,13 +106,16 @@
 </div>
 
 <script>
-particlesJS("particles-js", {
+tsParticles.load("particles-js", {
+  background: { color: "#000" },
   particles: {
-    number: { value: 85 },
-    size: { value: 3 },
-    move: { speed: 2 },
-    line_linked: { enable: true, color: "#ff0000" },
-    color: { value: "#ffffff" }
+    number: { value: 70 },
+    shape: { type: "circle" },
+    opacity: { value: 0.8 },
+    size: { value: 4 },
+    color: { value: "#ff0000" },
+    move: { speed: 1.2 },
+    links: { enable: true, color: "#ff0000", opacity: 0.7, distance: 140 }
   }
 });
 </script>
