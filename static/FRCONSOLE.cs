@@ -10,7 +10,7 @@ public static class HydraAuth
 
     private static readonly string apiUrl = "https://frconsole.onrender.com/client_login";
     private static readonly string messageUrl = "https://frconsole.onrender.com/get_messages";
-    private static readonly string category = "ADMIN"; // <- Change this if needed
+    private static readonly string category = "FRCONSOLE"; // <- Change this if needed
 
     private static string GetHWID()
     {
@@ -76,3 +76,4 @@ public static class HydraAuth
     }
 
 }
+
