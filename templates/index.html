@@ -4,105 +4,102 @@
   <meta charset="UTF-8">
   <title>FR CONSOLE - USER PANEL</title>
 
-  <!-- Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@900&family=Inter:wght@500;600&display=swap" rel="stylesheet">
-
-  <!-- Bootstrap -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-
-  <!-- Particles -->
   <script src="https://cdn.jsdelivr.net/npm/tsparticles@2.12.0/tsparticles.bundle.min.js"></script>
 
-  <style>
-    body { margin:0; padding:0; background:#000; font-family:"Inter",sans-serif; overflow-x:hidden; }
-    #particles-js { position:fixed; inset:0; width:100%; height:100%; z-index:-1; }
+<style>
+body { margin:0; padding:0; background:#000; font-family:"Inter",sans-serif; overflow-x:hidden; }
+#particles-js { position:fixed; inset:0; width:100%; height:100%; z-index:-1; }
 
-    .sidebar {
-      width:240px; height:100vh; position:fixed;
-      background:rgba(15,15,15,0.95); border-right:1px solid #222;
-      box-shadow:4px 0 15px rgba(255,0,0,0.2); padding:25px 0;
-    }
-    .sidebar h1 {
-      font-family:"Poppins"; font-size:38px; font-weight:900;
-      text-align:center; color:#ff1a1a;
-      text-shadow:0 0 20px rgba(255,0,0,0.9); margin-bottom:8px;
-    }
-    .sidebar p {
-      text-align:center; font-size:15px; font-weight:900;
-      color:#ff1a1a; text-shadow:0 0 12px rgba(255,0,0,0.7);
-      margin-bottom:22px;
-    }
-    .sidebar a {
-      display:block; padding:12px 20px; margin:6px 12px;
-      border-radius:10px; text-decoration:none; color:#eee;
-      font-weight:600; transition:0.25s;
-    }
-    .sidebar a.active, .sidebar a:hover {
-      background:#ff1a1a; color:white; box-shadow:0 0 12px rgba(255,0,0,0.7);
-    }
+.sidebar {
+  width:240px; height:100vh; position:fixed;
+  background:rgba(15,15,15,0.95); border-right:1px solid #222;
+  padding-top:25px; box-shadow:4px 0 15px rgba(255,0,0,0.2);
+}
+.sidebar h1 {
+  font-family:"Poppins"; font-weight:900; font-size:39px;
+  text-align:center; color:#ff1a1a;
+  text-shadow:0 0 20px rgba(255,0,0,0.9); margin-bottom:10px;
+}
+.sidebar p {
+  font-family:"Poppins",sans-serif !important;
+  text-align:center; color:#ff1a1a; font-size:20px; font-weight:900;
+  text-shadow:0 0 15px rgba(255,0,0,0.7); letter-spacing:1px;
+  margin-bottom:22px;
+}
 
-    .main { margin-left:260px; padding:40px 50px; min-height:100vh; color:white; }
+.sidebar a {
+  display:block; padding:12px 20px; margin:6px 12px; border-radius:10px;
+  color:white; text-decoration:none; font-weight:600; transition:0.25s;
+}
+.sidebar a.active, .sidebar a:hover {
+  background:#ff1a1a; color:white; box-shadow:0 0 12px rgba(255,0,0,0.7);
+}
 
-    .form-label {
-      font-weight:900; font-family:"Poppins";
-      color:#ff1a1a !important;
-      text-shadow:0 0 10px rgba(255,0,0,0.8);
-      font-size:20px;
-    }
+/* MAIN PANEL */
+.main { margin-left:260px; padding:40px 50px; min-height:100vh; color:white; }
 
-    .section { display:none; }
-    .section.active {
-      display:block; background:rgba(255,255,255,0.06);
-      backdrop-filter:blur(10px); padding:25px; border-radius:15px;
-      box-shadow:0 0 18px rgba(255,0,0,0.2);
-    }
+.form-label {
+  font-family:"Poppins"; font-weight:900; font-size:22px;
+  color:#ff1a1a !important; text-shadow:0 0 12px rgba(255,0,0,0.7);
+}
 
-    h4 {
-      font-family:"Poppins"; font-size:27px; font-weight:900;
-      color:#ff1a1a; margin-bottom:15px;
-      text-shadow:0 0 15px rgba(255,0,0,0.7);
-    }
+.section { display:none; }
+.section.active {
+  display:block; background:rgba(255,255,255,0.05);
+  backdrop-filter:blur(10px); padding:25px; border-radius:15px;
+  box-shadow:0 0 18px rgba(255,0,0,0.3);
+}
 
-    .form-control, .form-select {
-      background:#111; border:1px solid #333; color:white;
-    }
-    .form-control:focus, .form-select:focus {
-      border-color:#ff1a1a; box-shadow:0 0 10px rgba(255,0,0,0.6);
-    }
+h4 {
+  font-family:"Poppins"; font-size:27px; font-weight:900;
+  color:#ff1a1a; text-shadow:0 0 15px rgba(255,0,0,0.7);
+  margin-bottom:15px;
+}
 
-    table { color:white; font-size:14px; }
-    table thead th { background:#151515; border-color:#333; color:#ff1a1a; }
-    table tbody td { background:#101010; border-color:#333; }
+/* Inputs */
+.form-control,.form-select {
+  background:#111; border:1px solid #333; color:white;
+}
+.form-control:focus,.form-select:focus {
+  border-color:#ff1a1a; box-shadow:0 0 10px rgba(255,0,0,0.6);
+}
 
-    .toast {
-      position:fixed; bottom:20px; right:-300px; min-width:260px;
-      background:#ff1a1a; padding:12px 24px; color:white; font-weight:bold;
-      border-radius:6px; animation:slideIn .5s forwards; z-index:1000;
-    }
-    @keyframes slideIn { from{right:-300px;} to{right:20px;} }
+/* Table */
+table { color:white; }
+table thead th { background:#151515; border-color:#333; color:#ff1a1a; }
+table tbody td { background:#101010; border-color:#333; }
 
-    #messageList {
-      max-height:400px; overflow-y:auto;
-      border:1px solid #333; padding:10px; border-radius:8px; background:#0a0a0a;
-    }
+/* Toast */
+.toast {
+  position:fixed; bottom:20px; right:-300px;
+  background:#ff1a1a; padding:12px 24px; color:white; font-weight:900;
+  border-radius:6px; z-index:999; min-width:260px;
+  animation:slideIn .5s forwards;
+}
+@keyframes slideIn { from{right:-300px;} to{right:20px;} }
 
-    #loginCode {
-      background:#050505; border:1px solid #333;
-      border-radius:10px; font-family:monospace; padding:10px;
-      white-space:pre-wrap; color:#fff; min-height:180px;
-    }
+#messageList {
+  max-height:400px; overflow-y:auto; background:#0a0a0a;
+  padding:10px; border-radius:8px; border:1px solid #333;
+}
 
-    .developer {
-      font-size:14px; font-weight:800;
-      padding:4px 8px; color:#e67e22;
-      background:#2c1905; border-radius:5px;
-      display:inline-block;
-    }
-  </style>
+#loginCode {
+  background:#050505; color:#fff; border:1px solid #333;
+  white-space:pre-wrap; border-radius:10px; padding:12px;
+  min-height:180px; font-family:monospace;
+}
+
+.developer {
+  font-family:"Poppins"; font-size:15px; font-weight:800;
+  background:#2c1905; color:#e67e22; padding:4px 8px;
+  border-radius:6px; display:inline-block; margin-top:10px;
+}
+</style>
 </head>
 
 <body>
-
 <div id="particles-js"></div>
 
 <div class="sidebar">
@@ -120,122 +117,100 @@
 
 <div class="main">
 
-  <label class="form-label">Select Application</label>
-  <select class="form-select mb-3" id="appSelect" onchange="refreshUsers()">
-    <option value="FRCONSOLE">FR CONSOLE</option>
-    <option value="ADMIN">ADMIN</option>
-    <option value="TESTER">TESTER</option>
-  </select>
+<label class="form-label">SELECT APPLICATION</label>
+<select class="form-select mb-3" id="appSelect" onchange="refreshUsers()">
+  <option value="FRCONSOLE">FR CONSOLE</option>
+  <option value="ADMIN">ADMIN</option>
+  <option value="TESTER">TESTER</option>
+</select>
 
-  <!-- ADD USER -->
-  <div id="add" class="section active">
-    <h4>➕ Add User</h4>
-    <form onsubmit="addUser(event)">
-      <input id="add_username" placeholder="Username" class="form-control mb-2" required>
-      <input id="add_password" placeholder="Password" class="form-control mb-2" type="password" required>
-      <input id="add_expiry" class="form-control mb-2" type="date" required>
-      <button class="btn btn-success mt-1">Add</button>
-    </form>
-  </div>
+<!-- ADD -->
+<div id="add" class="section active">
+  <h4>➕ ADD USER</h4>
+  <form onsubmit="addUser(event)">
+    <input id="add_username" class="form-control mb-2" placeholder="Username" required>
+    <input id="add_password" class="form-control mb-2" placeholder="Password" type="password" required>
+    <input id="add_expiry" class="form-control mb-2" type="date" required>
+    <button class="btn btn-success">Add</button>
+  </form>
+</div>
 
-  <!-- DELETE USER -->
-  <div id="delete" class="section">
-    <h4>❌ Delete User</h4>
-    <form onsubmit="deleteUser(event)">
-      <input id="delete_username" class="form-control mb-2" placeholder="Username" required>
-      <button class="btn btn-danger">Delete</button>
-    </form>
-  </div>
+<!-- DELETE -->
+<div id="delete" class="section">
+  <h4>❌ DELETE USER</h4>
+  <form onsubmit="deleteUser(event)">
+    <input id="delete_username" class="form-control mb-2" placeholder="Username" required>
+    <button class="btn btn-danger">Delete</button>
+  </form>
+</div>
 
-  <!-- PAUSE / UNPAUSE -->
-  <div id="pause" class="section">
-    <h4>⏸ Pause / Unpause User</h4>
-    <form onsubmit="pauseUser(event,'pause')">
-      <input id="pause_username" class="form-control mb-2" placeholder="Username" required>
-      <button class="btn btn-warning me-2">Pause</button>
-      <button type="button" onclick="pauseUser(event,'unpause')" class="btn btn-secondary">Unpause</button>
-    </form>
-  </div>
+<!-- PAUSE -->
+<div id="pause" class="section">
+  <h4>⏸ PAUSE / UNPAUSE</h4>
+  <form onsubmit="pauseUser(event,'pause')">
+    <input id="pause_username" class="form-control mb-2" placeholder="Username" required>
+    <button class="btn btn-warning me-2">Pause</button>
+    <button type="button" onclick="pauseUser(event,'unpause')" class="btn btn-secondary">Unpause</button>
+  </form>
+</div>
 
-  <!-- INFO -->
-  <div id="info" class="section">
-    <h4>ℹ User Info</h4>
-    <form onsubmit="infoUser(event)">
-      <input id="info_username" class="form-control mb-2" placeholder="Username" required>
-      <button class="btn btn-primary">Get Info</button>
-    </form>
-    <div id="infoPanel" class="mt-3"></div>
-  </div>
+<!-- INFO -->
+<div id="info" class="section">
+  <h4>ℹ USER INFO</h4>
+  <form onsubmit="infoUser(event)">
+    <input id="info_username" class="form-control mb-2" placeholder="Username" required>
+    <button class="btn btn-primary">Get Info</button>
+  </form>
+  <div id="infoPanel" class="mt-3"></div>
+</div>
 
-  <!-- SHOW USERS -->
-  <div id="show" class="section">
-    <h4>📋 All Users</h4>
-    <table class="table table-bordered">
-      <thead><tr>
-        <th>Username</th><th>Password</th><th>HWID</th><th>Expiry</th><th>Created</th><th>Status</th>
-      </tr></thead>
-      <tbody id="userList"></tbody>
-    </table>
-  </div>
+<!-- SHOW USERS -->
+<div id="show" class="section">
+  <h4>📋 ALL USERS</h4>
+  <table class="table table-bordered">
+    <thead>
+      <tr><th>Username</th><th>Password</th><th>HWID</th><th>Expiry</th><th>Created</th><th>Status</th></tr>
+    </thead>
+    <tbody id="userList"></tbody>
+  </table>
+</div>
 
-  <!-- RESET -->
-  <div id="reset" class="section">
-    <h4>🔄 Reset HWID</h4>
-    <form onsubmit="resetHWID(event)">
-      <input id="reset_username" class="form-control mb-2" placeholder="Username" required>
-      <button class="btn btn-dark">Reset</button>
-    </form>
-  </div>
+<!-- RESET HWID -->
+<div id="reset" class="section">
+  <h4>🔄 RESET HWID</h4>
+  <form onsubmit="resetHWID(event)">
+    <input id="reset_username" class="form-control mb-2" placeholder="Username" required>
+    <button class="btn btn-dark">Reset</button>
+  </form>
+</div>
 
-  <!-- SEND MESSAGE -->
-  <div id="sendmsg" class="section">
-    <h4>✉ Send Message</h4>
-    <form onsubmit="loadUserMessages(event)" class="mb-2">
-      <div class="input-group">
-        <input id="message_username" class="form-control" placeholder="Enter Username" required>
-        <button class="btn btn-secondary">🔄 Load</button>
-      </div>
-    </form>
-    <form onsubmit="sendMessage(event)" class="mb-2">
-      <textarea id="message_text" class="form-control" rows="2" placeholder="Type message..." required></textarea>
-      <button class="btn btn-primary mt-2">Send</button>
-    </form>
-    <div id="messageList"></div>
-  </div>
+<!-- SEND MESSAGE -->
+<div id="sendmsg" class="section">
+  <h4>✉ SEND MESSAGE</h4>
+  <form onsubmit="loadUserMessages(event)" class="mb-2">
+    <div class="input-group">
+      <input id="message_username" class="form-control" placeholder="Enter Username" required>
+      <button class="btn btn-secondary">🔄 Load</button>
+    </div>
+  </form>
+  <form onsubmit="sendMessage(event)" class="mb-2">
+    <textarea id="message_text" class="form-control" rows="2" placeholder="Message" required></textarea>
+    <button class="btn btn-primary mt-2">Send</button>
+  </form>
+  <div id="messageList"></div>
+</div>
 
-  <!-- PROJECT -->
-  <div id="project" class="section">
-    <h4>📁 Project Code</h4>
-    <pre id="loginCode">
+<!-- PROJECT -->
+<div id="project" class="section">
+  <h4>📁 PROJECT CODE</h4>
+  <pre id="loginCode">
 FRCONSOLE.login(guna2TextBox1.Text, guna2TextBox2.Text);
-
-if (FRCONSOLE.response.status == "success")
-{
-    string message = FRCONSOLE.GetLatestMessage(guna2TextBox1.Text);
-
-    if (!string.IsNullOrEmpty(message))
-    {
-        var msgDialog = new Guna2MessageDialog();
-        msgDialog.Caption = "Admin Message";
-        msgDialog.Text = message;
-        msgDialog.Icon = MessageDialogIcon.Warning;
-        msgDialog.Buttons = MessageDialogButtons.OK;
-        msgDialog.Show();
-    }
-
-    Form2 main = new Form2();
-    main.Show();
-    this.Hide();
-}
-else
-{
-    status.Text = "Status: " + FRCONSOLE.response.message;
-}
-    </pre>
-    <button class="btn btn-light btn-sm mt-1" onclick="copyCode()">📋 Copy</button><br><br>
-    <p class="developer">Developer: SHUBH</p><br>
-    <a href="/static/FRCONSOLE.cs" download class="btn btn-success btn-sm">⬇ Download FRCONSOLE.cs</a>
-  </div>
+...
+(status.Text = "Status: " + FRCONSOLE.response.message);
+  </pre>
+  <button class="btn btn-light btn-sm mt-1" onclick="copyCode()">📋 Copy</button><br><br>
+  <p class="developer">Developer: SHUBH</p>
+</div>
 </div>
 
 <div id="toast" class="toast" style="display:none;"></div>
@@ -246,52 +221,51 @@ function showSection(id,e){
   document.getElementById(id).classList.add('active');
   document.querySelectorAll('.sidebar a').forEach(a=>a.classList.remove('active'));
   if(e) e.target.classList.add('active');
-  if(id==='show') refreshUsers();
+  if(id==="show") refreshUsers();
 }
 
 function showToast(msg){
-  const t=document.getElementById('toast');
-  t.innerText=msg; t.style.display='block';
-  t.style.animation='slideIn .5s forwards';
-  setTimeout(()=>{t.style.right='-300px';},3000);
+  const t=document.getElementById("toast");
+  t.innerText=msg;
+  t.style.display="block";
+  setTimeout(()=>t.style.right="-300px",3000);
 }
 
-function getCategory(){ return document.getElementById('appSelect').value; }
+function getCategory(){return document.getElementById("appSelect").value;}
 
 function addUser(e){
   e.preventDefault();
   fetch('/add_user',{method:'POST',body:new URLSearchParams({
-    category:getCategory(), username:document.getElementById('add_username').value,
-    password:document.getElementById('add_password').value, expiry:document.getElementById('add_expiry').value
-  })}).then(r=>r.json()).then(d=>{showToast(d.message); if(d.status==='success')refreshUsers();});
+    category:getCategory(),username:document.getElementById("add_username").value,
+    password:document.getElementById("add_password").value,expiry:document.getElementById("add_expiry").value
+  })}).then(r=>r.json()).then(d=>{showToast(d.message);if(d.status==='success')refreshUsers();});
 }
 
 function deleteUser(e){
   e.preventDefault();
   fetch('/delete_user',{method:'POST',body:new URLSearchParams({
-    category:getCategory(), username:document.getElementById('delete_username').value
-  })}).then(r=>r.json()).then(d=>{showToast(d.message); if(d.status==='success')refreshUsers();});
+    category:getCategory(),username:document.getElementById("delete_username").value
+  })}).then(r=>r.json()).then(d=>{showToast(d.message);if(d.status==='success')refreshUsers();});
 }
 
-function pauseUser(e,action){
+function pauseUser(e,a){
   e.preventDefault();
-  fetch('/pause_user',{method:'POST',body:new URLSearchParams({
-    category:getCategory(), username:document.getElementById('pause_username').value, action:action
-  })}).then(r=>r.json()).then(d=>showToast(d.message));
-}
+  fetch('/pause_user',{method:'POST',body:new	URLSearchParams({
+    category:getCategory(),username:document.getElementById("pause_username").value,action:a
+  })}).then(r=>r.json()).then(d=>showToast(d.message));}
 
 function infoUser(e){
   e.preventDefault();
   fetch('/info_user',{method:'POST',body:new URLSearchParams({
-    category:getCategory(), username:document.getElementById('info_username').value
+   	category:getCategory(),username:document.getElementById("info_username").value
   })}).then(r=>r.json()).then(d=>{
-    if(d.status==='success'){
+    if(d.status==="success"){
       let u=d.data;
-      document.getElementById('infoPanel').innerHTML=
-      `<div class="p-3 bg-dark rounded border border-secondary">
+      document.getElementById("infoPanel").innerHTML=
+      `<div class='p-3 bg-dark rounded border border-secondary'>
         <p><b>User:</b> ${u.Username}</p>
         <p><b>Pass:</b> ${u.Password}</p>
-        <p><b>HWID:</b> ${u.HWID||'None'}</p>
+        <p><b>HWID:</b> ${u.HWID||"None"}</p>
         <p><b>Expiry:</b> ${u.Expiry}</p>
         <p><b>Created:</b> ${u.CreatedAt}</p>
         <p><b>Status:</b> ${u.Status}</p>
@@ -302,68 +276,39 @@ function infoUser(e){
 
 function refreshUsers(){
   fetch('/get_users',{method:'POST',body:new URLSearchParams({category:getCategory()})})
-  .then(r=>r.json()).then(users=>{
-    let list=document.getElementById('userList'); list.innerHTML="";
-    users.forEach(u=>{
-      list.innerHTML+=`<tr><td>${u.Username}</td><td>${u.Password}</td><td>${u.HWID||"None"}</td>
-      <td>${u.Expiry}</td><td>${u.CreatedAt}</td><td>${u.Status}</td></tr>`;
+    .then(r=>r.json()).then(users=>{
+      let t=document.getElementById("userList"); t.innerHTML="";
+      users.forEach(u=>{t.innerHTML+=
+        `<tr><td>${u.Username}</td><td>${u.Password}</td><td>${u.HWID||"None"}</td>
+        <td>${u.Expiry}</td><td>${u.CreatedAt}</td><td>${u.Status}</td></tr>`});
     });
-  });
 }
 
 function resetHWID(e){
   e.preventDefault();
   fetch('/reset_hwid',{method:'POST',body:new URLSearchParams({
-    category:getCategory(), username:document.getElementById('reset_username').value
+   	category:getCategory(),username:document.getElementById("reset_username").value
   })}).then(r=>r.json()).then(d=>showToast(d.message));
 }
 
-function sendMessage(e){
-  e.preventDefault();
-  let u=document.getElementById("message_username").value.trim();
-  let m=document.getElementById("message_text").value.trim();
-  fetch('/send_message',{method:'POST',body:new URLSearchParams({username:u,message:m})})
-  .then(r=>r.json()).then(d=>{
-    showToast(d.message);
-    if(d.status==='success'){document.getElementById("message_text").value='';loadMessages(u);}
-  });
+functionsendMessage(e){
+e.preventDefault();
+let u=document.getElementById("message_username").value.trim();
+let m=document.getElementById("message_text").value.trim();
+fetch('/send_message',{method:'POST',body:new URLSearchParams({username:u,message:m})})
+.then(r=>r.json()).then(d=>{showToast(d.message);if(d.status==='success'){document.getElementById("message_text").value='';loadMessages(u);}});
 }
 
-document.getElementById("message_username").addEventListener("input",()=>{
-  let u=document.getElementById("message_username").value.trim();
-  if(u.length>=3)loadMessages(u);
-});
+function copyCode(){navigator.clipboard.writeText(document.getElementById("loginCode").innerText).then(()=>showToast("Copied!"));}
 
-function loadMessages(username){
-  fetch('/get_messages',{method:'POST',body:new URLSearchParams({
-    category:getCategory(),username:username
-  })}).then(r=>r.json()).then(data=>{
-    let box=document.getElementById("messageList"); box.innerHTML='';
-    if(data.status==="success"){
-      data.messages.forEach((m,i)=>{
-        let div=document.createElement("div");
-        div.className="border rounded p-2 mb-2 position-relative";
-        div.innerHTML=
-        `<b>${m.status==="inactive"?"<s>":""}${m.text}${m.status==="inactive"?"</s>":""}</b><br>
-        <small>${m.time}</small>`;
-        box.appendChild(div);
-      });
-    } else box.innerHTML="<div class='text-muted'>No messages found</div>";
-  });
-}
-
-function copyCode(){
-  navigator.clipboard.writeText(document.getElementById("loginCode").innerText)
-  .then(()=>showToast("Copied!"))
-  .catch(()=>showToast("Copy Failed!"));
-}
-
-tsParticles.load("particles-js",{
+tsParticles.load("particles-js", {
   background:{color:"#000"},
   particles:{
-    number:{value:60}, size:{value:3}, move:{enable:true,speed:1.1},
+    number:{value:65},
+    move:{enable:true,speed:1.1},
+    size:{value:3},
     color:{value:"#ff0000"},
-    links:{enable:true,color:"#ff0000",distance:140,opacity:.6,width:1}
+    links:{enable:true,color:"#ff0000",opacity:0.6,distance:140}
   }
 });
 </script>
