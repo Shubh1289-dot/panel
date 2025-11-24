@@ -10,63 +10,25 @@
 <style>
 body{margin:0;background:#000;font-family:"Inter",sans-serif;overflow-x:hidden;}
 #particles-js{position:fixed;inset:0;z-index:-1;}
-
-.sidebar{
-  width:240px;height:100vh;position:fixed;background:rgba(15,15,15,0.95);
-  border-right:1px solid #222;padding-top:25px;box-shadow:4px 0 18px rgba(255,0,0,0.2);
-}
-.sidebar h1{
-  font-family:"Poppins";font-size:38px;font-weight:900;color:#ff1a1a;text-align:center;
-  text-shadow:0 0 20px red;margin-bottom:10px;
-}
-.sidebar p{
-  font-family:"Poppins";font-size:18px;font-weight:900;text-align:center;
-  color:#ff1a1a;text-shadow:0 0 12px red;margin-bottom:20px;
-}
-
-.sidebar a{
-  display:block;padding:12px 20px;margin:6px 12px;border-radius:10px;
-  background:transparent;color:white;text-decoration:none;font-weight:600;
-  transition:0.25s;
-}
-.sidebar a:hover,
-.sidebar a.active{
-  background:#ff1a1a;color:white;box-shadow:0 0 15px rgba(255,0,0,0.7);
-}
-
-.main{margin-left:260px;padding:40px;color:white;}
-
-.form-label{
-  font-family:"Poppins";font-size:22px;font-weight:900;color:#ff1a1a;
-  text-shadow:0 0 10px red;
-}
-
+.sidebar{width:240px;height:100vh;position:fixed;background:rgba(15,15,15,0.95);border-right:1px solid #222;box-shadow:4px 0 18px rgba(255,0,0,0.2);padding-top:25px;}
+.sidebar h1{font-family:"Poppins";font-size:38px;font-weight:900;color:#ff1a1a;text-align:center;margin-bottom:10px;text-shadow:0 0 20px red;}
+.sidebar p{font-family:"Poppins";font-size:19px;font-weight:900;color:#ff1a1a;text-align:center;text-shadow:0 0 12px red;letter-spacing:1px;margin-bottom:20px;}
+.sidebar a{display:block;color:#fff;padding:12px 20px;margin:6px 12px;border-radius:10px;text-decoration:none;font-weight:600;transition:0.2s;}
+.sidebar a:hover,.sidebar a.active{background:#ff1a1a;box-shadow:0 0 12px red;}
+.main{margin-left:260px;padding:40px 45px;color:white;}
+.form-label{font-family:"Poppins";font-size:22px;font-weight:900;color:#ff1a1a;text-shadow:0 0 10px red;}
 .section{display:none;}
-.section.active{
-  display:block;background:rgba(255,255,255,0.06);backdrop-filter:blur(10px);
-  padding:25px;border-radius:15px;box-shadow:0 0 18px rgba(255,0,0,0.3);
-}
-
-h4{
-  font-family:"Poppins";font-size:27px;font-weight:900;color:#ff1a1a;
-  text-shadow:0 0 15px red;
-}
-
+.section.active{display:block;background:rgba(255,255,255,0.06);backdrop-filter:blur(10px);padding:25px;border-radius:15px;}
+h4{font-family:"Poppins";font-size:27px;font-weight:900;color:#ff1a1a;text-shadow:0 0 15px red;}
 .form-control,.form-select{background:#111;color:white;border:1px solid #333;}
 .form-control:focus,.form-select:focus{border-color:#ff1a1a;box-shadow:0 0 10px red;}
-
 table thead th{color:#ff1a1a;background:#151515;}
 table tbody td{background:#111;}
-
-#messageList{max-height:350px;overflow-y:auto;background:#0c0c0c;border:1px solid #333;padding:10px;border-radius:8px;}
-
-#loginCode{background:#080808;border:1px solid #333;color:white;padding:12px;border-radius:10px;min-height:170px;}
-
-.toast{
-  position:fixed;bottom:20px;right:-300px;background:#ff1a1a;color:white;
-  padding:12px 24px;border-radius:6px;font-weight:900;animation:slideIn .5s forwards;
-}
+.toast{position:fixed;bottom:20px;right:-300px;background:#ff1a1a;color:#fff;font-weight:900;padding:12px 24px;border-radius:6px;animation:slideIn .5s forwards;}
 @keyframes slideIn{from{right:-300px;}to{right:20px;}}
+#messageList{max-height:350px;overflow-y:auto;background:#0b0b0b;border:1px solid #333;padding:10px;border-radius:8px;}
+#loginCode{background:#080808;border:1px solid #333;color:#fff;padding:10px;min-height:180px;border-radius:10px;font-family:monospace;}
+.developer{font-family:"Poppins";background:#2c1905;color:#e67e22;padding:4px 8px;border-radius:6px;font-size:15px;font-weight:900;}
 </style>
 </head>
 
@@ -87,10 +49,9 @@ table tbody td{background:#111;}
 </div>
 
 <div class="main">
-
 <label class="form-label">SELECT APPLICATION</label>
 <select class="form-select mb-3" id="appSelect" onchange="refreshUsers()">
-<option value="FRCONSOLE">FRCONSOLE</option>
+<option value="FRCONSOLE">FR CONSOLE</option>
 <option value="ADMIN">ADMIN</option>
 <option value="TESTER">TESTER</option>
 </select>
@@ -101,7 +62,7 @@ table tbody td{background:#111;}
 <input id="add_username" class="form-control mb-2" placeholder="Username" required>
 <input id="add_password" class="form-control mb-2" placeholder="Password" required>
 <input id="add_expiry" class="form-control mb-2" type="date" required>
-<button class="btn btn-success">Add</button>
+<button class="btn btn-success mt-1">Add</button>
 </form>
 </div>
 
@@ -141,19 +102,15 @@ table tbody td{background:#111;}
 <div id="reset" class="section">
 <h4>🔄 RESET HWID</h4>
 <form onsubmit="resetHWID(event)">
-<input id="reset_username" class="form-control mb-2" placeholder="Username" required>
-<button class="btn btn-dark">Reset</button>
-</form>
-</div>
+<input id="reset_username" placeholder="Username" class="form-control mb-2" required>
+<button class="btn btn-dark">Reset</button></form></div>
 
 <div id="sendmsg" class="section">
 <h4>✉ SEND MESSAGE</h4>
 <form onsubmit="loadUserMessages(event)" class="mb-2">
 <div class="input-group">
-<input id="message_username" class="form-control" placeholder="Username" required>
-<button class="btn btn-secondary">Load</button>
-</div></form>
-
+<input id="message_username" placeholder="Enter Username" class="form-control" required>
+<button class="btn btn-secondary">Load</button></div></form>
 <form onsubmit="sendMessage(event)" class="mb-2">
 <textarea id="message_text" class="form-control" rows="2" required></textarea>
 <button class="btn btn-primary mt-2">Send</button></form>
@@ -168,14 +125,14 @@ table tbody td{background:#111;}
 </div>
 </div>
 
-<div id="toast" class="toast" style="display:none;">Done</div>
+<div id="toast" class="toast" style="display:none;">Message</div>
 
 <script>
 function showSection(id,e){document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));document.getElementById(id).classList.add('active');document.querySelectorAll('.sidebar a').forEach(a=>a.classList.remove('active'));e.target.classList.add('active');if(id==="show")refreshUsers();}
 function showToast(m){let t=document.getElementById("toast");t.innerText=m;t.style.display="block";setTimeout(()=>t.style.right="-300px",3000);}
 function getCategory(){return document.getElementById("appSelect").value;}
 
-function addUser(e){e.preventDefault();fetch('/add_user',{method:'POST',body:new URLSearchParams({category:getCategory(),username:document.getElementById("add_username").value,password:document.getElementById("add_password").value,expiry:document.getElementById("add_expiry").value})}).then(r=>r.json()).then(d=>showToast(d.message));}
+function addUser(e){e.preventDefault();fetch('/add_user',{method:'POST',body:new URLSearchParams({category:getCategory(),username:document.getElementById("add_username").value,password:document.getElementById("add_password").value,expiry:document.getElementById("add_expiry").value})}).then(r=>r.json()).then(d=>{showToast(d.message);refreshUsers();});}
 function deleteUser(e){e.preventDefault();fetch('/delete_user',{method:'POST',body:new URLSearchParams({category:getCategory(),username:document.getElementById("delete_username").value})}).then(r=>r.json()).then(d=>showToast(d.message));}
 function pauseUser(e,a){e.preventDefault();fetch('/pause_user',{method:'POST',body:new URLSearchParams({category:getCategory(),username:document.getElementById("pause_username").value,action:a})}).then(r=>r.json()).then(d=>showToast(d.message));}
 
@@ -183,16 +140,18 @@ function infoUser(e){e.preventDefault();fetch('/info_user',{method:'POST',body:n
 
 function refreshUsers(){fetch('/get_users',{method:'POST',body:new URLSearchParams({category:getCategory()})}).then(r=>r.json()).then(u=>{let t=document.getElementById("userList");t.innerHTML="";u.forEach(r=>{t.innerHTML+=`<tr><td>${r.Username}</td><td>${r.Password}</td><td>${r.HWID}</td><td>${r.Expiry}</td><td>${r.CreatedAt}</td><td>${r.Status}</td></tr>`});});}
 
+function resetHWID(e){e.preventDefault();fetch('/reset_hwid',{method:'POST',body:new URLSearchParams({category:getCategory(),username:document.getElementById("reset_username").value})}).then(r=>r.json()).then(d=>showToast(d.message));}
+
 document.getElementById("message_username").addEventListener("input",()=>{if(document.getElementById("message_username").value.trim().length>=3)loadMessages(document.getElementById("message_username").value.trim());});
 function loadUserMessages(e){e.preventDefault();loadMessages(document.getElementById("message_username").value.trim());}
 
-function loadMessages(u){fetch('/get_messages',{method:'POST',body:new URLSearchParams({category:getCategory(),username:u})}).then(r=>r.json()).then(d=>{let b=document.getElementById("messageList");b.innerHTML='';if(d.status==='success'){d.messages.forEach(m=>{b.innerHTML+=`<div class='border rounded p-2 mb-2'><b>${m.text}</b><br><small>${m.time}</small></div>`});}else b.innerHTML="<span>No messages</span>";});}
+function loadMessages(u){fetch('/get_messages',{method:'POST',body:new URLSearchParams({category:getCategory(),username:u})}).then(r=>r.json()).then(d=>{let b=document.getElementById("messageList");b.innerHTML='';if(d.status==='success'){d.messages.forEach(m=>{b.innerHTML+=`<div class='border rounded p-2 mb-2'><b>${m.text}</b><br><small>${m.time}</small></div>`})}else b.innerHTML="<span>No messages</span>";});}
 
 function sendMessage(e){e.preventDefault();let u=document.getElementById("message_username").value.trim();let m=document.getElementById("message_text").value.trim();fetch('/send_message',{method:'POST',body:new URLSearchParams({username:u,message:m})}).then(r=>r.json()).then(d=>{showToast(d.message);document.getElementById("message_text").value='';loadMessages(u);});}
 
 function copyCode(){navigator.clipboard.writeText(document.getElementById("loginCode").innerText).then(()=>showToast("Copied!"));}
 
-tsParticles.load("particles-js",{background:{color:"#000"},particles:{number:{value:60},move:{speed:1.1},size:{value:3},color:{value:"#ff0000"},links:{enable:true,color:"#ff0000",distance:140,opacity:.6}}});
+tsParticles.load("particles-js",{background:{color:"#000"},particles:{number:{value:65},move:{speed:1.2},size:{value:3},color:{value:"#ff0000"},links:{enable:true,color:"#ff0000",distance:130,opacity:.6}}});
 </script>
 </body>
 </html>
