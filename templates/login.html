@@ -5,7 +5,7 @@
 <title>FR CONSOLE - Login</title>
 
 <!-- Fonts -->
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@900&family=Inter:wght@500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@900&family=Inter:wght@600&display=swap" rel="stylesheet">
 
 <!-- Bootstrap -->
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -39,11 +39,11 @@
 
   .title {
     font-family: "Poppins", sans-serif;
-    font-size: 65px; /* bigger */
+    font-size: 65px;
     color: #ff1a1a;
     font-weight: 900;
     letter-spacing: 5px;
-    margin-bottom: 45px; /* more space above form */
+    margin-bottom: 45px;
     text-shadow: 0 0 25px rgba(255,0,0,0.9);
   }
 
@@ -52,13 +52,20 @@
     backdrop-filter: blur(10px);
     padding: 40px;
     border-radius: 18px;
-    width: 420px; /* slightly wider */
+    width: 420px;
     box-shadow: 0 0 25px rgba(255,0,0,0.35);
   }
 
+  .auth-title {
+    font-size: 22px;
+    font-weight: 800;
+    margin-bottom: 25px;
+    letter-spacing: 1px;
+  }
+
   .login-box input {
-    height: 60px; /* bigger input height */
-    font-size: 20px; /* bigger text */
+    height: 60px;
+    font-size: 20px;
     border-radius: 12px;
     font-weight: 600;
     margin-bottom: 18px;
@@ -81,6 +88,8 @@
   <h1 class="title">FR CONSOLE</h1>
 
   <div class="login-box">
+    <div class="auth-title">PANNEL AUTHENTICATION</div>
+
     <form method="POST">
       <input type="text" class="form-control" placeholder="Username" name="username" required>
       <input type="password" class="form-control" placeholder="Password" name="password" required>
