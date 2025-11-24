@@ -1,86 +1,108 @@
-PASTE START FROM HERE
-=====================================================================
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <title>FR CONSOLE - USER PANEL</title>
 
+  <!-- Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@900&family=Inter:wght@500;600&display=swap" rel="stylesheet">
+
+  <!-- Bootstrap -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <!-- Particles -->
   <script src="https://cdn.jsdelivr.net/npm/tsparticles@2.12.0/tsparticles.bundle.min.js"></script>
 
   <style>
-    body { margin:0; padding:0; background:#000; font-family:"Inter", sans-serif; overflow-x:hidden; }
+    body { margin:0; padding:0; background:#000; font-family:"Inter",sans-serif; overflow-x:hidden; }
     #particles-js { position:fixed; inset:0; width:100%; height:100%; z-index:-1; }
 
     .sidebar {
       width:240px; height:100vh; position:fixed;
-      background-color:rgba(15,15,15,0.95); border-right:1px solid #222;
-      padding:25px 0; box-shadow:4px 0 15px rgba(255,0,0,0.2);
+      background:rgba(15,15,15,0.95); border-right:1px solid #222;
+      box-shadow:4px 0 15px rgba(255,0,0,0.2); padding:25px 0;
     }
     .sidebar h1 {
-      font-family:"Poppins",sans-serif; font-size:38px; font-weight:900;
-      text-align:center; color:#ff1a1a; text-shadow:0 0 20px rgba(255,0,0,0.9); margin-bottom:8px;
+      font-family:"Poppins"; font-size:38px; font-weight:900;
+      text-align:center; color:#ff1a1a;
+      text-shadow:0 0 20px rgba(255,0,0,0.9); margin-bottom:8px;
     }
-    .sidebar p { text-align:center; color:#999; font-size:13px; margin-bottom:20px; }
+    .sidebar p {
+      text-align:center; font-size:15px; font-weight:900;
+      color:#ff1a1a; text-shadow:0 0 12px rgba(255,0,0,0.7);
+      margin-bottom:22px;
+    }
     .sidebar a {
-      display:block; padding:12px 20px; margin:6px 12px; text-decoration:none;
-      border-radius:10px; transition:0.25s; color:white; font-weight:600; font-size:14px;
+      display:block; padding:12px 20px; margin:6px 12px;
+      border-radius:10px; text-decoration:none; color:#eee;
+      font-weight:600; transition:0.25s;
     }
-    .sidebar a:hover, .sidebar a.active {
+    .sidebar a.active, .sidebar a:hover {
       background:#ff1a1a; color:white; box-shadow:0 0 12px rgba(255,0,0,0.7);
     }
 
-    .main {
-      margin-left:260px; padding:40px 50px; min-height:100vh; color:white;
+    .main { margin-left:260px; padding:40px 50px; min-height:100vh; color:white; }
+
+    .form-label {
+      font-weight:900; font-family:"Poppins";
+      color:#ff1a1a !important;
+      text-shadow:0 0 10px rgba(255,0,0,0.8);
+      font-size:20px;
     }
+
     .section { display:none; }
     .section.active {
-      display:block; background:rgba(255,255,255,0.06); backdrop-filter:blur(10px);
-      padding:25px; border-radius:15px; box-shadow:0 0 18px rgba(255,0,0,0.15);
+      display:block; background:rgba(255,255,255,0.06);
+      backdrop-filter:blur(10px); padding:25px; border-radius:15px;
+      box-shadow:0 0 18px rgba(255,0,0,0.2);
     }
+
     h4 {
-      font-family:"Poppins"; font-weight:900; font-size:25px; margin-bottom:15px;
-      color:#ff1a1a; text-shadow:0 0 15px rgba(255,0,0,0.7);
+      font-family:"Poppins"; font-size:27px; font-weight:900;
+      color:#ff1a1a; margin-bottom:15px;
+      text-shadow:0 0 15px rgba(255,0,0,0.7);
     }
+
     .form-control, .form-select {
       background:#111; border:1px solid #333; color:white;
     }
     .form-control:focus, .form-select:focus {
-      border-color:#ff1a1a; background:#0d0d0d;
-      box-shadow:0 0 10px rgba(255,0,0,0.5);
+      border-color:#ff1a1a; box-shadow:0 0 10px rgba(255,0,0,0.6);
     }
 
-    table { color:white; }
-    table thead th { background:#151515; color:#ff1a1a; border-color:#333; }
+    table { color:white; font-size:14px; }
+    table thead th { background:#151515; border-color:#333; color:#ff1a1a; }
     table tbody td { background:#101010; border-color:#333; }
 
     .toast {
       position:fixed; bottom:20px; right:-300px; min-width:260px;
-      padding:12px 24px; background:#ff1a1a; color:white; font-weight:bold;
+      background:#ff1a1a; padding:12px 24px; color:white; font-weight:bold;
       border-radius:6px; animation:slideIn .5s forwards; z-index:1000;
     }
     @keyframes slideIn { from{right:-300px;} to{right:20px;} }
 
     #messageList {
-      max-height:400px; overflow-y:auto; background:#090909; border:1px solid #333; padding:10px; border-radius:8px;
+      max-height:400px; overflow-y:auto;
+      border:1px solid #333; padding:10px; border-radius:8px; background:#0a0a0a;
     }
 
     #loginCode {
-      background:#050505; color:white; border:1px solid #333; font-family:monospace;
-      min-height:180px; white-space:pre-wrap; border-radius:8px; padding:10px;
+      background:#050505; border:1px solid #333;
+      border-radius:10px; font-family:monospace; padding:10px;
+      white-space:pre-wrap; color:#fff; min-height:180px;
     }
 
     .developer {
-      background:#2c1905; color:#e67e22; padding:4px 8px; border-radius:4px;
-      font-size:14px; font-weight:600; display:inline-block; margin-bottom:10px;
+      font-size:14px; font-weight:800;
+      padding:4px 8px; color:#e67e22;
+      background:#2c1905; border-radius:5px;
+      display:inline-block;
     }
   </style>
 </head>
 
 <body>
+
 <div id="particles-js"></div>
 
 <div class="sidebar">
@@ -88,15 +110,16 @@ PASTE START FROM HERE
   <p>USER MANAGEMENT</p>
   <a href="#" onclick="showSection('add',event)" class="active">➕ Add User</a>
   <a href="#" onclick="showSection('delete',event)">❌ Delete User</a>
-  <a href="#" onclick="showSection('pause',event)">⏸️ Pause User</a>
-  <a href="#" onclick="showSection('info',event)">ℹ️ Info User</a>
+  <a href="#" onclick="showSection('pause',event)">⏸ Pause User</a>
+  <a href="#" onclick="showSection('info',event)">ℹ Info User</a>
   <a href="#" onclick="showSection('show',event)">📋 Show Users</a>
   <a href="#" onclick="showSection('reset',event)">🔄 Reset HWID</a>
-  <a href="#" onclick="showSection('sendmsg',event)">✉️ Send Message</a>
-  <a href="#" onclick="showSection('project',event)">📁 Project</a>
+  <a href="#" onclick="showSection('sendmsg',event)">✉ Send Message</a>
+  <a href="#" onclick="showSection('project',event)">📁 Project Code</a>
 </div>
 
 <div class="main">
+
   <label class="form-label">Select Application</label>
   <select class="form-select mb-3" id="appSelect" onchange="refreshUsers()">
     <option value="FRCONSOLE">FR CONSOLE</option>
@@ -104,18 +127,18 @@ PASTE START FROM HERE
     <option value="TESTER">TESTER</option>
   </select>
 
-  <!-- ADD -->
+  <!-- ADD USER -->
   <div id="add" class="section active">
     <h4>➕ Add User</h4>
     <form onsubmit="addUser(event)">
       <input id="add_username" placeholder="Username" class="form-control mb-2" required>
-      <input id="add_password" placeholder="Password" class="form-control mb-2" required type="password">
+      <input id="add_password" placeholder="Password" class="form-control mb-2" type="password" required>
       <input id="add_expiry" class="form-control mb-2" type="date" required>
-      <button class="btn btn-success">Add</button>
+      <button class="btn btn-success mt-1">Add</button>
     </form>
   </div>
 
-  <!-- DELETE -->
+  <!-- DELETE USER -->
   <div id="delete" class="section">
     <h4>❌ Delete User</h4>
     <form onsubmit="deleteUser(event)">
@@ -124,11 +147,11 @@ PASTE START FROM HERE
     </form>
   </div>
 
-  <!-- PAUSE -->
+  <!-- PAUSE / UNPAUSE -->
   <div id="pause" class="section">
-    <h4>⏸️ Pause / Unpause User</h4>
+    <h4>⏸ Pause / Unpause User</h4>
     <form onsubmit="pauseUser(event,'pause')">
-      <input id="pause_username" placeholder="Username" class="form-control mb-2" required>
+      <input id="pause_username" class="form-control mb-2" placeholder="Username" required>
       <button class="btn btn-warning me-2">Pause</button>
       <button type="button" onclick="pauseUser(event,'unpause')" class="btn btn-secondary">Unpause</button>
     </form>
@@ -136,15 +159,15 @@ PASTE START FROM HERE
 
   <!-- INFO -->
   <div id="info" class="section">
-    <h4>ℹ️ User Info</h4>
+    <h4>ℹ User Info</h4>
     <form onsubmit="infoUser(event)">
       <input id="info_username" class="form-control mb-2" placeholder="Username" required>
       <button class="btn btn-primary">Get Info</button>
     </form>
-    <div id="infoPanel"></div>
+    <div id="infoPanel" class="mt-3"></div>
   </div>
 
-  <!-- SHOW -->
+  <!-- SHOW USERS -->
   <div id="show" class="section">
     <h4>📋 All Users</h4>
     <table class="table table-bordered">
@@ -159,22 +182,22 @@ PASTE START FROM HERE
   <div id="reset" class="section">
     <h4>🔄 Reset HWID</h4>
     <form onsubmit="resetHWID(event)">
-      <input id="reset_username" placeholder="Username" class="form-control mb-2" required>
+      <input id="reset_username" class="form-control mb-2" placeholder="Username" required>
       <button class="btn btn-dark">Reset</button>
     </form>
   </div>
 
-  <!-- SEND MSG -->
+  <!-- SEND MESSAGE -->
   <div id="sendmsg" class="section">
-    <h4>✉️ Send Message</h4>
+    <h4>✉ Send Message</h4>
     <form onsubmit="loadUserMessages(event)" class="mb-2">
       <div class="input-group">
-        <input id="message_username" placeholder="Enter Username" class="form-control" required>
+        <input id="message_username" class="form-control" placeholder="Enter Username" required>
         <button class="btn btn-secondary">🔄 Load</button>
       </div>
     </form>
     <form onsubmit="sendMessage(event)" class="mb-2">
-      <textarea id="message_text" placeholder="Type your message..." class="form-control" rows="2" required></textarea>
+      <textarea id="message_text" class="form-control" rows="2" placeholder="Type message..." required></textarea>
       <button class="btn btn-primary mt-2">Send</button>
     </form>
     <div id="messageList"></div>
@@ -209,9 +232,9 @@ else
     status.Text = "Status: " + FRCONSOLE.response.message;
 }
     </pre>
-    <button class="btn btn-light btn-sm" onclick="copyCode()">📋 Copy</button>
-    <p class="developer mt-2">Developer: SHUBH</p>
-    <a href="/static/FRCONSOLE.cs" download class="btn btn-success btn-sm">⬇️ Download FRCONSOLE.cs</a>
+    <button class="btn btn-light btn-sm mt-1" onclick="copyCode()">📋 Copy</button><br><br>
+    <p class="developer">Developer: SHUBH</p><br>
+    <a href="/static/FRCONSOLE.cs" download class="btn btn-success btn-sm">⬇ Download FRCONSOLE.cs</a>
   </div>
 </div>
 
@@ -238,66 +261,60 @@ function getCategory(){ return document.getElementById('appSelect').value; }
 function addUser(e){
   e.preventDefault();
   fetch('/add_user',{method:'POST',body:new URLSearchParams({
-    category:getCategory(),
-    username:document.getElementById('add_username').value,
-    password:document.getElementById('add_password').value,
-    expiry:document.getElementById('add_expiry').value
+    category:getCategory(), username:document.getElementById('add_username').value,
+    password:document.getElementById('add_password').value, expiry:document.getElementById('add_expiry').value
   })}).then(r=>r.json()).then(d=>{showToast(d.message); if(d.status==='success')refreshUsers();});
 }
 
 function deleteUser(e){
   e.preventDefault();
   fetch('/delete_user',{method:'POST',body:new URLSearchParams({
-    category:getCategory(),
-    username:document.getElementById('delete_username').value
+    category:getCategory(), username:document.getElementById('delete_username').value
   })}).then(r=>r.json()).then(d=>{showToast(d.message); if(d.status==='success')refreshUsers();});
 }
 
 function pauseUser(e,action){
   e.preventDefault();
   fetch('/pause_user',{method:'POST',body:new URLSearchParams({
-    category:getCategory(),
-    username:document.getElementById('pause_username').value,
-    action:action
+    category:getCategory(), username:document.getElementById('pause_username').value, action:action
   })}).then(r=>r.json()).then(d=>showToast(d.message));
 }
 
 function infoUser(e){
   e.preventDefault();
   fetch('/info_user',{method:'POST',body:new URLSearchParams({
-    category:getCategory(),
-    username:document.getElementById('info_username').value
+    category:getCategory(), username:document.getElementById('info_username').value
   })}).then(r=>r.json()).then(d=>{
     if(d.status==='success'){
       let u=d.data;
       document.getElementById('infoPanel').innerHTML=
-        `<div class="mt-3 p-3 bg-dark rounded border border-secondary">
-         <p><b>User:</b> ${u.Username}</p>
-         <p><b>Pass:</b> ${u.Password}</p>
-         <p><b>HWID:</b> ${u.HWID||'None'}</p>
-         <p><b>Expiry:</b> ${u.Expiry}</p>
-         <p><b>Created:</b> ${u.CreatedAt}</p>
-         <p><b>Status:</b> ${u.Status||'Unknown'}</p>
-         </div>`;
+      `<div class="p-3 bg-dark rounded border border-secondary">
+        <p><b>User:</b> ${u.Username}</p>
+        <p><b>Pass:</b> ${u.Password}</p>
+        <p><b>HWID:</b> ${u.HWID||'None'}</p>
+        <p><b>Expiry:</b> ${u.Expiry}</p>
+        <p><b>Created:</b> ${u.CreatedAt}</p>
+        <p><b>Status:</b> ${u.Status}</p>
+      </div>`;
     } else showToast(d.message);
   });
 }
 
 function refreshUsers(){
   fetch('/get_users',{method:'POST',body:new URLSearchParams({category:getCategory()})})
-    .then(r=>r.json()).then(users=>{
-      let t=document.getElementById('userList'); t.innerHTML='';
-      users.forEach(u=>{t.innerHTML+=`<tr>
-<td>${u.Username}</td><td>${u.Password}</td><td>${u.HWID||'None'}</td>
-<td>${u.Expiry}</td><td>${u.CreatedAt}</td><td>${u.Status}</td></tr>`;});
+  .then(r=>r.json()).then(users=>{
+    let list=document.getElementById('userList'); list.innerHTML="";
+    users.forEach(u=>{
+      list.innerHTML+=`<tr><td>${u.Username}</td><td>${u.Password}</td><td>${u.HWID||"None"}</td>
+      <td>${u.Expiry}</td><td>${u.CreatedAt}</td><td>${u.Status}</td></tr>`;
     });
+  });
 }
 
 function resetHWID(e){
   e.preventDefault();
   fetch('/reset_hwid',{method:'POST',body:new URLSearchParams({
-    category:getCategory(),
-    username:document.getElementById('reset_username').value
+    category:getCategory(), username:document.getElementById('reset_username').value
   })}).then(r=>r.json()).then(d=>showToast(d.message));
 }
 
@@ -321,55 +338,34 @@ function loadMessages(username){
   fetch('/get_messages',{method:'POST',body:new URLSearchParams({
     category:getCategory(),username:username
   })}).then(r=>r.json()).then(data=>{
-    let box=document.getElementById("messageList");
-    box.innerHTML='';
-    if(data.status==='success'){
+    let box=document.getElementById("messageList"); box.innerHTML='';
+    if(data.status==="success"){
       data.messages.forEach((m,i)=>{
         let div=document.createElement("div");
         div.className="border rounded p-2 mb-2 position-relative";
-        div.innerHTML=`<b>${m.status==="inactive"?"<s>":""}${m.text}${m.status==="inactive"?"</s>":""}</b><br>
-        <small>${m.time}</small>
-        <div onclick="toggleMenu(${i})" style="position:absolute;top:5px;right:10px;cursor:pointer;">⋮</div>
-        <div id="menu-${i}" style="display:none;position:absolute;top:25px;right:10px;" class="bg-dark border rounded p-1">
-          <button onclick="updateMsg('${username}',${i},'active')" class="btn btn-sm btn-success w-100">Active</button>
-          <button onclick="updateMsg('${username}',${i},'inactive')" class="btn btn-sm btn-warning w-100">Inactive</button>
-          <button onclick="updateMsg('${username}',${i},'delete')" class="btn btn-sm btn-danger w-100">Delete</button>
-        </div>`;
+        div.innerHTML=
+        `<b>${m.status==="inactive"?"<s>":""}${m.text}${m.status==="inactive"?"</s>":""}</b><br>
+        <small>${m.time}</small>`;
         box.appendChild(div);
       });
-    } else box.innerHTML='<div class="text-muted">No messages found.</div>';
+    } else box.innerHTML="<div class='text-muted'>No messages found</div>";
   });
-}
-
-function toggleMenu(i){
-  let m=document.getElementById(`menu-${i}`);
-  m.style.display=m.style.display==="none"||m.style.display===""?"block":"none";
-}
-
-function updateMsg(username,index,action){
-  fetch('/update_message_status',{method:"POST",body:new URLSearchParams({
-    username:username,category:getCategory(),index:index,action:action
-  })}).then(r=>r.json()).then(d=>{showToast(d.message);loadMessages(username);});
 }
 
 function copyCode(){
   navigator.clipboard.writeText(document.getElementById("loginCode").innerText)
-    .then(()=>showToast("Copied!")).catch(()=>showToast("Failed"));
+  .then(()=>showToast("Copied!"))
+  .catch(()=>showToast("Copy Failed!"));
 }
 
-tsParticles.load("particles-js", {
+tsParticles.load("particles-js",{
   background:{color:"#000"},
   particles:{
-    number:{value:60},
-    size:{value:3},
-    move:{enable:true,speed:1.1},
+    number:{value:60}, size:{value:3}, move:{enable:true,speed:1.1},
     color:{value:"#ff0000"},
-    links:{enable:true,color:"#ff0000",opacity:0.6,distance:140}
+    links:{enable:true,color:"#ff0000",distance:140,opacity:.6,width:1}
   }
 });
 </script>
 </body>
 </html>
-
-=====================================================================
-PASTE END HERE
