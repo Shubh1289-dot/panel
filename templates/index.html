@@ -196,11 +196,11 @@
   <h4>📁 Project Name</h4>
   <div class="mb-3 position-relative">
     <pre id="loginCode" class="bg-dark text-white p-3 rounded" style="font-family: monospace; white-space: pre-wrap; word-break: break-word; min-height: 180px;">
-HydraAuth.login(guna2TextBox1.Text, guna2TextBox2.Text);
+FRCONSOLE.login(guna2TextBox1.Text, guna2TextBox2.Text);
 
-if (HydraAuth.response.status == "success")
+if (FRCONSOLE.response.status == "success")
 {
-    string message = HydraAuth.GetLatestMessage(guna2TextBox1.Text); // ← Username pass karo
+    string message = FRCONSOLE.GetLatestMessage(guna2TextBox1.Text); // ← Username pass karo
 
     if (!string.IsNullOrEmpty(message))
     {
@@ -219,7 +219,7 @@ if (HydraAuth.response.status == "success")
 }
 else
 {
-    status.Text = "Status: " + HydraAuth.response.message;
+    status.Text = "Status: " + FRCONSOLE.response.message;
 }
     </pre>
     <button class="btn btn-sm btn-outline-light position-absolute top-0 end-0 m-2" onclick="copyCode()">📋</button>
@@ -228,7 +228,7 @@ else
   <!-- 👇 Styled Description and Developer Info -->
 <p class="developer">Developer: FR CONSOLE</p>
 <div style="margin-bottom: 12px;"></div>
-<a href="/static/HydraAuth.cs" download class="btn btn-success btn-sm">⬇️ Download HydraAuth.cs</a>
+<a href="/static/FRCONSOLE.cs" download class="btn btn-success btn-sm">⬇️ Download FRCONSOLE.cs</a>
 </div>
 </div>
 
