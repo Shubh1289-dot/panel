@@ -1,101 +1,34 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>FR CONSOLE - USER PANEL</title>
-
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@900&family=Inter:wght@500;600&display=swap" rel="stylesheet">
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-  <script src="https://cdn.jsdelivr.net/npm/tsparticles@2.12.0/tsparticles.bundle.min.js"></script>
+<meta charset="UTF-8">
+<title>FR CONSOLE - USER PANEL</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@900&family=Inter:wght@500;600&display=swap" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/tsparticles@2.12.0/tsparticles.bundle.min.js"></script>
 
 <style>
-body { margin:0; padding:0; background:#000; font-family:"Inter",sans-serif; overflow-x:hidden; }
-#particles-js { position:fixed; inset:0; width:100%; height:100%; z-index:-1; }
-
-.sidebar {
-  width:240px; height:100vh; position:fixed;
-  background:rgba(15,15,15,0.95); border-right:1px solid #222;
-  padding-top:25px; box-shadow:4px 0 15px rgba(255,0,0,0.2);
-}
-.sidebar h1 {
-  font-family:"Poppins"; font-weight:900; font-size:39px;
-  text-align:center; color:#ff1a1a;
-  text-shadow:0 0 20px rgba(255,0,0,0.9); margin-bottom:10px;
-}
-.sidebar p {
-  font-family:"Poppins",sans-serif !important;
-  text-align:center; color:#ff1a1a; font-size:20px; font-weight:900;
-  text-shadow:0 0 15px rgba(255,0,0,0.7); letter-spacing:1px;
-  margin-bottom:22px;
-}
-
-.sidebar a {
-  display:block; padding:12px 20px; margin:6px 12px; border-radius:10px;
-  color:white; text-decoration:none; font-weight:600; transition:0.25s;
-}
-.sidebar a.active, .sidebar a:hover {
-  background:#ff1a1a; color:white; box-shadow:0 0 12px rgba(255,0,0,0.7);
-}
-
-/* MAIN PANEL */
-.main { margin-left:260px; padding:40px 50px; min-height:100vh; color:white; }
-
-.form-label {
-  font-family:"Poppins"; font-weight:900; font-size:22px;
-  color:#ff1a1a !important; text-shadow:0 0 12px rgba(255,0,0,0.7);
-}
-
-.section { display:none; }
-.section.active {
-  display:block; background:rgba(255,255,255,0.05);
-  backdrop-filter:blur(10px); padding:25px; border-radius:15px;
-  box-shadow:0 0 18px rgba(255,0,0,0.3);
-}
-
-h4 {
-  font-family:"Poppins"; font-size:27px; font-weight:900;
-  color:#ff1a1a; text-shadow:0 0 15px rgba(255,0,0,0.7);
-  margin-bottom:15px;
-}
-
-/* Inputs */
-.form-control,.form-select {
-  background:#111; border:1px solid #333; color:white;
-}
-.form-control:focus,.form-select:focus {
-  border-color:#ff1a1a; box-shadow:0 0 10px rgba(255,0,0,0.6);
-}
-
-/* Table */
-table { color:white; }
-table thead th { background:#151515; border-color:#333; color:#ff1a1a; }
-table tbody td { background:#101010; border-color:#333; }
-
-/* Toast */
-.toast {
-  position:fixed; bottom:20px; right:-300px;
-  background:#ff1a1a; padding:12px 24px; color:white; font-weight:900;
-  border-radius:6px; z-index:999; min-width:260px;
-  animation:slideIn .5s forwards;
-}
-@keyframes slideIn { from{right:-300px;} to{right:20px;} }
-
-#messageList {
-  max-height:400px; overflow-y:auto; background:#0a0a0a;
-  padding:10px; border-radius:8px; border:1px solid #333;
-}
-
-#loginCode {
-  background:#050505; color:#fff; border:1px solid #333;
-  white-space:pre-wrap; border-radius:10px; padding:12px;
-  min-height:180px; font-family:monospace;
-}
-
-.developer {
-  font-family:"Poppins"; font-size:15px; font-weight:800;
-  background:#2c1905; color:#e67e22; padding:4px 8px;
-  border-radius:6px; display:inline-block; margin-top:10px;
-}
+body{margin:0;background:#000;font-family:"Inter",sans-serif;overflow-x:hidden;}
+#particles-js{position:fixed;inset:0;z-index:-1;}
+.sidebar{width:240px;height:100vh;position:fixed;background:rgba(15,15,15,0.95);border-right:1px solid #222;box-shadow:4px 0 18px rgba(255,0,0,0.2);padding-top:25px;}
+.sidebar h1{font-family:"Poppins";font-size:38px;font-weight:900;color:#ff1a1a;text-align:center;margin-bottom:10px;text-shadow:0 0 20px red;}
+.sidebar p{font-family:"Poppins";font-size:19px;font-weight:900;color:#ff1a1a;text-align:center;text-shadow:0 0 12px red;letter-spacing:1px;margin-bottom:20px;}
+.sidebar a{display:block;color:#fff;padding:12px 20px;margin:6px 12px;border-radius:10px;text-decoration:none;font-weight:600;transition:0.2s;}
+.sidebar a:hover,.sidebar a.active{background:#ff1a1a;box-shadow:0 0 12px red;}
+.main{margin-left:260px;padding:40px 45px;color:white;}
+.form-label{font-family:"Poppins";font-size:22px;font-weight:900;color:#ff1a1a;text-shadow:0 0 10px red;}
+.section{display:none;}
+.section.active{display:block;background:rgba(255,255,255,0.06);backdrop-filter:blur(10px);padding:25px;border-radius:15px;}
+h4{font-family:"Poppins";font-size:27px;font-weight:900;color:#ff1a1a;text-shadow:0 0 15px red;}
+.form-control,.form-select{background:#111;color:white;border:1px solid #333;}
+.form-control:focus,.form-select:focus{border-color:#ff1a1a;box-shadow:0 0 10px red;}
+table thead th{color:#ff1a1a;background:#151515;}
+table tbody td{background:#111;}
+.toast{position:fixed;bottom:20px;right:-300px;background:#ff1a1a;color:#fff;font-weight:900;padding:12px 24px;border-radius:6px;animation:slideIn .5s forwards;}
+@keyframes slideIn{from{right:-300px;}to{right:20px;}}
+#messageList{max-height:350px;overflow-y:auto;background:#0b0b0b;border:1px solid #333;padding:10px;border-radius:8px;}
+#loginCode{background:#080808;border:1px solid #333;color:#fff;padding:10px;min-height:180px;border-radius:10px;font-family:monospace;}
+.developer{font-family:"Poppins";background:#2c1905;color:#e67e22;padding:4px 8px;border-radius:6px;font-size:15px;font-weight:900;}
 </style>
 </head>
 
@@ -103,214 +36,122 @@ table tbody td { background:#101010; border-color:#333; }
 <div id="particles-js"></div>
 
 <div class="sidebar">
-  <h1>FR CONSOLE</h1>
-  <p>USER MANAGEMENT</p>
-  <a href="#" onclick="showSection('add',event)" class="active">➕ Add User</a>
-  <a href="#" onclick="showSection('delete',event)">❌ Delete User</a>
-  <a href="#" onclick="showSection('pause',event)">⏸ Pause User</a>
-  <a href="#" onclick="showSection('info',event)">ℹ Info User</a>
-  <a href="#" onclick="showSection('show',event)">📋 Show Users</a>
-  <a href="#" onclick="showSection('reset',event)">🔄 Reset HWID</a>
-  <a href="#" onclick="showSection('sendmsg',event)">✉ Send Message</a>
-  <a href="#" onclick="showSection('project',event)">📁 Project Code</a>
+<h1>FR CONSOLE</h1>
+<p>USER MANAGEMENT</p>
+<a class="active" onclick="showSection('add',event)">➕ Add User</a>
+<a onclick="showSection('delete',event)">❌ Delete User</a>
+<a onclick="showSection('pause',event)">⏸ Pause User</a>
+<a onclick="showSection('info',event)">ℹ Info User</a>
+<a onclick="showSection('show',event)">📋 Show Users</a>
+<a onclick="showSection('reset',event)">🔄 Reset HWID</a>
+<a onclick="showSection('sendmsg',event)">✉ Send Message</a>
+<a onclick="showSection('project',event)">📁 Project Code</a>
 </div>
 
 <div class="main">
-
 <label class="form-label">SELECT APPLICATION</label>
 <select class="form-select mb-3" id="appSelect" onchange="refreshUsers()">
-  <option value="FRCONSOLE">FRCONSOLE</option>
-  <option value="ADMIN">ADMIN</option>
-  <option value="TESTER">TESTER</option>
+<option value="FRCONSOLE">FR CONSOLE</option>
+<option value="ADMIN">ADMIN</option>
+<option value="TESTER">TESTER</option>
 </select>
 
-<!-- ADD -->
 <div id="add" class="section active">
-  <h4>➕ ADD USER</h4>
-  <form onsubmit="addUser(event)">
-    <input id="add_username" class="form-control mb-2" placeholder="Username" required>
-    <input id="add_password" class="form-control mb-2" placeholder="Password" type="password" required>
-    <input id="add_expiry" class="form-control mb-2" type="date" required>
-    <button class="btn btn-success">Add</button>
-  </form>
+<h4>➕ ADD USER</h4>
+<form onsubmit="addUser(event)">
+<input id="add_username" class="form-control mb-2" placeholder="Username" required>
+<input id="add_password" class="form-control mb-2" placeholder="Password" required>
+<input id="add_expiry" class="form-control mb-2" type="date" required>
+<button class="btn btn-success mt-1">Add</button>
+</form>
 </div>
 
-<!-- DELETE -->
 <div id="delete" class="section">
-  <h4>❌ DELETE USER</h4>
-  <form onsubmit="deleteUser(event)">
-    <input id="delete_username" class="form-control mb-2" placeholder="Username" required>
-    <button class="btn btn-danger">Delete</button>
-  </form>
+<h4>❌ DELETE USER</h4>
+<form onsubmit="deleteUser(event)">
+<input id="delete_username" class="form-control mb-2" placeholder="Username" required>
+<button class="btn btn-danger">Delete</button>
+</form>
 </div>
 
-<!-- PAUSE -->
 <div id="pause" class="section">
-  <h4>⏸ PAUSE / UNPAUSE</h4>
-  <form onsubmit="pauseUser(event,'pause')">
-    <input id="pause_username" class="form-control mb-2" placeholder="Username" required>
-    <button class="btn btn-warning me-2">Pause</button>
-    <button type="button" onclick="pauseUser(event,'unpause')" class="btn btn-secondary">Unpause</button>
-  </form>
+<h4>⏸ PAUSE / UNPAUSE</h4>
+<form onsubmit="pauseUser(event,'pause')">
+<input id="pause_username" class="form-control mb-2" placeholder="Username" required>
+<button class="btn btn-warning me-2">Pause</button>
+<button type="button" class="btn btn-secondary" onclick="pauseUser(event,'unpause')">Unpause</button>
+</form>
 </div>
 
-<!-- INFO -->
 <div id="info" class="section">
-  <h4>ℹ USER INFO</h4>
-  <form onsubmit="infoUser(event)">
-    <input id="info_username" class="form-control mb-2" placeholder="Username" required>
-    <button class="btn btn-primary">Get Info</button>
-  </form>
-  <div id="infoPanel" class="mt-3"></div>
+<h4>ℹ USER INFO</h4>
+<form onsubmit="infoUser(event)">
+<input id="info_username" class="form-control mb-2" placeholder="Username" required>
+<button class="btn btn-primary">Get Info</button>
+</form>
+<div id="infoPanel"></div>
 </div>
 
-<!-- SHOW USERS -->
 <div id="show" class="section">
-  <h4>📋 ALL USERS</h4>
-  <table class="table table-bordered">
-    <thead>
-      <tr><th>Username</th><th>Password</th><th>HWID</th><th>Expiry</th><th>Created</th><th>Status</th></tr>
-    </thead>
-    <tbody id="userList"></tbody>
-  </table>
+<h4>📋 ALL USERS</h4>
+<table class="table table-bordered">
+<thead><tr><th>Username</th><th>Password</th><th>HWID</th><th>Expiry</th><th>Created</th><th>Status</th></tr></thead>
+<tbody id="userList"></tbody></table>
 </div>
 
-<!-- RESET HWID -->
 <div id="reset" class="section">
-  <h4>🔄 RESET HWID</h4>
-  <form onsubmit="resetHWID(event)">
-    <input id="reset_username" class="form-control mb-2" placeholder="Username" required>
-    <button class="btn btn-dark">Reset</button>
-  </form>
-</div>
+<h4>🔄 RESET HWID</h4>
+<form onsubmit="resetHWID(event)">
+<input id="reset_username" placeholder="Username" class="form-control mb-2" required>
+<button class="btn btn-dark">Reset</button></form></div>
 
-<!-- SEND MESSAGE -->
 <div id="sendmsg" class="section">
-  <h4>✉ SEND MESSAGE</h4>
-  <form onsubmit="loadUserMessages(event)" class="mb-2">
-    <div class="input-group">
-      <input id="message_username" class="form-control" placeholder="Enter Username" required>
-      <button class="btn btn-secondary">🔄 Load</button>
-    </div>
-  </form>
-  <form onsubmit="sendMessage(event)" class="mb-2">
-    <textarea id="message_text" class="form-control" rows="2" placeholder="Message" required></textarea>
-    <button class="btn btn-primary mt-2">Send</button>
-  </form>
-  <div id="messageList"></div>
+<h4>✉ SEND MESSAGE</h4>
+<form onsubmit="loadUserMessages(event)" class="mb-2">
+<div class="input-group">
+<input id="message_username" placeholder="Enter Username" class="form-control" required>
+<button class="btn btn-secondary">Load</button></div></form>
+<form onsubmit="sendMessage(event)" class="mb-2">
+<textarea id="message_text" class="form-control" rows="2" required></textarea>
+<button class="btn btn-primary mt-2">Send</button></form>
+<div id="messageList"></div>
 </div>
 
-<!-- PROJECT -->
 <div id="project" class="section">
-  <h4>📁 PROJECT CODE</h4>
-  <pre id="loginCode">
-FRCONSOLE.login(guna2TextBox1.Text, guna2TextBox2.Text);
-...
-(status.Text = "Status: " + FRCONSOLE.response.message);
-  </pre>
-  <button class="btn btn-light btn-sm mt-1" onclick="copyCode()">📋 Copy</button><br><br>
-  <p class="developer">Developer: SHUBH</p>
+<h4>📁 PROJECT CODE</h4>
+<pre id="loginCode">FRCONSOLE.login(guna2TextBox1.Text, guna2TextBox2.Text);</pre>
+<button class="btn btn-light btn-sm" onclick="copyCode()">📋 Copy</button><br><br>
+<p class="developer">Developer: SHUBH</p>
 </div>
 </div>
 
-<div id="toast" class="toast" style="display:none;"></div>
+<div id="toast" class="toast" style="display:none;">Message</div>
 
 <script>
-function showSection(id,e){
-  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
-  document.getElementById(id).classList.add('active');
-  document.querySelectorAll('.sidebar a').forEach(a=>a.classList.remove('active'));
-  if(e) e.target.classList.add('active');
-  if(id==="show") refreshUsers();
-}
-
-function showToast(msg){
-  const t=document.getElementById("toast");
-  t.innerText=msg;
-  t.style.display="block";
-  setTimeout(()=>t.style.right="-300px",3000);
-}
-
+function showSection(id,e){document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));document.getElementById(id).classList.add('active');document.querySelectorAll('.sidebar a').forEach(a=>a.classList.remove('active'));e.target.classList.add('active');if(id==="show")refreshUsers();}
+function showToast(m){let t=document.getElementById("toast");t.innerText=m;t.style.display="block";setTimeout(()=>t.style.right="-300px",3000);}
 function getCategory(){return document.getElementById("appSelect").value;}
 
-function addUser(e){
-  e.preventDefault();
-  fetch('/add_user',{method:'POST',body:new URLSearchParams({
-    category:getCategory(),username:document.getElementById("add_username").value,
-    password:document.getElementById("add_password").value,expiry:document.getElementById("add_expiry").value
-  })}).then(r=>r.json()).then(d=>{showToast(d.message);if(d.status==='success')refreshUsers();});
-}
+function addUser(e){e.preventDefault();fetch('/add_user',{method:'POST',body:new URLSearchParams({category:getCategory(),username:document.getElementById("add_username").value,password:document.getElementById("add_password").value,expiry:document.getElementById("add_expiry").value})}).then(r=>r.json()).then(d=>{showToast(d.message);refreshUsers();});}
+function deleteUser(e){e.preventDefault();fetch('/delete_user',{method:'POST',body:new URLSearchParams({category:getCategory(),username:document.getElementById("delete_username").value})}).then(r=>r.json()).then(d=>showToast(d.message));}
+function pauseUser(e,a){e.preventDefault();fetch('/pause_user',{method:'POST',body:new URLSearchParams({category:getCategory(),username:document.getElementById("pause_username").value,action:a})}).then(r=>r.json()).then(d=>showToast(d.message));}
 
-function deleteUser(e){
-  e.preventDefault();
-  fetch('/delete_user',{method:'POST',body:new URLSearchParams({
-    category:getCategory(),username:document.getElementById("delete_username").value
-  })}).then(r=>r.json()).then(d=>{showToast(d.message);if(d.status==='success')refreshUsers();});
-}
+function infoUser(e){e.preventDefault();fetch('/info_user',{method:'POST',body:new URLSearchParams({category:getCategory(),username:document.getElementById("info_username").value})}).then(r=>r.json()).then(d=>{if(d.status==='success'){let u=d.data;document.getElementById("infoPanel").innerHTML=`<div class='p-3 bg-dark rounded'><p><b>User:</b>${u.Username}</p><p><b>Pass:</b>${u.Password}</p><p><b>HWID:</b>${u.HWID}</p><p><b>Expiry:</b>${u.Expiry}</p><p><b>Created:</b>${u.CreatedAt}</p><p><b>Status:</b>${u.Status}</p></div>`;}else showToast(d.message);});}
 
-function pauseUser(e,a){
-  e.preventDefault();
-  fetch('/pause_user',{method:'POST',body:new	URLSearchParams({
-    category:getCategory(),username:document.getElementById("pause_username").value,action:a
-  })}).then(r=>r.json()).then(d=>showToast(d.message));}
+function refreshUsers(){fetch('/get_users',{method:'POST',body:new URLSearchParams({category:getCategory()})}).then(r=>r.json()).then(u=>{let t=document.getElementById("userList");t.innerHTML="";u.forEach(r=>{t.innerHTML+=`<tr><td>${r.Username}</td><td>${r.Password}</td><td>${r.HWID}</td><td>${r.Expiry}</td><td>${r.CreatedAt}</td><td>${r.Status}</td></tr>`});});}
 
-function infoUser(e){
-  e.preventDefault();
-  fetch('/info_user',{method:'POST',body:new URLSearchParams({
-   	category:getCategory(),username:document.getElementById("info_username").value
-  })}).then(r=>r.json()).then(d=>{
-    if(d.status==="success"){
-      let u=d.data;
-      document.getElementById("infoPanel").innerHTML=
-      `<div class='p-3 bg-dark rounded border border-secondary'>
-        <p><b>User:</b> ${u.Username}</p>
-        <p><b>Pass:</b> ${u.Password}</p>
-        <p><b>HWID:</b> ${u.HWID||"None"}</p>
-        <p><b>Expiry:</b> ${u.Expiry}</p>
-        <p><b>Created:</b> ${u.CreatedAt}</p>
-        <p><b>Status:</b> ${u.Status}</p>
-      </div>`;
-    } else showToast(d.message);
-  });
-}
+function resetHWID(e){e.preventDefault();fetch('/reset_hwid',{method:'POST',body:new URLSearchParams({category:getCategory(),username:document.getElementById("reset_username").value})}).then(r=>r.json()).then(d=>showToast(d.message));}
 
-function refreshUsers(){
-  fetch('/get_users',{method:'POST',body:new URLSearchParams({category:getCategory()})})
-    .then(r=>r.json()).then(users=>{
-      let t=document.getElementById("userList"); t.innerHTML="";
-      users.forEach(u=>{t.innerHTML+=
-        `<tr><td>${u.Username}</td><td>${u.Password}</td><td>${u.HWID||"None"}</td>
-        <td>${u.Expiry}</td><td>${u.CreatedAt}</td><td>${u.Status}</td></tr>`});
-    });
-}
+document.getElementById("message_username").addEventListener("input",()=>{if(document.getElementById("message_username").value.trim().length>=3)loadMessages(document.getElementById("message_username").value.trim());});
+function loadUserMessages(e){e.preventDefault();loadMessages(document.getElementById("message_username").value.trim());}
 
-function resetHWID(e){
-  e.preventDefault();
-  fetch('/reset_hwid',{method:'POST',body:new URLSearchParams({
-   	category:getCategory(),username:document.getElementById("reset_username").value
-  })}).then(r=>r.json()).then(d=>showToast(d.message));
-}
+function loadMessages(u){fetch('/get_messages',{method:'POST',body:new URLSearchParams({category:getCategory(),username:u})}).then(r=>r.json()).then(d=>{let b=document.getElementById("messageList");b.innerHTML='';if(d.status==='success'){d.messages.forEach(m=>{b.innerHTML+=`<div class='border rounded p-2 mb-2'><b>${m.text}</b><br><small>${m.time}</small></div>`})}else b.innerHTML="<span>No messages</span>";});}
 
-functionsendMessage(e){
-e.preventDefault();
-let u=document.getElementById("message_username").value.trim();
-let m=document.getElementById("message_text").value.trim();
-fetch('/send_message',{method:'POST',body:new URLSearchParams({username:u,message:m})})
-.then(r=>r.json()).then(d=>{showToast(d.message);if(d.status==='success'){document.getElementById("message_text").value='';loadMessages(u);}});
-}
+function sendMessage(e){e.preventDefault();let u=document.getElementById("message_username").value.trim();let m=document.getElementById("message_text").value.trim();fetch('/send_message',{method:'POST',body:new URLSearchParams({username:u,message:m})}).then(r=>r.json()).then(d=>{showToast(d.message);document.getElementById("message_text").value='';loadMessages(u);});}
 
 function copyCode(){navigator.clipboard.writeText(document.getElementById("loginCode").innerText).then(()=>showToast("Copied!"));}
 
-tsParticles.load("particles-js", {
-  background:{color:"#000"},
-  particles:{
-    number:{value:65},
-    move:{enable:true,speed:1.1},
-    size:{value:3},
-    color:{value:"#ff0000"},
-    links:{enable:true,color:"#ff0000",opacity:0.6,distance:140}
-  }
-});
+tsParticles.load("particles-js",{background:{color:"#000"},particles:{number:{value:65},move:{speed:1.2},size:{value:3},color:{value:"#ff0000"},links:{enable:true,color:"#ff0000",distance:130,opacity:.6}}});
 </script>
 </body>
 </html>
