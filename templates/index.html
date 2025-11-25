@@ -230,7 +230,7 @@
     <pre id="loginCode" class="p-3 rounded" style="background:#080808; color:white; border:1px solid #444; font-family: monospace; min-height:180px;">
 FRCONSOLE.login(guna2TextBox1.Text, guna2TextBox2.Text);
 
-if (FRCONSOLE.response.status == "success")
+if (FRCONSOLE.response.GetProperty("status").GetString() == "success")
 {
     string message = FRCONSOLE.GetLatestMessage(guna2TextBox1.Text);
 
@@ -244,14 +244,15 @@ if (FRCONSOLE.response.status == "success")
         msgDialog.Show();
     }
 
-    Form2 main = new Form2();
+    MAIN main = new MAIN();
     main.Show();
     this.Hide();
 }
 else
 {
-    status.Text = "Status: " + FRCONSOLE.response.message;
+    status.Text = "Status: " + FRCONSOLE.response.GetProperty("message").GetString();
 }
+
     </pre>
     <button class="btn btn-light btn-sm position-absolute top-0 end-0 m-2" onclick="copyCode()">📋</button>
   </div>
