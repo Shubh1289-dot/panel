@@ -133,11 +133,11 @@
     <label class="form-label">SELECT APPLICATION</label>
     <select class="form-select" id="appSelect" onchange="refreshUsers()">
       <option value="FRCONSOLE">FRCONSOLE</option>
-      <option value="ADMIN">SILENTAIM</option>
-      <option value="TESTER">INTERNAL</option>
-      <option value="TESTER">SOUTH</option>
-      <option value="TESTER">SOUTHAIM</option>
-      <option value="TESTER">SOUTHV2</option>
+      <option value="SILENTAIM">SILENTAIM</option>
+      <option value="INTERNAL">INTERNAL</option>
+      <option value="SOUTH">SOUTH</option>
+      <option value="SILENTAIM">SOUTHAIM</option>
+      <option value="SOUTHV2">SOUTHV2</option>
     </select>
   </div>
   <!-- Add User -->
@@ -218,7 +218,7 @@
     </div>
   </form>
 
-  <form onsubmit="sendMessage(event)" class="mb-3">
+  <form onsubmit="sendMessage(event)" classs="mb-3">
     <textarea required class="form-control mb-2" rows="2" placeholder="Type message..." id="message_text"></textarea>
     <button class="btn btn-primary">Send</button>
   </form>
