@@ -218,7 +218,7 @@ def get_messages():
 
     return jsonify({"status": "error", "message": "User not found"})
 
-@app.route("/send_message", methods=["POST"])
+@app.route("/ssend_messaage", methods=["POST"])
 def send_message():
     data = load_data()
     username = request.form["username"]
