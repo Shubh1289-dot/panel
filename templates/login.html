@@ -4,14 +4,8 @@
 <meta charset="UTF-8">
 <title>FR CONSOLE - Login</title>
 
-<!-- Fonts -->
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@900&family=Inter:wght@600&display=swap" rel="stylesheet">
-
-<!-- Bootstrap -->
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-
-<!-- TSParticles -->
-<script src="https://cdn.jsdelivr.net/npm/tsparticles@2.12.0/tsparticles.bundle.min.js"></script>
 
 <style>
   body {
@@ -19,20 +13,28 @@
     padding: 0;
     background: #000;
     height: 100vh;
+    overflow: hidden;
+    font-family: "Inter", sans-serif;
     display: flex;
     justify-content: center;
     align-items: center;
-    overflow: hidden;
-    font-family: "Inter", sans-serif;
   }
 
-  #particles-js {
-    position: fixed;
-    inset: 0;
-    z-index: -1;
+  /* Floating Red Neon Balls */
+  .orb {
+    position: absolute;
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    background: radial-gradient(circle, #ff3b3b, #990000);
+    box-shadow: 0 0 40px #ff1a1a, 0 0 80px #ff0000;
+    opacity: 0.85;
+    filter: blur(1px);
+    transition: transform 0.2s linear;
   }
 
   .login-container {
+    z-index: 2;
     text-align: center;
   }
 
@@ -47,12 +49,12 @@
   }
 
   .login-box {
-    background: rgba(255,255,255,0.08);
+    background: rgba(255,255,255,0.07);
     backdrop-filter: blur(10px);
     padding: 40px;
     border-radius: 18px;
     width: 420px;
-    box-shadow: 0 0 20px rgba(255,0,0,0.3);
+    box-shadow: 0 0 25px rgba(255,0,0,0.4);
   }
 
   .auth-title {
@@ -61,18 +63,16 @@
     color: #ff1a1a;
     font-weight: 900;
     margin-bottom: 25px;
-    text-shadow: 0 0 15px rgba(255,0,0,0.7);
   }
 
-  .login-box input {
+  input {
     height: 55px;
     font-size: 18px;
     border-radius: 12px;
     background: #111;
-    border: 1px solid #333;
     color: white;
+    border: 1px solid #333;
     margin-bottom: 18px;
-    font-weight: 600;
   }
 
   .btn-login {
@@ -86,17 +86,20 @@
 
 <body>
 
-<div id="particles-js"></div>
+<!-- Floating Neon Balls -->
+<div class="orb" id="orb1"></div>
+<div class="orb" id="orb2"></div>
+<div class="orb" id="orb3"></div>
 
+<!-- Login UI -->
 <div class="login-container">
   <h1 class="title">FR CONSOLE</h1>
-
   <div class="login-box">
     <div class="auth-title">PANNEL AUTHENTICATION</div>
 
     <form method="POST">
-      <input type="text" class="form-control" name="username" placeholder="Username" required>
-      <input type="password" class="form-control" name="password" placeholder="Password" required>
+      <input type="text" class="form-control" placeholder="Username" name="username" required>
+      <input type="password" class="form-control" placeholder="Password" name="password" required>
       <button class="btn btn-danger w-100 btn-login">LOGIN</button>
 
       {% if error %}
@@ -107,32 +110,48 @@
 </div>
 
 <script>
-tsParticles.load("particles-js", {
-  fpsLimit: 50,
+/* RANDOM FLOATING + MOUSE ATTRACTING GLOW BALLS */
 
-  particles: {
-    number: { value: 40 },   // light particles
-    size: { value: 2 },
-    move: {
-      speed: 0.7,
-      enable: true
-    },
-    opacity: { value: 0.6 },
-    color: { value: "#ff0000" },
-    shape: { type: "circle" },
+const orbs = [
+  { el: document.getElementById("orb1"), x: 100, y: 200, dx: 0.5, dy: 0.4 },
+  { el: document.getElementById("orb2"), x: 500, y: 400, dx: -0.4, dy: 0.5 },
+  { el: document.getElementById("orb3"), x: 300, y: 150, dx: 0.6, dy: -0.3 },
+];
 
-    links: {
-      enable: true,
-      distance: 120,
-      color: "#ff1a1a",
-      opacity: 0.3,
-      width: 1
-    }
-  },
+let mouseX = window.innerWidth / 2;
+let mouseY = window.innerHeight / 2;
 
-  background: { color: "#000" },
-  detectRetina: false
+document.addEventListener("mousemove", (e) => {
+  mouseX = e.clientX;
+  mouseY = e.clientY;
 });
+
+function animate() {
+  orbs.forEach(o => {
+    // random floating movement
+    o.x += o.dx;
+    o.y += o.dy;
+
+    if (o.x < 0 || o.x > window.innerWidth - 150) o.dx *= -1;
+    if (o.y < 0 || o.y > window.innerHeight - 150) o.dy *= -1;
+
+    // mouse attraction
+    let dx = mouseX - o.x;
+    let dy = mouseY - o.y;
+    let dist = Math.sqrt(dx * dx + dy * dy);
+
+    if (dist < 200) { 
+      o.x += dx * 0.02;
+      o.y += dy * 0.02;
+    }
+
+    o.el.style.transform = `translate(${o.x}px, ${o.y}px)`;
+  });
+
+  requestAnimationFrame(animate);
+}
+
+animate();
 </script>
 
 </body>
