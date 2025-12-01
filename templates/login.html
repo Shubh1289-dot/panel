@@ -15,9 +15,6 @@
     height: 100vh;
     overflow: hidden;
     font-family: "Inter", sans-serif;
-    display: flex;
-    justify-content: center;
-    align-items: center;
   }
 
   /* Floating Neon Ball Style */
@@ -29,12 +26,13 @@
     background: radial-gradient(circle, #ff3b3b, #990000);
     box-shadow: 0 0 40px #ff1a1a, 0 0 80px #ff0000;
     opacity: 0.85;
-    filter: blur(1px);
-    transition: transform 0.15s linear;
+    z-index: 1;                 /* BELOW LOGIN UI */
   }
 
+  /* LOGIN UI ALWAYS ABOVE */
   .login-container {
-    z-index: 2;
+    z-index: 10;
+    position: relative;
     text-align: center;
   }
 
@@ -87,9 +85,10 @@
 
 <body>
 
-<!-- MULTIPLE FLOATING ORBS -->
+<!-- ORBS CONTAINER (BELOW UI) -->
 <div id="orb-container"></div>
 
+<!-- LOGIN UI -->
 <div class="login-container">
   <h1 class="title">FR CONSOLE</h1>
 
@@ -121,10 +120,10 @@ for (let i = 0; i < totalOrbs; i++) {
 
   orbs.push({
     el: div,
-    x: Math.random() * window.innerWidth,   // FULL SCREEN RANDOM
-    y: Math.random() * window.innerHeight,
-    dx: (Math.random() * 1.2) - 0.6,        // SPEED BOOST
-    dy: (Math.random() * 1.2) - 0.6
+    x: Math.random() * window.innerWidth,   // FULL WIDTH RANDOM
+    y: Math.random() * window.innerHeight,  // FULL HEIGHT RANDOM
+    dx: (Math.random() * 1.4) - 0.7,        // HIGHER FLOAT SPEED
+    dy: (Math.random() * 1.4) - 0.7
   });
 }
 
@@ -138,11 +137,11 @@ document.addEventListener("mousemove", e => {
 
 function animate() {
   orbs.forEach(o => {
-    // FLOAT WHOLE SCREEN
+
     o.x += o.dx;
     o.y += o.dy;
 
-    // WALL BOUNCE (FULL AREA)
+    // FULL SCREEN WALL BOUNCE
     if (o.x < 0 || o.x > window.innerWidth - 150) o.dx *= -1;
     if (o.y < 0 || o.y > window.innerHeight - 150) o.dy *= -1;
 
@@ -151,9 +150,9 @@ function animate() {
     let dy = mouseY - o.y;
     let dist = Math.sqrt(dx * dx + dy * dy);
 
-    if (dist < 260) {  
-      o.x += dx * 0.018;
-      o.y += dy * 0.018;
+    if (dist < 300) {  
+      o.x += dx * 0.015;
+      o.y += dy * 0.015;
     }
 
     o.el.style.transform = `translate(${o.x}px, ${o.y}px)`;
