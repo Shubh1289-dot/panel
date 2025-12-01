@@ -23,8 +23,8 @@
   /* Floating Neon Ball Style */
   .orb {
     position: absolute;
-    width: 110px;
-    height: 110px;
+    width: 120px;
+    height: 120px;
     border-radius: 50%;
     background: radial-gradient(circle, #ff3b3b, #990000);
     box-shadow: 0 0 40px #ff1a1a, 0 0 80px #ff0000;
@@ -33,7 +33,6 @@
     transition: transform 0.15s linear;
   }
 
-  /* UI */
   .login-container {
     z-index: 2;
     text-align: center;
@@ -89,11 +88,11 @@
 <body>
 
 <!-- MULTIPLE FLOATING ORBS -->
-<div id="orb-container">
-</div>
+<div id="orb-container"></div>
 
 <div class="login-container">
   <h1 class="title">FR CONSOLE</h1>
+
   <div class="login-box">
     <div class="auth-title">PANNEL AUTHENTICATION</div>
 
@@ -110,7 +109,7 @@
 </div>
 
 <script>
-// CREATE 15 FLOATING ORBS
+// CREATE 15 FLOATING ORBS (FULL SCREEN)
 const totalOrbs = 15;
 const container = document.getElementById("orb-container");
 let orbs = [];
@@ -122,10 +121,10 @@ for (let i = 0; i < totalOrbs; i++) {
 
   orbs.push({
     el: div,
-    x: Math.random() * window.innerWidth,
+    x: Math.random() * window.innerWidth,   // FULL SCREEN RANDOM
     y: Math.random() * window.innerHeight,
-    dx: (Math.random() * 1) - 0.5,
-    dy: (Math.random() * 1) - 0.5
+    dx: (Math.random() * 1.2) - 0.6,        // SPEED BOOST
+    dy: (Math.random() * 1.2) - 0.6
   });
 }
 
@@ -137,24 +136,24 @@ document.addEventListener("mousemove", e => {
   mouseY = e.clientY;
 });
 
-// ANIMATION LOOP
 function animate() {
   orbs.forEach(o => {
-    // normal float
+    // FLOAT WHOLE SCREEN
     o.x += o.dx;
     o.y += o.dy;
 
+    // WALL BOUNCE (FULL AREA)
     if (o.x < 0 || o.x > window.innerWidth - 150) o.dx *= -1;
     if (o.y < 0 || o.y > window.innerHeight - 150) o.dy *= -1;
 
-    // mouse attraction effect
+    // MOUSE ATTRACTION
     let dx = mouseX - o.x;
     let dy = mouseY - o.y;
-    let dist = Math.sqrt(dx*dx + dy*dy);
+    let dist = Math.sqrt(dx * dx + dy * dy);
 
-    if (dist < 230) {  // attraction radius
-      o.x += dx * 0.015;
-      o.y += dy * 0.015;
+    if (dist < 260) {  
+      o.x += dx * 0.018;
+      o.y += dy * 0.018;
     }
 
     o.el.style.transform = `translate(${o.x}px, ${o.y}px)`;
