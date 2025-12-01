@@ -17,23 +17,33 @@
     font-family: "Inter", sans-serif;
   }
 
-  /* Floating Neon Ball Style */
+  /* ORBS BACKGROUND */
+  #orb-container {
+    position: fixed;
+    inset: 0;
+    z-index: 1;     /* glowing balls back */
+  }
+
   .orb {
     position: absolute;
     width: 120px;
     height: 120px;
     border-radius: 50%;
-    background: radial-gradient(circle, #ff3b3b, #990000);
+    background: radial-gradient(circle, #ff4444, #900000);
     box-shadow: 0 0 40px #ff1a1a, 0 0 80px #ff0000;
     opacity: 0.85;
-    z-index: 1;                 /* BELOW LOGIN UI */
+    filter: blur(1px);
+    transition: transform 0.15s linear;
   }
 
-  /* LOGIN UI ALWAYS ABOVE */
+  /* LOGIN UI EXACT ORIGINAL POSITION */
   .login-container {
-    z-index: 10;
-    position: relative;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);   /* EXACT CENTER */
     text-align: center;
+    z-index: 10;
   }
 
   .title {
@@ -42,8 +52,8 @@
     color: #ff1a1a;
     font-weight: 900;
     letter-spacing: 5px;
+    margin-bottom: 40px;  /* original spacing */
     text-shadow: 0 0 25px rgba(255,0,0,0.9);
-    margin-bottom: 45px;
   }
 
   .login-box {
@@ -52,15 +62,17 @@
     padding: 40px;
     border-radius: 18px;
     width: 420px;
-    box-shadow: 0 0 25px rgba(255,0,0,0.4);
+    box-shadow: 0 0 25px rgba(255,0,0,0.35);
   }
 
   .auth-title {
     font-family: "Poppins", sans-serif;
     font-size: 28px;
-    color: #ff1a1a;
     font-weight: 900;
+    color: #ff1a1a;
+    letter-spacing: 2px;
     margin-bottom: 25px;
+    text-shadow: 0 0 15px rgba(255,0,0,0.7);
   }
 
   input {
@@ -85,7 +97,7 @@
 
 <body>
 
-<!-- ORBS CONTAINER (BELOW UI) -->
+<!-- ORBS -->
 <div id="orb-container"></div>
 
 <!-- LOGIN UI -->
@@ -108,21 +120,21 @@
 </div>
 
 <script>
-// CREATE 15 FLOATING ORBS (FULL SCREEN)
-const totalOrbs = 15;
+// 15 ORBS FULLSCREEN FLOAT
+const ORB_COUNT = 15;
 const container = document.getElementById("orb-container");
 let orbs = [];
 
-for (let i = 0; i < totalOrbs; i++) {
-  let div = document.createElement("div");
-  div.classList.add("orb");
-  container.appendChild(div);
+for (let i = 0; i < ORB_COUNT; i++) {
+  let o = document.createElement("div");
+  o.classList.add("orb");
+  container.appendChild(o);
 
   orbs.push({
-    el: div,
-    x: Math.random() * window.innerWidth,   // FULL WIDTH RANDOM
-    y: Math.random() * window.innerHeight,  // FULL HEIGHT RANDOM
-    dx: (Math.random() * 1.4) - 0.7,        // HIGHER FLOAT SPEED
+    el: o,
+    x: Math.random() * window.innerWidth,
+    y: Math.random() * window.innerHeight,
+    dx: (Math.random() * 1.4) - 0.7,
     dy: (Math.random() * 1.4) - 0.7
   });
 }
@@ -141,18 +153,16 @@ function animate() {
     o.x += o.dx;
     o.y += o.dy;
 
-    // FULL SCREEN WALL BOUNCE
     if (o.x < 0 || o.x > window.innerWidth - 150) o.dx *= -1;
     if (o.y < 0 || o.y > window.innerHeight - 150) o.dy *= -1;
 
-    // MOUSE ATTRACTION
     let dx = mouseX - o.x;
     let dy = mouseY - o.y;
-    let dist = Math.sqrt(dx * dx + dy * dy);
+    let dist = Math.sqrt(dx*dx + dy*dy);
 
-    if (dist < 300) {  
-      o.x += dx * 0.015;
-      o.y += dy * 0.015;
+    if (dist < 300) {
+      o.x += dx * 0.02;
+      o.y += dy * 0.02;
     }
 
     o.el.style.transform = `translate(${o.x}px, ${o.y}px)`;
