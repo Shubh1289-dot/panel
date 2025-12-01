@@ -17,20 +17,18 @@
   body {
     margin: 0;
     padding: 0;
-    background: #000000;  
+    background: #000;
     height: 100vh;
     display: flex;
     justify-content: center;
     align-items: center;
-    font-family: "Inter", sans-serif;
     overflow: hidden;
+    font-family: "Inter", sans-serif;
   }
 
   #particles-js {
     position: fixed;
     inset: 0;
-    width: 100%;
-    height: 100%;
     z-index: -1;
   }
 
@@ -44,39 +42,41 @@
     color: #ff1a1a;
     font-weight: 900;
     letter-spacing: 5px;
-    margin-bottom: 45px;
     text-shadow: 0 0 25px rgba(255,0,0,0.9);
+    margin-bottom: 45px;
   }
 
   .login-box {
-    background: rgba(255,255,255,0.09);
+    background: rgba(255,255,255,0.08);
     backdrop-filter: blur(10px);
     padding: 40px;
     border-radius: 18px;
     width: 420px;
-    box-shadow: 0 0 25px rgba(255,0,0,0.35);
+    box-shadow: 0 0 20px rgba(255,0,0,0.3);
   }
 
   .auth-title {
     font-family: "Poppins", sans-serif;
     font-size: 28px;
-    font-weight: 900;
     color: #ff1a1a;
-    letter-spacing: 3px;
-    margin-bottom: 28px;
-    text-shadow: 0 0 18px rgba(255,0,0,0.7);
+    font-weight: 900;
+    margin-bottom: 25px;
+    text-shadow: 0 0 15px rgba(255,0,0,0.7);
   }
 
   .login-box input {
-    height: 60px;
-    font-size: 20px;
+    height: 55px;
+    font-size: 18px;
     border-radius: 12px;
-    font-weight: 600;
+    background: #111;
+    border: 1px solid #333;
+    color: white;
     margin-bottom: 18px;
+    font-weight: 600;
   }
 
   .btn-login {
-    height: 58px;
+    height: 55px;
     font-size: 20px;
     font-weight: bold;
     border-radius: 12px;
@@ -95,8 +95,8 @@
     <div class="auth-title">PANNEL AUTHENTICATION</div>
 
     <form method="POST">
-      <input type="text" class="form-control" placeholder="Username" name="username" required>
-      <input type="password" class="form-control" placeholder="Password" name="password" required>
+      <input type="text" class="form-control" name="username" placeholder="Username" required>
+      <input type="password" class="form-control" name="password" placeholder="Password" required>
       <button class="btn btn-danger w-100 btn-login">LOGIN</button>
 
       {% if error %}
@@ -108,23 +108,29 @@
 
 <script>
 tsParticles.load("particles-js", {
-  fpsLimit: 45,
-
-  background: { color: "#000" },
+  fpsLimit: 50,
 
   particles: {
-    number: { value: 25 },   // LOW particles = no lag
+    number: { value: 40 },   // light particles
     size: { value: 2 },
-    move: { speed: 0.6 },
-    opacity: { value: 0.7 },
+    move: {
+      speed: 0.7,
+      enable: true
+    },
+    opacity: { value: 0.6 },
     color: { value: "#ff0000" },
+    shape: { type: "circle" },
 
-    links: { enable: false }, // Heavy system removed
-
-    collisions: { enable: false },
-    shadow: { enable: false }
+    links: {
+      enable: true,
+      distance: 120,
+      color: "#ff1a1a",
+      opacity: 0.3,
+      width: 1
+    }
   },
 
+  background: { color: "#000" },
   detectRetina: false
 });
 </script>
