@@ -20,19 +20,20 @@
     align-items: center;
   }
 
-  /* Floating Red Neon Balls */
+  /* Floating Neon Ball Style */
   .orb {
     position: absolute;
-    width: 120px;
-    height: 120px;
+    width: 110px;
+    height: 110px;
     border-radius: 50%;
     background: radial-gradient(circle, #ff3b3b, #990000);
     box-shadow: 0 0 40px #ff1a1a, 0 0 80px #ff0000;
     opacity: 0.85;
     filter: blur(1px);
-    transition: transform 0.2s linear;
+    transition: transform 0.15s linear;
   }
 
+  /* UI */
   .login-container {
     z-index: 2;
     text-align: center;
@@ -73,6 +74,7 @@
     color: white;
     border: 1px solid #333;
     margin-bottom: 18px;
+    font-weight: 600;
   }
 
   .btn-login {
@@ -86,12 +88,10 @@
 
 <body>
 
-<!-- Floating Neon Balls -->
-<div class="orb" id="orb1"></div>
-<div class="orb" id="orb2"></div>
-<div class="orb" id="orb3"></div>
+<!-- MULTIPLE FLOATING ORBS -->
+<div id="orb-container">
+</div>
 
-<!-- Login UI -->
 <div class="login-container">
   <h1 class="title">FR CONSOLE</h1>
   <div class="login-box">
@@ -110,39 +110,51 @@
 </div>
 
 <script>
-/* RANDOM FLOATING + MOUSE ATTRACTING GLOW BALLS */
+// CREATE 15 FLOATING ORBS
+const totalOrbs = 15;
+const container = document.getElementById("orb-container");
+let orbs = [];
 
-const orbs = [
-  { el: document.getElementById("orb1"), x: 100, y: 200, dx: 0.5, dy: 0.4 },
-  { el: document.getElementById("orb2"), x: 500, y: 400, dx: -0.4, dy: 0.5 },
-  { el: document.getElementById("orb3"), x: 300, y: 150, dx: 0.6, dy: -0.3 },
-];
+for (let i = 0; i < totalOrbs; i++) {
+  let div = document.createElement("div");
+  div.classList.add("orb");
+  container.appendChild(div);
+
+  orbs.push({
+    el: div,
+    x: Math.random() * window.innerWidth,
+    y: Math.random() * window.innerHeight,
+    dx: (Math.random() * 1) - 0.5,
+    dy: (Math.random() * 1) - 0.5
+  });
+}
 
 let mouseX = window.innerWidth / 2;
 let mouseY = window.innerHeight / 2;
 
-document.addEventListener("mousemove", (e) => {
+document.addEventListener("mousemove", e => {
   mouseX = e.clientX;
   mouseY = e.clientY;
 });
 
+// ANIMATION LOOP
 function animate() {
   orbs.forEach(o => {
-    // random floating movement
+    // normal float
     o.x += o.dx;
     o.y += o.dy;
 
     if (o.x < 0 || o.x > window.innerWidth - 150) o.dx *= -1;
     if (o.y < 0 || o.y > window.innerHeight - 150) o.dy *= -1;
 
-    // mouse attraction
+    // mouse attraction effect
     let dx = mouseX - o.x;
     let dy = mouseY - o.y;
-    let dist = Math.sqrt(dx * dx + dy * dy);
+    let dist = Math.sqrt(dx*dx + dy*dy);
 
-    if (dist < 200) { 
-      o.x += dx * 0.02;
-      o.y += dy * 0.02;
+    if (dist < 230) {  // attraction radius
+      o.x += dx * 0.015;
+      o.y += dy * 0.015;
     }
 
     o.el.style.transform = `translate(${o.x}px, ${o.y}px)`;
