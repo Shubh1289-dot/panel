@@ -2,153 +2,179 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>FR CONSOLE</title>
+<title>FR Console Login</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@700;900&family=Inter:wght@400;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 
 <style>
 body {
     margin: 0;
     height: 100vh;
-    background: radial-gradient(circle at top, #140000, #000);
+    background: radial-gradient(circle at center, #1a0000 0%, #000 60%);
     font-family: "Inter", sans-serif;
-    color: white;
     display: flex;
     align-items: center;
     justify-content: center;
+    color: white;
 }
 
-/* MAIN CONTAINER */
-.console-container {
+/* CARD */
+.login-card {
+    width: 420px;
+    background: rgba(20, 20, 20, 0.95);
+    border-radius: 18px;
+    padding: 35px;
+    box-shadow: 0 0 40px rgba(255, 0, 0, 0.15);
+    border: 1px solid rgba(255, 0, 0, 0.15);
     text-align: center;
-    width: 520px;
 }
 
-/* TITLE */
-.title {
-    font-family: "Poppins", sans-serif;
-    font-size: 64px;
-    font-weight: 900;
-    letter-spacing: 6px;
-    color: #ff1a1a;
-    margin-bottom: 10px;
-    text-shadow: 0 0 25px rgba(255,0,0,0.6);
+/* LOGO / TITLE */
+.logo {
+    font-size: 28px;
+    font-weight: 600;
+    margin-bottom: 8px;
+    color: white;
+}
+
+.logo span {
+    color: #ff2b2b;
 }
 
 .subtitle {
-    color: #888;
-    margin-bottom: 40px;
-    letter-spacing: 2px;
+    color: #777;
+    font-size: 14px;
+    margin-bottom: 30px;
 }
 
-/* PANEL BOX */
-.panel-box {
-    background: rgba(255, 255, 255, 0.05);
-    backdrop-filter: blur(12px);
-    border-radius: 18px;
-    padding: 35px;
-    box-shadow: 0 0 30px rgba(255,0,0,0.15);
-    border: 1px solid rgba(255,0,0,0.15);
+/* INPUTS */
+.form-control {
+    height: 52px;
+    background: #0b0b0b;
+    border: 1px solid #1f1f1f;
+    border-radius: 10px;
+    color: white;
+    margin-bottom: 15px;
 }
 
-/* BUTTON GRID */
-.grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 15px;
+.form-control:focus {
+    background: #0b0b0b;
+    color: white;
+    border-color: #ff2b2b;
+    box-shadow: 0 0 0 1px rgba(255,0,0,0.2);
 }
 
-.action-btn {
-    height: 55px;
-    border-radius: 12px;
-    border: 1px solid #330000;
-    background: linear-gradient(145deg, #1a0000, #000);
-    color: #ff4d4d;
-    font-weight: 600;
-    letter-spacing: 1px;
-    transition: 0.25s;
-}
-
-.action-btn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 0 18px rgba(255,0,0,0.35);
-    background: linear-gradient(145deg, #2a0000, #000);
-}
-
-/* MODAL */
-.modal-content {
-    background: #050505;
-    border-radius: 16px;
-    border: 1px solid rgba(255,0,0,0.25);
-    box-shadow: 0 0 25px rgba(255,0,0,0.25);
-}
-
-.modal-title {
-    color: #ff1a1a;
-    font-weight: 700;
-    letter-spacing: 1px;
-}
-
-input {
-    background: #0f0f0f !important;
-    border: 1px solid #222 !important;
-    color: white !important;
-    height: 50px;
-    border-radius: 10px !important;
-}
-
-.btn-danger {
-    height: 50px;
+/* BUTTON */
+.btn-login {
+    height: 52px;
     border-radius: 10px;
     font-weight: 600;
-    letter-spacing: 1px;
+    letter-spacing: 0.5px;
+    background: linear-gradient(90deg, #ff1a1a, #b30000);
+    border: none;
+    margin-top: 5px;
+}
+
+.btn-login:hover {
+    background: linear-gradient(90deg, #ff3333, #cc0000);
+}
+
+/* LINKS */
+.links {
+    display: flex;
+    justify-content: space-between;
+    font-size: 13px;
+    margin-top: 8px;
+    margin-bottom: 18px;
+}
+
+.links a {
+    color: #888;
+    text-decoration: none;
+}
+
+.links a:hover {
+    color: #ff2b2b;
+}
+
+/* DIVIDER */
+.divider {
+    margin: 22px 0;
+    color: #444;
+    font-size: 13px;
+    position: relative;
+}
+
+.divider::before,
+.divider::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    width: 40%;
+    height: 1px;
+    background: #222;
+}
+
+.divider::before { left: 0; }
+.divider::after { right: 0; }
+
+/* SOCIAL BUTTONS */
+.socials {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+.social-btn {
+    flex: 1;
+    height: 45px;
+    border-radius: 10px;
+    background: #0b0b0b;
+    border: 1px solid #1f1f1f;
+    color: #aaa;
+    transition: 0.2s;
+}
+
+.social-btn:hover {
+    border-color: #ff2b2b;
+    color: #ff2b2b;
 }
 </style>
 </head>
 
 <body>
 
-<div class="console-container">
-    <div class="title">FR CONSOLE</div>
-    <div class="subtitle">SECURE ACCESS PORTAL</div>
+<div class="login-card">
 
-    <div class="panel-box">
-        <div class="grid">
-            <button class="action-btn" data-bs-toggle="modal" data-bs-target="#loginModal">Dashboard</button>
-            <button class="action-btn" data-bs-toggle="modal" data-bs-target="#loginModal">Admin Panel</button>
-            <button class="action-btn" data-bs-toggle="modal" data-bs-target="#loginModal">Analytics</button>
-            <button class="action-btn" data-bs-toggle="modal" data-bs-target="#loginModal">Reports</button>
-            <button class="action-btn" data-bs-toggle="modal" data-bs-target="#loginModal">Secure Vault</button>
-            <button class="action-btn" data-bs-toggle="modal" data-bs-target="#loginModal">User Control</button>
+    <div class="logo">FR<span>Console</span></div>
+    <div class="subtitle">Secure authentication required</div>
+
+    <form method="POST">
+        <input type="text" class="form-control" placeholder="Username" name="username" required>
+        <input type="password" class="form-control" placeholder="Password" name="password" required>
+
+        <div class="links">
+            <a href="#">Create account</a>
+            <a href="#">Forgot password?</a>
         </div>
+
+        <button class="btn btn-danger w-100 btn-login">Log In →</button>
+
+        {% if error %}
+        <div class="alert alert-danger mt-3">{{ error }}</div>
+        {% endif %}
+    </form>
+
+    <div class="divider">OR CONTINUE WITH</div>
+
+    <div class="socials">
+        <button class="social-btn">Discord</button>
+        <button class="social-btn">Google</button>
+        <button class="social-btn">GitHub</button>
     </div>
+
 </div>
 
-<!-- LOGIN MODAL -->
-<div class="modal fade" id="loginModal" tabindex="-1">
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content p-3">
-      <div class="modal-header border-0">
-        <h5 class="modal-title">Authentication Required</h5>
-        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
-      </div>
-
-      <div class="modal-body">
-        <form method="POST">
-          <input type="text" class="form-control mb-3" placeholder="Username" name="username" required>
-          <input type="password" class="form-control mb-3" placeholder="Password" name="password" required>
-          <button class="btn btn-danger w-100">LOGIN</button>
-
-          {% if error %}
-          <div class="alert alert-danger mt-3">{{ error }}</div>
-          {% endif %}
-        </form>
-      </div>
-    </div>
-  </div>
-</div>
-
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
