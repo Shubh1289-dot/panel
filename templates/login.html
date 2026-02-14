@@ -19,7 +19,6 @@ body {
     color: white;
 }
 
-/* CARD */
 .login-card {
     width: 420px;
     background: rgba(20, 20, 20, 0.95);
@@ -30,7 +29,6 @@ body {
     text-align: center;
 }
 
-/* LOGO */
 .logo {
     font-family: "Poppins", sans-serif;
     font-size: 34px;
@@ -50,7 +48,6 @@ body {
     margin-bottom: 30px;
 }
 
-/* INPUTS */
 .form-control {
     height: 52px;
     background: #0b0b0b;
@@ -67,7 +64,6 @@ body {
     box-shadow: 0 0 0 1px rgba(255,0,0,0.2);
 }
 
-/* BUTTON */
 .btn-login {
     height: 52px;
     border-radius: 10px;
@@ -82,7 +78,6 @@ body {
     background: linear-gradient(90deg, #ff3333, #cc0000);
 }
 
-/* LINKS */
 .links {
     display: flex;
     justify-content: space-between;
@@ -100,7 +95,6 @@ body {
     color: #ff2b2b;
 }
 
-/* DIVIDER */
 .divider {
     margin: 22px 0;
     color: #444;
@@ -121,10 +115,8 @@ body {
 .divider::before { left: 0; }
 .divider::after { right: 0; }
 
-/* SOCIAL BUTTONS */
 .socials {
     display: flex;
-    justify-content: space-between;
     gap: 10px;
 }
 
@@ -168,12 +160,16 @@ body {
         {% endif %}
     </form>
 
-    <div class="divider">OR CONTINUE WITH</div>
+    <div class="divider">COMMUNITY</div>
 
     <div class="socials">
-        <button class="social-btn">Discord</button>
-        <button class="social-btn">Google</button>
-        <button class="social-btn">GitHub</button>
+        <button class="social-btn" onclick="window.open('https://discord.gg/JjdDagrkvX', '_blank')">
+            Discord
+        </button>
+
+        <button class="social-btn" onclick="window.open('https://guns.lol/shubh.', '_blank')">
+            guns.lol
+        </button>
     </div>
 
 </div>
