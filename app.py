@@ -6,11 +6,9 @@ import os
 app = Flask(__name__)
 app.secret_key = os.urandom(24)
 
-# Admin credentials
 ADMIN_USERNAME = "FR"
 ADMIN_PASSWORD = "SHUBH"
 
-# JSONBin Config
 JSONBIN_API_KEY = "$2a$10$R74G8pPzaRy0kLrcmfIYO.jvMl0T8JA3XQVaRHQNqYWsyO8ltxLr."
 BIN_ID = "68fef44843b1c97be983b559"
 
@@ -18,6 +16,14 @@ HEADERS = {
     "Content-Type": "application/json",
     "X-Master-Key": JSONBIN_API_KEY
 }
+
+# ✅ EXPIRY CHECK (today valid / past expired)
+def is_expired(expiry_str):
+    try:
+        expiry_date = datetime.strptime(expiry_str, "%Y-%m-%d").date()
+        return datetime.today().date() > expiry_date
+    except:
+        return False
 
 # ---------------------------- Auth Routes ----------------------------
 
@@ -106,6 +112,13 @@ def client_login():
 
     for user in data[category]:
         if user["Username"] == username and user["Password"] == password:
+
+            # ✅ AUTO DELETE IF EXPIRED
+            if is_expired(user["Expiry"]):
+                data[category] = [u for u in data[category] if u["Username"] != username]
+                save_data(data)
+                return jsonify({"status": "error", "message": "Account expired"})
+
             if user["Status"] != "Active":
                 return jsonify({"status": "error", "message": "Account paused"})
 
@@ -199,7 +212,9 @@ def info_user():
 def get_users():
     data = load_data()
     category = request.form["category"]
-    return jsonify(data.get(category, []))
+
+    valid_users = [u for u in data.get(category, []) if not is_expired(u["Expiry"])]
+    return jsonify(valid_users)
 
 # ---------------------------- Messaging ----------------------------
 
@@ -234,7 +249,7 @@ def send_message():
                 user["Messages"].append({
                     "text": message,
                     "time": now,
-                    "status": "active"  # ✅ Important
+                    "status": "active"
                 })
                 found = True
                 break
