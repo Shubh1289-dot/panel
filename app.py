@@ -17,14 +17,16 @@ HEADERS = {
     "X-Master-Key": JSONBIN_API_KEY
 }
 
-# ✅ SAFE EXPIRY CHECK (never crashes)
+# ✅ CORRECT EXPIRY LOGIC (today valid)
 def is_expired(expiry_str):
     try:
         if not expiry_str:
             return False
 
         expiry = datetime.strptime(expiry_str, "%Y-%m-%d").date()
-        return datetime.today().date() >= expiry
+
+        # ✅ TODAY NOT EXPIRED
+        return datetime.today().date() > expiry
 
     except Exception as e:
         print("Expiry Error:", expiry_str, e)
@@ -68,52 +70,31 @@ def save_data(data):
         print("Save Error:", e)
         return False
 
-# ---------------- Auth ----------------
-
-@app.route("/")
-def home():
-    if session.get("logged_in"):
-        return render_template("index.html")
-    return redirect(url_for("login"))
-
-@app.route("/login", methods=["GET", "POST"])
-def login():
-    if request.method == "POST":
-        username = request.form.get("username")
-        password = request.form.get("password")
-
-        if username == ADMIN_USERNAME and password == ADMIN_PASSWORD:
-            session["logged_in"] = True
-            return redirect(url_for("home"))
-
-        return render_template("login.html", error="Invalid credentials")
-
-    return render_template("login.html")
-
-@app.route("/logout")
-def logout():
-    session.pop("logged_in", None)
-    return redirect(url_for("login"))
-
 # ---------------- Users ----------------
 
 @app.route("/add_user", methods=["POST"])
 def add_user():
     data = load_data()
 
-    category = request.form.get("category", "").strip()
-    username = request.form.get("username", "").strip()
-    password = request.form.get("password", "").strip()
-    expiry = request.form.get("expiry", "").strip()
+    category = request.form.get("category")
+    username = request.form.get("username")
+    password = request.form.get("password")
+    expiry = request.form.get("expiry")
 
-    if not category or not username or not password:
-        return jsonify({"status": "error", "message": "Missing fields"})
+    # ✅ HARD VALIDATION (prevents JSONBin corruption)
+    if not category or not username or not password or not expiry:
+        return jsonify({"status": "error", "message": "Fill all fields"})
+
+    category = category.strip()
+    username = username.strip()
+    password = password.strip()
+    expiry = expiry.strip()
 
     if category not in data:
         data[category] = []
 
     if any(u["Username"] == username for u in data[category]):
-        return jsonify({"status": "error", "message": "Username already exists"})
+        return jsonify({"status": "error", "message": "Username exists"})
 
     data[category].append({
         "Username": username,
@@ -145,7 +126,7 @@ def client_login():
 
         if user["Username"] == username and user["Password"] == password:
 
-            # ✅ AUTO DELETE IF EXPIRED
+            # ✅ EXPIRE + DELETE
             if is_expired(user.get("Expiry")):
                 data[category] = [u for u in data[category] if u["Username"] != username]
                 save_data(data)
@@ -161,7 +142,7 @@ def client_login():
                 if save_data(data):
                     return jsonify({"status": "success", "message": "HWID bound. Login success"})
 
-                return jsonify({"status": "error", "message": "Failed to bind HWID"})
+                return jsonify({"status": "error", "message": "HWID save failed"})
 
             if user.get("HWID") != client_hwid:
                 return jsonify({"status": "error", "message": "HWID mismatch"})
