@@ -387,9 +387,7 @@ function resetHWID(e){
     category:getCategory(),username:reset_username.value})})
   .then(r=>r.json()).then(d=>showToast(d.message));
 }
-document.getElementById("add_expiry").addEventListener("change", function () {
-    setTimeout(() => this.blur(), 50);
-});
+
 
 function copyCode(){ navigator.clipboard.writeText(loginCode.innerText).then(()=>showToast("Copied!")); }
 </script>
