@@ -283,31 +283,41 @@ def client_login():
     hwid = request.form["hwid"]
 
     if category not in data:
-        return jsonify({"status": "error", "message": "Invalid application"})
+        return jsonify({"status": "error", "message": "Application not found"})
 
     for user in data[category]:
 
-        if user["Username"] == username and user["Password"] == password:
+        if user["Username"] == username:
 
+            # ✅ USER FOUND → CHECK PASSWORD
+            if user["Password"] != password:
+                return jsonify({"status": "error", "message": "Wrong password"})
+
+            # ✅ EXPIRY
             if is_expired(user["Expiry"]):
                 data[category] = [u for u in data[category] if u["Username"] != username]
                 save_data(data)
-                return jsonify({"status": "error", "message": "Expired"})
+                return jsonify({"status": "error", "message": "Account expired"})
 
+            # ✅ STATUS
             if user["Status"] != "Active":
-                return jsonify({"status": "error", "message": "Paused"})
+                return jsonify({"status": "error", "message": "Account paused"})
 
+            # ✅ HWID FIRST BIND
             if not user["HWID"]:
                 user["HWID"] = hwid
                 save_data(data)
-                return jsonify({"status": "success", "message": "HWID bound"})
+                return jsonify({"status": "success", "message": "HWID bound. Login success"})
 
+            # ✅ HWID MISMATCH
             if user["HWID"] != hwid:
-                return jsonify({"status": "error", "message": "HWID mismatch"})
+                return jsonify({"status": "error", "message": "HWID mismatch / already used"})
 
             return jsonify({"status": "success", "message": "Login success"})
 
-    return jsonify({"status": "error", "message": "Invalid credentials"})
+    # ✅ USER NOT FOUND
+    return jsonify({"status": "error", "message": "Username does not exist"})
+
 
 
     return jsonify({"status": "error", "message": "Invalid credentials"})
