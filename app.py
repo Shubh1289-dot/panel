@@ -17,23 +17,21 @@ HEADERS = {
     "X-Master-Key": JSONBIN_API_KEY
 }
 
-# ✅ EXPIRY CHECK (TODAY VALID)
+# ✅ EXPIRY CHECK (DATE + TIME SUPPORT)
 def is_expired(expiry_str):
     try:
         expiry_str = expiry_str.strip()
 
-        # datetime-local support (date + hour + minute)
         if "T" in expiry_str:
             expiry_time = datetime.strptime(expiry_str, "%Y-%m-%dT%H:%M")
             return datetime.now() > expiry_time
 
-        # fallback (old users safe)
-        expiry_date = datetime.strptime(expiry_str, "%Y-%m-%d")
-        return datetime.now() > expiry_date
+        expiry_time = datetime.strptime(expiry_str, "%Y-%m-%d")
+        return datetime.now() > expiry_time
 
-    except:
+    except Exception as e:
+        print("Expiry Error:", expiry_str, e)
         return False
-
 
 # ---------------------------- Auth Routes ----------------------------
 
@@ -93,7 +91,6 @@ def add_user():
     if category not in data:
         data[category] = []
 
-    # ✅ REMOVE EXPIRED USERS FIRST (ghost bug fix)
     data[category] = [u for u in data[category] if not is_expired(u["Expiry"])]
     save_data(data)
 
@@ -127,7 +124,6 @@ def client_login():
     for user in data[category]:
         if user["Username"] == username and user["Password"] == password:
 
-            # ✅ EXPIRED → DELETE USER
             if is_expired(user["Expiry"]):
                 data[category] = [u for u in data[category] if u["Username"] != username]
                 save_data(data)
@@ -159,7 +155,6 @@ def delete_user():
     if category not in data:
         return jsonify({"status": "error", "message": "Invalid application"})
 
-    # ✅ CLEAN EXPIRED USERS FIRST
     data[category] = [u for u in data[category] if not is_expired(u["Expiry"])]
     save_data(data)
 
@@ -204,6 +199,7 @@ def send_message():
     username = request.form["username"]
     message = request.form["message"]
     now = datetime.now().strftime("%Y-%m-%d %H:%M")
+
     found = False
 
     for category, users in data.items():
@@ -211,11 +207,13 @@ def send_message():
             if user["Username"] == username:
                 if "Messages" not in user:
                     user["Messages"] = []
+
                 user["Messages"].append({
                     "text": message,
                     "time": now,
                     "status": "active"
                 })
+
                 found = True
                 break
         if found:
@@ -227,33 +225,6 @@ def send_message():
     if save_data(data):
         return jsonify({"status": "success", "message": "Message saved"})
     return jsonify({"status": "error", "message": "Failed to save message"})
-
-@app.route("/update_message_status", methods=["POST"])
-def update_message_status():
-    data = load_data()
-    category = request.form["category"].strip().lower()
-    username = request.form["username"].strip().lower()
-    index = int(request.form["index"])
-    action = request.form["action"]
-
-    lowered_data = {k.lower(): v for k, v in data.items()}
-
-    if category not in lowered_data:
-        return jsonify({"status": "error", "message": "Invalid application"})
-
-    for user in lowered_data[category]:
-        if user["Username"].lower() == username:
-            if "Messages" in user and index < len(user["Messages"]):
-                if action == "delete":
-                    user["Messages"].pop(index)
-                else:
-                    user["Messages"][index]["status"] = action
-                if save_data(data):
-                    return jsonify({"status": "success", "message": f"Message {action}d"})
-                return jsonify({"status": "error", "message": "Failed to update message"})
-            return jsonify({"status": "error", "message": "Invalid message index"})
-
-    return jsonify({"status": "error", "message": "User not found"})
 
 # ---------------------------- Run ----------------------------
 
