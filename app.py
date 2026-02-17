@@ -237,6 +237,52 @@ def client_login():
 
     return jsonify({"status": "error", "message": "Invalid credentials"})
 
+
+# ✅ FIXED ROUTE (ONLY CHANGE)
+@app.route("/send_message", methods=["POST"])
+def send_message():
+    data = load_data()
+    username = request.form["username"]
+    message = request.form["message"]
+    now = ist_now().strftime("%Y-%m-%d %H:%M")
+
+    for category, users in data.items():
+        for user in users:
+            if user["Username"] == username:
+
+                if "Messages" not in user:
+                    user["Messages"] = []
+
+                user["Messages"].append({
+                    "text": message,
+                    "time": now,
+                    "status": "active"
+                })
+
+                if save_data(data):
+                    return jsonify({"status": "success", "message": "Message saved"})
+
+                return jsonify({"status": "error", "message": "Save failed"})
+
+    return jsonify({"status": "error", "message": "User not found"})
+
+
+@app.route("/get_messages", methods=["POST"])
+def get_messages():
+    data = load_data()
+    category = request.form["category"]
+    username = request.form["username"]
+
+    if category not in data:
+        return jsonify({"status": "error", "message": "Invalid application"})
+
+    for user in data[category]:
+        if user["Username"] == username:
+            return jsonify({"status": "success", "messages": user.get("Messages", [])})
+
+    return jsonify({"status": "error", "message": "User not found"})
+
+
 # -------------------- RUN --------------------
 
 if __name__ == "__main__":
