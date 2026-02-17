@@ -285,6 +285,11 @@ function showSection(id, e) {
   if (e) e.target.classList.add('active');
   if (id === 'show') refreshUsers();
 }
+const expiryInput = document.getElementById("add_expiry");
+
+expiryInput.addEventListener("change", () => {
+  expiryInput.blur();   // ✅ picker close
+});
 
 function showToast(msg) {
   const toast = document.getElementById('toast');
