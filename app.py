@@ -208,6 +208,31 @@ def delete_user():
         return jsonify({"status": "success", "message": "User deleted"})
 
     return jsonify({"status": "error", "message": "Delete failed"})
+@app.route("/pause_user", methods=["POST"])
+def pause_user():
+    data = load_data()
+
+    category = request.form["category"]
+    username = request.form["username"]
+    action = request.form["action"]
+
+    if category not in data:
+        return jsonify({"status": "error", "message": "Invalid application"})
+
+    for user in data[category]:
+        if user["Username"] == username:
+
+            if action == "pause":
+                user["Status"] = "Paused"
+            else:
+                user["Status"] = "Active"
+
+            if save_data(data):
+                return jsonify({"status": "success", "message": f"User {action}d"})
+
+            return jsonify({"status": "error", "message": "Save failed"})
+
+    return jsonify({"status": "error", "message": "User not found"})
 
 
 @app.route("/get_users", methods=["POST"])
