@@ -108,12 +108,6 @@
     }
 
     @keyframes slideIn { from { right:-300px; } to { right:20px; } }
-
-    /* ✅ WHITE ICON FIX */
-    .white-datetime::-webkit-calendar-picker-indicator {
-        filter: invert(1);
-        cursor: pointer;
-    }
   </style>
 </head>
 
@@ -143,41 +137,249 @@
       <option value="INTERNAL">INTERNAL</option>
       <option value="SOUTH">SOUTH</option>
       <option value="SILENTAIM">SOUTHAIM</option>
-      <option value="PUSSY">PUSSY</option>
+       <option value="PUSSY">PUSSY</option>
       <option value="SOUTHV2">SOUTHV2</option>
     </select>
   </div>
-
   <!-- Add User -->
   <div id="add" class="section active">
     <h4>➕ Add User</h4>
     <form onsubmit="addUser(event)">
       <input required type="text" class="form-control mb-2" placeholder="Username" id="add_username">
       <input required type="password" class="form-control mb-2" placeholder="Password" id="add_password">
-
-      <!-- ✅ UPDATED FIELD -->
-      <input required type="datetime-local" class="form-control mb-2 white-datetime" id="add_expiry">
-
+      <input required type="date" class="form-control mb-2" id="add_expiry">
       <button class="btn btn-success">Add</button>
     </form>
   </div>
+
+  <!-- Delete User -->
+  <div id="delete" class="section">
+    <h4>❌ Delete User</h4>
+    <form onsubmit="deleteUser(event)">
+      <input required type="text" class="form-control mb-2" placeholder="Username" id="delete_username">
+      <button class="btn btn-danger">Delete</button>
+    </form>
+  </div>
+
+  <!-- Pause User -->
+  <div id="pause" class="section">
+    <h4>⏸️ Pause / Unpause User</h4>
+    <form onsubmit="pauseUser(event, 'pause')">
+      <input required type="text" class="form-control mb-2" placeholder="Username" id="pause_username">
+      <button class="btn btn-warning me-2">Pause</button>
+      <button type="button" class="btn btn-secondary" onclick="pauseUser(event, 'unpause')">Unpause</button>
+    </form>
+  </div>
+
+  <!-- Info User -->
+  <div id="info" class="section">
+    <h4>ℹ️ User Info</h4>
+    <form onsubmit="infoUser(event)">
+      <input required type="text" class="form-control mb-2" placeholder="Username" id="info_username">
+      <button class="btn btn-primary">Get Info</button>
+    </form>
+    <div id="infoPanel" class="mt-3"></div>
+  </div>
+
+  <!-- Show Users -->
+  <div id="show" class="section">
+    <h4>📋 All Users</h4>
+    <table class="table table-bordered user-table">
+      <thead>
+        <tr>
+          <th>Username</th>
+          <th>Password</th>
+          <th>HWID</th>
+          <th>Expiry</th>
+          <th>Created</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody id="userList"></tbody>
+    </table>
+  </div>
+
+  <!-- Reset HWID -->
+  <div id="reset" class="section">
+    <h4>🔄 Reset HWID</h4>
+    <form onsubmit="resetHWID(event)">
+      <input required type="text" class="form-control mb-2" placeholder="Username" id="reset_username">
+      <button class="btn btn-dark">Reset HWID</button>
+    </form>
+  </div>
+
+<!-- Send Message -->
+<div id="sendmsg" class="section">
+  <h4>✉️ Send Message</h4>
+
+  <form onsubmit="loadUserMessages(event)" class="mb-3">
+    <div class="input-group">
+      <input required type="text" class="form-control" placeholder="Enter Username" id="message_username">
+      <button class="btn btn-secondary">🔄 Load</button>
+    </div>
+  </form>
+
+  <form onsubmit="sendMessage(event)" classs="mb-3">
+    <textarea required class="form-control mb-2" rows="2" placeholder="Type message..." id="message_text"></textarea>
+    <button class="btn btn-primary">Send</button>
+  </form>
+
+  <div id="messageList" style="max-height: 400px; overflow-y: auto; border: 1px solid #333; padding: 10px; border-radius: 8px;"></div>
+</div>
+
+<!-- Project Name -->
+<div id="project" class="section">
+  <h4>📁 Project Name</h4>
+  <div class="mb-3 position-relative">
+    <pre id="loginCode" class="p-3 rounded" style="background:#080808; color:white; border:1px solid #444; font-family: monospace; min-height:180px;">
+FRCONSOLE.login(guna2TextBox1.Text, guna2TextBox2.Text);
+
+if (FRCONSOLE.response.GetProperty("status").GetString() == "success")
+{
+    string message = FRCONSOLE.GetLatestMessage(guna2TextBox1.Text);
+
+    if (!string.IsNullOrEmpty(message))
+    {
+        var msgDialog = new Guna2MessageDialog();
+        msgDialog.Caption = "Admin Message";
+        msgDialog.Text = message;
+        msgDialog.Icon = MessageDialogIcon.Warning;
+        msgDialog.Buttons = MessageDialogButtons.OK;
+        msgDialog.Show();
+    }
+
+    MAIN main = new MAIN();
+    main.Show();
+    this.Hide();
+}
+else
+{
+    status.Text = "Status: " + FRCONSOLE.response.GetProperty("message").GetString();
+}
+
+    </pre>
+    <button class="btn btn-light btn-sm position-absolute top-0 end-0 m-2" onclick="copyCode()">📋</button>
+  </div>
+  <p class="developer">Developer: SHUBH</p>
+  <a href="/static/FRCONSOLE.cs" download class="btn btn-success btn-sm">⬇ Download FRCONSOLE.cs</a>
+</div>
 
 </div>
 
 <div id="toast" class="toast" style="display:none;"></div>
 
 <script>
+function showSection(id, e) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  document.querySelectorAll('.sidebar a').forEach(a => a.classList.remove('active'));
+  if (e) e.target.classList.add('active');
+  if (id === 'show') refreshUsers();
+}
+
+function showToast(msg) {
+  const toast = document.getElementById('toast');
+  toast.innerText = msg;
+  toast.style.display = 'block';
+  toast.style.animation = 'slideIn 0.5s forwards';
+  setTimeout(() => toast.style.right = '-300px', 3000);
+}
+
 function getCategory() { return document.getElementById('appSelect').value; }
 
 function addUser(e) {
   e.preventDefault();
   fetch('/add_user', { method:'POST', body:new URLSearchParams({
     category:getCategory(),
-    username:add_username.value,
-    password:add_password.value,
-    expiry:add_expiry.value })
-  }).then(res=>res.json()).then(d=>alert(d.message));
+    username:document.getElementById("add_username").value,
+    password:document.getElementById("add_password").value,
+    expiry:document.getElementById("add_expiry").value })
+  }).then(res=>res.json()).then(d=>{ showToast(d.message); if(d.status==='success') refreshUsers(); });
 }
+
+function deleteUser(e) {
+  e.preventDefault();
+  fetch('/delete_user', { method:'POST', body:new URLSearchParams({
+    category:getCategory(),
+    username:document.getElementById("delete_username").value })
+  }).then(res=>res.json()).then(d=>{ showToast(d.message); if(d.status==='success') refreshUsers(); });
+}
+
+function pauseUser(e, action) {
+  e.preventDefault();
+  fetch('/pause_user', { method:'POST', body:new URLSearchParams({
+    category:getCategory(),
+    username:document.getElementById("pause_username").value,
+    action:action })
+  }).then(res=>res.json()).then(d=>showToast(d.message));
+}
+
+function infoUser(e) {
+  e.preventDefault();
+  fetch('/info_user', { method:'POST', body:new URLSearchParams({
+    category:getCategory(),
+    username:document.getElementById("info_username").value })
+  }).then(res=>res.json()).then(d=>{
+    if(d.status==='success'){
+      const u=d.data;
+      infoPanel.innerHTML=`
+        <div class='p-3 bg-dark rounded'>
+          <p><b>User:</b> ${u.Username}</p>
+          <p><b>Pass:</b> ${u.Password}</p>
+          <p><b>HWID:</b> ${u.HWID||'None'}</p>
+          <p><b>Expiry:</b> ${u.Expiry}</p>
+          <p><b>Created:</b> ${u.CreatedAt}</p>
+          <p><b>Status:</b> ${u.Status||'Unknown'}</p>
+        </div>`;
+    } else showToast(d.message);
+  });
+}
+
+function refreshUsers() {
+  fetch('/get_users',{method:'POST',body:new URLSearchParams({category:getCategory()})})
+  .then(r=>r.json()).then(users=>{
+    userList.innerHTML="";
+    users.forEach(u=>{ userList.innerHTML+=`
+      <tr><td>${u.Username}</td><td>${u.Password}</td><td>${u.HWID}</td>
+      <td>${u.Expiry}</td><td>${u.CreatedAt}</td><td>${u.Status}</td></tr>`; });
+  });
+}
+
+function loadUserMessages(e){ e.preventDefault(); loadMessages(message_username.value.trim()); }
+
+document.getElementById("message_username").addEventListener("input",()=>{
+  if(message_username.value.trim().length>=3) loadMessages(message_username.value.trim());
+});
+
+function loadMessages(u){
+  fetch('/get_messages',{method:'POST',body:new URLSearchParams({category:getCategory(),username:u})})
+  .then(r=>r.json()).then(d=>{
+    messageList.innerHTML="";
+    if(d.status==='success'){
+      d.messages.forEach(m=>{
+        messageList.innerHTML+=`<div class='border rounded p-2 mb-2'><b>${m.text}</b><br><small>${m.time}</small></div>`;
+      });
+    } else messageList.innerHTML="<span>No messages</span>";
+  });
+}
+
+function sendMessage(e){
+  e.preventDefault();
+  fetch('/send_message',{method:'POST',body:new URLSearchParams({
+    username:message_username.value.trim(), message:message_text.value.trim() })})
+  .then(r=>r.json()).then(d=>{
+    showToast(d.message); message_text.value=''; loadMessages(message_username.value.trim());
+  });
+}
+
+function resetHWID(e){
+  e.preventDefault();
+  fetch('/reset_hwid',{method:'POST',body:new URLSearchParams({
+    category:getCategory(),username:reset_username.value})})
+  .then(r=>r.json()).then(d=>showToast(d.message));
+}
+
+function copyCode(){ navigator.clipboard.writeText(loginCode.innerText).then(()=>showToast("Copied!")); }
 </script>
 
 </body>
