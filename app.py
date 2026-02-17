@@ -1,7 +1,6 @@
 from flask import Flask, request, jsonify, render_template, session, redirect, url_for
 import requests
-from datetime import datetime
-from zoneinfo import ZoneInfo
+from datetime import datetime, timedelta, timezone
 import os
 
 app = Flask(__name__)
@@ -18,17 +17,34 @@ HEADERS = {
     "X-Master-Key": JSONBIN_API_KEY
 }
 
-# ✅ TIMEZONE (India)
-IST = ZoneInfo("Asia/Kolkata")
+# ✅ IST TIMEZONE (fix created time issue)
+IST = timezone(timedelta(hours=5, minutes=30))
 
-# ✅ EXPIRY CHECK (supports datetime)
+
+# ---------------------------- EXPIRY LOGIC ----------------------------
+
 def is_expired(expiry_str):
     try:
-        expiry = datetime.fromisoformat(expiry_str)
+        expiry_str = expiry_str.replace("T", " ")
+        expiry = datetime.strptime(expiry_str, "%Y-%m-%d %H:%M")
         now = datetime.now(IST)
-        return now > expiry
-    except:
+        return now >= expiry
+    except Exception as e:
+        print("Expiry Parse Error:", expiry_str, e)
         return False
+
+
+def cleanup_all(data):
+    changed = False
+    for category in data:
+        before = len(data[category])
+        data[category] = [u for u in data[category] if not is_expired(u["Expiry"])]
+        if len(data[category]) != before:
+            changed = True
+
+    if changed:
+        save_data(data)
+
 
 # ---------------------------- Auth Routes ----------------------------
 
@@ -38,48 +54,62 @@ def home():
         return render_template("index.html")
     return redirect(url_for("login"))
 
+
 @app.route("/login", methods=["GET", "POST"])
 def login():
     if request.method == "POST":
         username = request.form.get("username")
         password = request.form.get("password")
+
         if username == ADMIN_USERNAME and password == ADMIN_PASSWORD:
             session["logged_in"] = True
             return redirect(url_for("home"))
+
         return render_template("login.html", error="Invalid credentials")
+
     return render_template("login.html")
+
 
 @app.route("/logout")
 def logout():
     session.pop("logged_in", None)
     return redirect(url_for("login"))
 
+
 # ---------------------------- JSONBin Logic ----------------------------
 
 def load_data():
     try:
-        res = requests.get(f"https://api.jsonbin.io/v3/b/{BIN_ID}/latest", headers=HEADERS)
+        res = requests.get(
+            f"https://api.jsonbin.io/v3/b/{BIN_ID}/latest",
+            headers=HEADERS
+        )
+
         if res.status_code == 200:
-            return res.json().get("record", {})
+            data = res.json().get("record", {})
+            cleanup_all(data)
+            return data
+
+        return {}
+
     except Exception as e:
         print("Load Error:", e)
-    return {}
+        return {}
+
 
 def save_data(data):
     try:
-        res = requests.put(f"https://api.jsonbin.io/v3/b/{BIN_ID}", headers=HEADERS, json=data)
+        res = requests.put(
+            f"https://api.jsonbin.io/v3/b/{BIN_ID}",
+            headers=HEADERS,
+            json=data
+        )
         return res.status_code == 200
+
     except Exception as e:
         print("Save Error:", e)
         return False
 
-# ✅ CLEANUP EXPIRED USERS (REAL FIX)
-def cleanup_expired_users(data, category):
-    if category in data:
-        before = len(data[category])
-        data[category] = [u for u in data[category] if not is_expired(u["Expiry"])]
-        if len(data[category]) != before:
-            save_data(data)
 
 # ---------------------------- User Management ----------------------------
 
@@ -90,17 +120,13 @@ def add_user():
     category = request.form["category"]
     username = request.form["username"]
     password = request.form["password"]
-    expiry = request.form["expiry"]  # datetime-local आता है
+    expiry = request.form["expiry"]
 
     if category not in data:
         data[category] = []
 
-    cleanup_expired_users(data, category)
-
     if any(u["Username"] == username for u in data[category]):
         return jsonify({"status": "error", "message": "Username already exists"})
-
-    now = datetime.now(IST)
 
     data[category].append({
         "Username": username,
@@ -108,12 +134,43 @@ def add_user():
         "HWID": None,
         "Status": "Active",
         "Expiry": expiry,
-        "CreatedAt": now.strftime("%Y-%m-%d %H:%M")
+        "CreatedAt": datetime.now(IST).strftime("%Y-%m-%d %H:%M")
     })
 
     if save_data(data):
         return jsonify({"status": "success", "message": "User added successfully"})
+
     return jsonify({"status": "error", "message": "Failed to add user"})
+
+
+@app.route("/delete_user", methods=["POST"])
+def delete_user():
+    data = load_data()
+
+    category = request.form["category"]
+    username = request.form["username"]
+
+    if category not in data:
+        return jsonify({"status": "error", "message": "Invalid application"})
+
+    before = len(data[category])
+    data[category] = [u for u in data[category] if u["Username"] != username]
+
+    if len(data[category]) == before:
+        return jsonify({"status": "error", "message": "User not found"})
+
+    if save_data(data):
+        return jsonify({"status": "success", "message": "User deleted"})
+
+    return jsonify({"status": "error", "message": "Failed to update data"})
+
+
+@app.route("/get_users", methods=["POST"])
+def get_users():
+    data = load_data()
+    category = request.form["category"]
+    return jsonify(data.get(category, []))
+
 
 @app.route("/client_login", methods=["POST"])
 def client_login():
@@ -126,8 +183,6 @@ def client_login():
 
     if category not in data:
         return jsonify({"status": "error", "message": "Invalid application"})
-
-    cleanup_expired_users(data, category)
 
     for user in data[category]:
         if user["Username"] == username and user["Password"] == password:
@@ -152,8 +207,11 @@ def client_login():
 
     return jsonify({"status": "error", "message": "Invalid username or password"})
 
-@app.route("/delete_user", methods=["POST"])
-def delete_user():
+
+# ---------------------------- Messaging ----------------------------
+
+@app.route("/get_messages", methods=["POST"])
+def get_messages():
     data = load_data()
 
     category = request.form["category"]
@@ -162,26 +220,36 @@ def delete_user():
     if category not in data:
         return jsonify({"status": "error", "message": "Invalid application"})
 
-    cleanup_expired_users(data, category)
+    for user in data[category]:
+        if user["Username"] == username:
+            return jsonify({"status": "success", "messages": user.get("Messages", [])})
 
-    before = len(data[category])
-    data[category] = [u for u in data[category] if u["Username"] != username]
+    return jsonify({"status": "error", "message": "User not found"})
 
-    if len(data[category]) == before:
-        return jsonify({"status": "error", "message": "User not found"})
 
-    if save_data(data):
-        return jsonify({"status": "success", "message": "User deleted"})
-    return jsonify({"status": "error", "message": "Failed to update data"})
-
-@app.route("/get_users", methods=["POST"])
-def get_users():
+@app.route("/send_message", methods=["POST"])
+def send_message():
     data = load_data()
-    category = request.form["category"]
 
-    cleanup_expired_users(data, category)
+    username = request.form["username"]
+    message = request.form["message"]
 
-    return jsonify(data.get(category, []))
+    now = datetime.now(IST).strftime("%Y-%m-%d %H:%M")
+
+    for category in data:
+        for user in data[category]:
+            if user["Username"] == username:
+                user.setdefault("Messages", []).append({
+                    "text": message,
+                    "time": now,
+                    "status": "active"
+                })
+
+                if save_data(data):
+                    return jsonify({"status": "success", "message": "Message saved"})
+
+    return jsonify({"status": "error", "message": "User not found"})
+
 
 # ---------------------------- Run ----------------------------
 
