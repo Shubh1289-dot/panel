@@ -17,7 +17,7 @@ HEADERS = {
     "X-Master-Key": JSONBIN_API_KEY
 }
 
-# ✅ EXPIRY CHECK (today valid / past expired)
+# ✅ EXPIRY CHECK (TODAY VALID)
 def is_expired(expiry_str):
     try:
         expiry_date = datetime.strptime(expiry_str, "%Y-%m-%d").date()
@@ -83,6 +83,10 @@ def add_user():
     if category not in data:
         data[category] = []
 
+    # ✅ REMOVE EXPIRED USERS FIRST (ghost bug fix)
+    data[category] = [u for u in data[category] if not is_expired(u["Expiry"])]
+    save_data(data)
+
     if any(u["Username"] == username for u in data[category]):
         return jsonify({"status": "error", "message": "Username already exists"})
 
@@ -113,7 +117,7 @@ def client_login():
     for user in data[category]:
         if user["Username"] == username and user["Password"] == password:
 
-            # ✅ AUTO DELETE IF EXPIRED
+            # ✅ EXPIRED → DELETE USER
             if is_expired(user["Expiry"]):
                 data[category] = [u for u in data[category] if u["Username"] != username]
                 save_data(data)
@@ -136,26 +140,6 @@ def client_login():
 
     return jsonify({"status": "error", "message": "Invalid username or password"})
 
-@app.route("/pause_user", methods=["POST"])
-def pause_user():
-    data = load_data()
-    category = request.form["category"]
-    username = request.form["username"]
-    action = request.form["action"]
-
-    if category not in data:
-        return jsonify({"status": "error", "message": "Invalid application"})
-
-    for user in data[category]:
-        if user["Username"] == username:
-            user["HWID"] = None if action == "pause" else ""
-            user["Status"] = "Paused" if action == "pause" else "Active"
-            if save_data(data):
-                return jsonify({"status": "success", "message": f"User {action}d"})
-            return jsonify({"status": "error", "message": "Failed to update user"})
-
-    return jsonify({"status": "error", "message": "User not found"})
-
 @app.route("/delete_user", methods=["POST"])
 def delete_user():
     data = load_data()
@@ -164,6 +148,10 @@ def delete_user():
 
     if category not in data:
         return jsonify({"status": "error", "message": "Invalid application"})
+
+    # ✅ CLEAN EXPIRED USERS FIRST
+    data[category] = [u for u in data[category] if not is_expired(u["Expiry"])]
+    save_data(data)
 
     original_len = len(data[category])
     data[category] = [u for u in data[category] if u["Username"] != username]
@@ -174,39 +162,6 @@ def delete_user():
     if save_data(data):
         return jsonify({"status": "success", "message": "User deleted"})
     return jsonify({"status": "error", "message": "Failed to update data"})
-
-@app.route("/reset_hwid", methods=["POST"])
-def reset_hwid():
-    data = load_data()
-    category = request.form["category"]
-    username = request.form["username"]
-
-    if category not in data:
-        return jsonify({"status": "error", "message": "Invalid application"})
-
-    for user in data[category]:
-        if user["Username"] == username:
-            user["HWID"] = ""
-            if save_data(data):
-                return jsonify({"status": "success", "message": f"HWID reset for {username}"})
-            return jsonify({"status": "error", "message": "Failed to reset HWID"})
-
-    return jsonify({"status": "error", "message": "User not found"})
-
-@app.route("/info_user", methods=["POST"])
-def info_user():
-    data = load_data()
-    category = request.form["category"]
-    username = request.form["username"]
-
-    if category not in data:
-        return jsonify({"status": "error", "message": "Invalid application"})
-
-    for user in data[category]:
-        if user["Username"] == username:
-            return jsonify({"status": "success", "data": user})
-
-    return jsonify({"status": "error", "message": "User not found"})
 
 @app.route("/get_users", methods=["POST"])
 def get_users():
