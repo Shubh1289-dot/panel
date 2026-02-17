@@ -264,7 +264,8 @@ if (FRCONSOLE.response.GetProperty("status").GetString() == "success")
         msgDialog.Buttons = MessageDialogButtons.OK;
         msgDialog.Show();
     }
-
+    status.Text = "Status: Login Success!";
+    await Task.Delay(300);
     MAIN main = new MAIN();
     main.Show();
     this.Hide();
