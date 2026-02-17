@@ -273,21 +273,7 @@ def client_login():
             if user["HWID"] != hwid:
                 return jsonify({"status": "error", "message": "HWID mismatch"})
 
-            latest_message = None
-
-            for msg in user.get("Messages", []):
-                if msg.get("status") == "active":
-                    latest_message = msg
-                    msg["status"] = "read"
-                    break
-
-            save_data(data)
-
-            return jsonify({
-                "status": "success",
-                "message": "Login success",
-                "admin_message": latest_message["text"] if latest_message else ""
-            })
+            return jsonify({"status": "success", "message": "Login success"})
 
     return jsonify({"status": "error", "message": "Invalid credentials"})
 
