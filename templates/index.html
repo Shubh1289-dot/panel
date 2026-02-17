@@ -4,9 +4,6 @@
   <meta charset="UTF-8">
   <title>FR CONSOLE</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
-<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
-
 
   <style>
     body { background-color: #000; font-family: 'Segoe UI', sans-serif; color:white; }
@@ -289,13 +286,6 @@ function showSection(id, e) {
   if (id === 'show') refreshUsers();
 }
 
-flatpickr("#add_expiry", {
-    enableTime: true,
-    dateFormat: "Y-m-d H:i",
-    time_24hr: true,
-    allowInput: false
-});
-
 function showToast(msg) {
   const toast = document.getElementById('toast');
   toast.innerText = msg;
@@ -397,6 +387,9 @@ function resetHWID(e){
     category:getCategory(),username:reset_username.value})})
   .then(r=>r.json()).then(d=>showToast(d.message));
 }
+document.getElementById("add_expiry").addEventListener("change", function () {
+    this.blur();   // picker ko force close karta hai
+});
 
 function copyCode(){ navigator.clipboard.writeText(loginCode.innerText).then(()=>showToast("Copied!")); }
 </script>
