@@ -351,77 +351,34 @@ function infoUser(e) {
     } else showToast(d.message);
   });
 }
+
 function refreshUsers() {
   fetch('/get_users',{method:'POST',body:new URLSearchParams({category:getCategory()})})
   .then(r=>r.json()).then(users=>{
     userList.innerHTML="";
-    users.forEach(u=>{
-      userList.innerHTML+=`
-        <tr>
-          <td>${u.Username}</td>
-          <td>${u.Password}</td>
-          <td>${u.HWID}</td>
-          <td>${u.Expiry}</td>
-          <td>${u.CreatedAt}</td>
-          <td>${u.Status}</td>
-        </tr>`;
-    });
+    users.forEach(u=>{ userList.innerHTML+=`
+      <tr><td>${u.Username}</td><td>${u.Password}</td><td>${u.HWID}</td>
+      <td>${u.Expiry}</td><td>${u.CreatedAt}</td><td>${u.Status}</td></tr>`; });
   });
 }
 
-/* ✅ ONLY MANUAL LOAD */
-function loadUserMessages(e){
-  e.preventDefault();
-
-  const username = document.getElementById("message_username").value.trim();
-
-  if(!username){
-    showToast("Enter username");
-    return;
-  }
-
-  loadMessages(username);
-}
-
-/* ❌ DELETE THIS COMPLETELY */
-/*
+function loadUserMessages(e){ e.preventDefault(); loadMessages(message_username.value.trim()); }
 document.getElementById("message_username").addEventListener("input",()=>{
   if(message_username.value.trim().length>=3) loadMessages(message_username.value.trim());
 });
-*/
+
 
 function loadMessages(u){
-  fetch('/get_messages',{
-    method:'POST',
-    body:new URLSearchParams({
-      category:getCategory(),
-      username:u
-    })
-  })
-  .then(r=>r.json())
-  .then(d=>{
+  fetch('/get_messages',{method:'POST',body:new URLSearchParams({category:getCategory(),username:u})})
+  .then(r=>r.json()).then(d=>{
     messageList.innerHTML="";
-
     if(d.status==='success'){
-      if(!d.messages || d.messages.length === 0){
-        messageList.innerHTML="<span>No messages</span>";
-        return;
-      }
-
       d.messages.forEach(m=>{
-        messageList.innerHTML+=`
-          <div class='border rounded p-2 mb-2'>
-            <b>${m.text}</b><br>
-            <small>${m.time}</small>
-          </div>`;
+        messageList.innerHTML+=`<div class='border rounded p-2 mb-2'><b>${m.text}</b><br><small>${m.time}</small></div>`;
       });
-
-    } else {
-      messageList.innerHTML="<span>No messages</span>";
-    }
+    } else messageList.innerHTML="<span>No messages</span>";
   });
 }
-
 
 function sendMessage(e){
   e.preventDefault();
