@@ -157,7 +157,10 @@
       <input required type="text" class="form-control mb-2" placeholder="Username" id="add_username">
       <input required type="password" class="form-control mb-2" placeholder="Password" id="add_password">
       <input required type="datetime-local" class="form-control mb-2 white-datetime" id="add_expiry">
-      <button class="btn btn-success">Add</button>
+      <button type="button" class="btn btn-dark btn-sm mb-2" onclick="confirmDateTime()">
+  OK
+</button>
+ <button class="btn btn-success">Add</button>
     </form>
   </div>
 
@@ -284,6 +287,17 @@ function showSection(id, e) {
   document.querySelectorAll('.sidebar a').forEach(a => a.classList.remove('active'));
   if (e) e.target.classList.add('active');
   if (id === 'show') refreshUsers();
+}
+function confirmDateTime() {
+  const dt = document.getElementById("add_expiry");
+
+  if (!dt.value) {
+    showToast("Select date & time first");
+    return;
+  }
+
+  dt.blur();
+  showToast("Date & Time Locked ✅");
 }
 
 function showToast(msg) {
