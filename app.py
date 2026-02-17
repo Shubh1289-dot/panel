@@ -22,16 +22,18 @@ def is_expired(expiry_str):
     try:
         expiry_str = expiry_str.strip()
 
+        # Handles datetime-local format from browser
         if "T" in expiry_str:
             expiry_time = datetime.strptime(expiry_str, "%Y-%m-%dT%H:%M")
-            return datetime.now() > expiry_time
+        else:
+            expiry_time = datetime.strptime(expiry_str, "%Y-%m-%d")
 
-        expiry_time = datetime.strptime(expiry_str, "%Y-%m-%d")
-        return datetime.now() > expiry_time
+        return datetime.now() >= expiry_time
 
     except Exception as e:
-        print("Expiry Error:", expiry_str, e)
+        print("EXPIRY PARSE ERROR:", expiry_str, e)
         return False
+
 
 # ---------------------------- Auth Routes ----------------------------
 
