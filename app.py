@@ -1,6 +1,6 @@
 from flask import Flask, request, jsonify, render_template, session, redirect, url_for
 import requests
-from datetime import datetime
+from datetime import datetime, timedelta
 import os
 
 app = Flask(__name__)
@@ -17,42 +17,53 @@ HEADERS = {
     "X-Master-Key": JSONBIN_API_KEY
 }
 
-# ---------------------------- EXPIRY LOGIC ----------------------------
+# -------------------- TIMEZONE FIX (IST) --------------------
+
+def ist_now():
+    return datetime.utcnow() + timedelta(hours=5, minutes=30)
+
+# -------------------- EXPIRY LOGIC --------------------
 
 def parse_expiry(expiry_str):
-    try:
-        return datetime.strptime(expiry_str, "%Y-%m-%dT%H:%M")
-    except:
+    formats = [
+        "%Y-%m-%dT%H:%M",
+        "%Y-%m-%dT%H:%M:%S",
+        "%Y-%m-%d"
+    ]
+
+    for fmt in formats:
         try:
-            return datetime.strptime(expiry_str, "%Y-%m-%d")
+            return datetime.strptime(expiry_str, fmt)
         except:
-            return None
+            pass
+
+    return None
 
 
 def is_expired(expiry_str):
     expiry = parse_expiry(expiry_str)
     if not expiry:
         return False
-    return datetime.now() > expiry
 
+    return ist_now() > expiry
 
-# ---------------------------- JSONBIN ----------------------------
+# -------------------- JSONBIN --------------------
 
 def load_data_raw():
     try:
         res = requests.get(
-            f"https://api.jsonbin.io/v3/b/{BIN_ID}",
+            f"https://api.jsonbin.io/v3/b/{BIN_ID}?meta=false",
             headers=HEADERS
         )
 
         if res.status_code == 200:
-            return res.json().get("record", {})
+            return res.json()
 
-        print("Load Failed:", res.status_code, res.text)
+        print("LOAD FAILED:", res.status_code, res.text)
         return {}
 
     except Exception as e:
-        print("Load Error:", e)
+        print("LOAD ERROR:", e)
         return {}
 
 
@@ -64,24 +75,26 @@ def save_data(data):
             json=data
         )
 
-        print("Save Status:", res.status_code)
+        print("SAVE STATUS:", res.status_code)
         return res.status_code == 200
 
     except Exception as e:
-        print("Save Error:", e)
+        print("SAVE ERROR:", e)
         return False
 
 
 def clean_expired_users(data):
     changed = False
-    now = datetime.now()
+    now = ist_now()
 
     for category in list(data.keys()):
-        users = data.get(category, [])
+
         valid_users = []
 
-        for user in users:
+        for user in data.get(category, []):
+
             expiry = parse_expiry(user.get("Expiry", ""))
+
             if expiry and now > expiry:
                 print("AUTO DELETE:", user.get("Username"))
                 changed = True
@@ -101,8 +114,7 @@ def load_data():
     data = load_data_raw()
     return clean_expired_users(data)
 
-
-# ---------------------------- AUTH ----------------------------
+# -------------------- AUTH --------------------
 
 @app.route("/")
 def home():
@@ -114,6 +126,7 @@ def home():
 @app.route("/login", methods=["GET", "POST"])
 def login():
     if request.method == "POST":
+
         if request.form.get("username") == ADMIN_USERNAME and request.form.get("password") == ADMIN_PASSWORD:
             session["logged_in"] = True
             return redirect(url_for("home"))
@@ -128,8 +141,7 @@ def logout():
     session.pop("logged_in", None)
     return redirect(url_for("login"))
 
-
-# ---------------------------- USER MANAGEMENT ----------------------------
+# -------------------- USER MANAGEMENT --------------------
 
 @app.route("/add_user", methods=["POST"])
 def add_user():
@@ -152,13 +164,13 @@ def add_user():
         "HWID": "",
         "Status": "Active",
         "Expiry": expiry,
-        "CreatedAt": datetime.now().strftime("%Y-%m-%d %H:%M")
+        "CreatedAt": ist_now().strftime("%Y-%m-%d %H:%M")
     })
 
     if save_data(data):
         return jsonify({"status": "success", "message": "User added successfully"})
 
-    return jsonify({"status": "error", "message": "Failed to add user"})
+    return jsonify({"status": "error", "message": "Add failed"})
 
 
 @app.route("/delete_user", methods=["POST"])
@@ -225,8 +237,7 @@ def client_login():
 
     return jsonify({"status": "error", "message": "Invalid credentials"})
 
-
-# ---------------------------- RUN ----------------------------
+# -------------------- RUN --------------------
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000, debug=True)
