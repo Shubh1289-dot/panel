@@ -363,7 +363,9 @@ function refreshUsers() {
 }
 
 function loadUserMessages(e){ e.preventDefault(); loadMessages(message_username.value.trim()); }
-
+document.getElementById("message_username").addEventListener("input",()=>{
+  if(message_username.value.trim().length>=3) loadMessages(message_username.value.trim());
+});
 
 
 function loadMessages(u){
