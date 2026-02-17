@@ -236,6 +236,27 @@ def client_login():
             return jsonify({"status": "success", "message": "Login success"})
 
     return jsonify({"status": "error", "message": "Invalid credentials"})
+@app.route("/reset_hwid", methods=["POST"])
+def reset_hwid():
+    data = load_data()
+
+    category = request.form["category"]
+    username = request.form["username"]
+
+    if category not in data:
+        return jsonify({"status": "error", "message": "Invalid application"})
+
+    for user in data[category]:
+        if user["Username"] == username:
+
+            user["HWID"] = ""
+
+            if save_data(data):
+                return jsonify({"status": "success", "message": "HWID reset"})
+
+            return jsonify({"status": "error", "message": "Save failed"})
+
+    return jsonify({"status": "error", "message": "User not found"})
 
 
 # ✅ FIXED ROUTE (ONLY CHANGE)
