@@ -172,6 +172,21 @@ def add_user():
 
     return jsonify({"status": "error", "message": "Add failed"})
 
+@app.route("/info_user", methods=["POST"])
+def info_user():
+    data = load_data()
+
+    category = request.form["category"]
+    username = request.form["username"]
+
+    if category not in data:
+        return jsonify({"status": "error", "message": "Invalid application"})
+
+    for user in data[category]:
+        if user["Username"] == username:
+            return jsonify({"status": "success", "data": user})
+
+    return jsonify({"status": "error", "message": "User not found"})
 
 @app.route("/delete_user", methods=["POST"])
 def delete_user():
