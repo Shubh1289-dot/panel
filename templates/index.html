@@ -388,7 +388,6 @@ function resetHWID(e){
   .then(r=>r.json()).then(d=>showToast(d.message));
 }
 
-
 function copyCode(){ navigator.clipboard.writeText(loginCode.innerText).then(()=>showToast("Copied!")); }
 </script>
 
