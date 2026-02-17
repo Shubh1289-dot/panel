@@ -233,6 +233,38 @@ def pause_user():
             return jsonify({"status": "error", "message": "Save failed"})
 
     return jsonify({"status": "error", "message": "User not found"})
+@app.route("/update_message_status", methods=["POST"])
+def update_message_status():
+    data = load_data()
+
+    category = request.form["category"]
+    username = request.form["username"]
+    index = int(request.form["index"])
+    action = request.form["action"]
+
+    if category not in data:
+        return jsonify({"status": "error", "message": "Invalid application"})
+
+    for user in data[category]:
+        if user["Username"] == username:
+
+            if "Messages" not in user:
+                return jsonify({"status": "error", "message": "No messages"})
+
+            if index >= len(user["Messages"]):
+                return jsonify({"status": "error", "message": "Invalid index"})
+
+            if action == "delete":
+                user["Messages"].pop(index)
+            else:
+                user["Messages"][index]["status"] = action
+
+            if save_data(data):
+                return jsonify({"status": "success"})
+
+            return jsonify({"status": "error", "message": "Save failed"})
+
+    return jsonify({"status": "error", "message": "User not found"})
 
 
 @app.route("/get_users", methods=["POST"])
