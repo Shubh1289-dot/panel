@@ -1,14 +1,20 @@
 from flask import Flask, request, jsonify, render_template, session, redirect, url_for
 import requests
 from datetime import datetime
+import pytz
 import os
 
 app = Flask(__name__)
 app.secret_key = os.urandom(24)
 
+# ✅ FORCE INDIA TIMEZONE
+IST = pytz.timezone("Asia/Kolkata")
+
+# Admin credentials
 ADMIN_USERNAME = "FR"
 ADMIN_PASSWORD = "SHUBH"
 
+# JSONBin Config
 JSONBIN_API_KEY = "$2a$10$R74G8pPzaRy0kLrcmfIYO.jvMl0T8JA3XQVaRHQNqYWsyO8ltxLr."
 BIN_ID = "68fef44843b1c97be983b559"
 
@@ -17,8 +23,7 @@ HEADERS = {
     "X-Master-Key": JSONBIN_API_KEY
 }
 
-# ---------------- EXPIRY LOGIC ----------------
-
+# ✅ EXPIRY CHECK (DATE + TIME SUPPORT)
 def is_expired(expiry_str):
     try:
         expiry_str = expiry_str.strip()
@@ -28,7 +33,7 @@ def is_expired(expiry_str):
         else:
             expiry_time = datetime.strptime(expiry_str, "%Y-%m-%d")
 
-        return datetime.now() >= expiry_time
+        return datetime.now(IST) >= expiry_time
 
     except Exception as e:
         print("EXPIRY ERROR:", expiry_str, e)
@@ -50,19 +55,18 @@ def clean_expired_users(data):
             changed = True
 
     if changed:
-        print("Expired users auto removed")
+        print("Expired users removed")
         save_data(data)
 
     return data
 
-# ---------------- AUTH ----------------
+# ---------------------------- Auth Routes ----------------------------
 
 @app.route("/")
 def home():
     if session.get("logged_in"):
         return render_template("index.html")
     return redirect(url_for("login"))
-
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
@@ -78,13 +82,12 @@ def login():
 
     return render_template("login.html")
 
-
 @app.route("/logout")
 def logout():
     session.pop("logged_in", None)
     return redirect(url_for("login"))
 
-# ---------------- JSONBIN ----------------
+# ---------------------------- JSONBin Logic ----------------------------
 
 def load_data():
     try:
@@ -92,7 +95,7 @@ def load_data():
 
         if res.status_code == 200:
             data = res.json().get("record", {})
-            return clean_expired_users(data)   # ✅ CRITICAL FIX
+            return clean_expired_users(data)   # ✅ AUTO CLEAN
 
         return {}
 
@@ -100,16 +103,16 @@ def load_data():
         print("Load Error:", e)
         return {}
 
-
 def save_data(data):
     try:
         res = requests.put(f"https://api.jsonbin.io/v3/b/{BIN_ID}", headers=HEADERS, json=data)
         return res.status_code == 200
+
     except Exception as e:
         print("Save Error:", e)
         return False
 
-# ---------------- USER MGMT ----------------
+# ---------------------------- User Management ----------------------------
 
 @app.route("/add_user", methods=["POST"])
 def add_user():
@@ -132,7 +135,7 @@ def add_user():
         "HWID": None,
         "Status": "Active",
         "Expiry": expiry,
-        "CreatedAt": datetime.now().strftime("%Y-%m-%d %H:%M")
+        "CreatedAt": datetime.now(IST).strftime("%Y-%m-%d %H:%M")  # ✅ FIXED
     })
 
     if save_data(data):
@@ -166,8 +169,11 @@ def client_login():
 
             if user["HWID"] in [None, ""]:
                 user["HWID"] = client_hwid
-                save_data(data)
-                return jsonify({"status": "success", "message": "HWID bound. Login success"})
+
+                if save_data(data):
+                    return jsonify({"status": "success", "message": "HWID bound. Login success"})
+
+                return jsonify({"status": "error", "message": "Failed to bind HWID"})
 
             if user["HWID"] != client_hwid:
                 return jsonify({"status": "error", "message": "HWID mismatch. Access denied"})
@@ -183,7 +189,7 @@ def get_users():
     category = request.form["category"]
     return jsonify(data.get(category, []))
 
-# ---------------- RUN ----------------
+# ---------------------------- Run ----------------------------
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000, debug=True)
