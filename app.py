@@ -20,10 +20,20 @@ HEADERS = {
 # ✅ EXPIRY CHECK (TODAY VALID)
 def is_expired(expiry_str):
     try:
-        expiry_date = datetime.strptime(expiry_str, "%Y-%m-%d").date()
-        return datetime.today().date() > expiry_date
+        expiry_str = expiry_str.strip()
+
+        # datetime-local support (date + hour + minute)
+        if "T" in expiry_str:
+            expiry_time = datetime.strptime(expiry_str, "%Y-%m-%dT%H:%M")
+            return datetime.now() > expiry_time
+
+        # fallback (old users safe)
+        expiry_date = datetime.strptime(expiry_str, "%Y-%m-%d")
+        return datetime.now() > expiry_date
+
     except:
         return False
+
 
 # ---------------------------- Auth Routes ----------------------------
 
