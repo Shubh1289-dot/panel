@@ -307,7 +307,12 @@ def client_login():
             if not user["HWID"]:
                 user["HWID"] = hwid
                 save_data(data)
-                return jsonify({"status": "success", "message": "HWID bound. Login success"})
+               return jsonify({
+    "status": "success",
+    "message": "HWID bound. Login success",
+    "expiry": user["Expiry"]     # ✅ IMPORTANT
+})
+
 
             # ✅ HWID MISMATCH
             if user["HWID"] != hwid:
