@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify, render_template, session, redirect, url_for
+from flask import Flask, request, jsonify, render_template, session, redirect, url_for, Response
 import requests
 from datetime import datetime, timedelta
 import os
@@ -134,6 +134,22 @@ def login():
         return render_template("login.html", error="Invalid credentials")
 
     return render_template("login.html")
+import os
+
+@app.route("/view/<path:filename>")
+def view_file(filename):
+    file_path = os.path.join("static", filename)
+
+    if not os.path.exists(file_path):
+        return "File not found", 404
+
+    with open(file_path, "r", encoding="utf-8", errors="ignore") as f:
+        content = f.read()
+
+    return Response(
+        content,
+        mimetype="text/plain"   # ✅ FORCE OPEN IN BROWSER
+    )
 
 
 @app.route("/logout")
