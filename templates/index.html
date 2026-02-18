@@ -20,6 +20,13 @@
   display: flex;
   flex-direction: column;
 }
+.glow-red {
+  color: #ff1a1a;
+  text-shadow:
+    0 0 5px rgba(255,0,0,0.8),
+    0 0 10px rgba(255,0,0,0.6),
+    0 0 18px rgba(255,0,0,0.4);
+}
 
 
     .sidebar h5 {
@@ -289,9 +296,12 @@
   font-size: 13px;
   letter-spacing: 0.5px;
 ">
-  Developed By <span style="color:#ff1a1a;">SHUBH</span> • Private Build
+  Developed By <span class="glow-red">SHUBH</span> • Private Build
 </div>
- <a href="/static/FRCONSOLE.cs" download class="btn btn-danger btn-sm me-2">
+
+<!-- SPACE + BUTTON ROW -->
+<div class="mt-3 text-center">
+  <a href="/static/FRCONSOLE.cs" download class="btn btn-danger btn-sm me-2">
     ⬇ Download FRCONSOLE.cs
   </a>
 
@@ -299,10 +309,14 @@
     ⬇ Download MAIN.txt
   </a>
 
- <a href="/static/LOGIN.txt" download class="btn btn-danger btn-sm">
-  ⬇ Download LOGIN.txt
-</a>
-   <p class="developer">Developer: SHUBH</p>
+  <a href="/static/LOGIN.txt" download class="btn btn-danger btn-sm">
+    ⬇ Download LOGIN.txt
+  </a>
+</div>
+
+<!-- DEVELOPER GLOW -->
+<p class="developer glow-red mt-3">Developer: SHUBH</p>
+
 </div>   <!-- ✅ ab band karo -->
 
 <div id="toast" class="toast" style="display:none;"></div>
