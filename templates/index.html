@@ -251,7 +251,10 @@
     <pre id="loginCode" class="p-3 rounded" style="background:#080808; color:white; border:1px solid #444; font-family: monospace; min-height:180px;">
 FRCONSOLE.login(guna2TextBox1.Text, guna2TextBox2.Text);
 
-if (FRCONSOLE.response.GetProperty("status").GetString() == "success")
+var response = FRCONSOLE.response;
+
+if (response.TryGetProperty("status", out var statusElement) &&
+    statusElement.GetString() == "success")
 {
     string message = FRCONSOLE.GetLatestMessage(guna2TextBox1.Text);
 
@@ -264,16 +267,23 @@ if (FRCONSOLE.response.GetProperty("status").GetString() == "success")
         msgDialog.Buttons = MessageDialogButtons.OK;
         msgDialog.Show();
     }
+
     status.Text = "Status: Login Success!";
     await Task.Delay(300);
+
     MAIN main = new MAIN();
     main.Show();
     this.Hide();
 }
 else
 {
-    status.Text = "Status: " + FRCONSOLE.response.GetProperty("message").GetString();
+    // ✅ SAFE error message read
+    if (response.TryGetProperty("message", out var msgElement))
+        status.Text = "Status: " + msgElement.GetString();
+    else
+        status.Text = "Status: Login failed";
 }
+
 
     </pre>
     <button class="btn btn-light btn-sm position-absolute top-0 end-0 m-2" onclick="copyCode()">📋</button>
