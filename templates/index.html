@@ -302,37 +302,37 @@
 <!-- SPACE + BUTTON ROW -->
 <div class="mt-3 text-center">
 
-  <div class="dropdown d-inline-block me-2">
-    <button class="btn btn-danger btn-sm dropdown-toggle" data-bs-toggle="dropdown">
-      ⬇ FRCONSOLE.cs
+  <!-- FRCONSOLE.cs -->
+  <div class="d-inline-block me-3">
+    <a href="/static/FRCONSOLE.cs" download class="btn btn-danger btn-sm me-1">
+      ⬇ Download
+    </a>
+    <button class="btn btn-outline-danger btn-sm"
+            onclick="copyFile('/static/FRCONSOLE.cs')">
+      📋 Copy
     </button>
-    <ul class="dropdown-menu dropdown-menu-dark">
-      <li><a class="dropdown-item" href="/static/FRCONSOLE.cs" target="_blank">Open</a></li>
-      <li><a class="dropdown-item" href="/static/FRCONSOLE.cs" download>Download</a></li>
-      <li><a class="dropdown-item" href="#" onclick="copyFile('/static/FRCONSOLE.cs')">Copy</a></li>
-    </ul>
   </div>
 
-  <div class="dropdown d-inline-block me-2">
-    <button class="btn btn-danger btn-sm dropdown-toggle" data-bs-toggle="dropdown">
-      ⬇ MAIN.txt
+  <!-- MAIN.txt -->
+  <div class="d-inline-block me-3">
+    <a href="/static/MAIN.txt" download class="btn btn-danger btn-sm me-1">
+      ⬇ Download
+    </a>
+    <button class="btn btn-outline-danger btn-sm"
+            onclick="copyFile('/static/MAIN.txt')">
+      📋 Copy
     </button>
-    <ul class="dropdown-menu dropdown-menu-dark">
-      <li><a class="dropdown-item" href="/static/MAIN.txt" target="_blank">Open</a></li>
-      <li><a class="dropdown-item" href="/static/MAIN.txt" download>Download</a></li>
-      <li><a class="dropdown-item" href="#" onclick="copyFile('/static/MAIN.txt')">Copy</a></li>
-    </ul>
   </div>
 
-  <div class="dropdown d-inline-block">
-    <button class="btn btn-danger btn-sm dropdown-toggle" data-bs-toggle="dropdown">
-      ⬇ LOGIN.txt
+  <!-- LOGIN.txt -->
+  <div class="d-inline-block">
+    <a href="/static/LOGIN.txt" download class="btn btn-danger btn-sm me-1">
+      ⬇ Download
+    </a>
+    <button class="btn btn-outline-danger btn-sm"
+            onclick="copyFile('/static/LOGIN.txt')">
+      📋 Copy
     </button>
-    <ul class="dropdown-menu dropdown-menu-dark">
-      <li><a class="dropdown-item" href="/static/LOGIN.txt" target="_blank">Open</a></li>
-      <li><a class="dropdown-item" href="/static/LOGIN.txt" download>Download</a></li>
-      <li><a class="dropdown-item" href="#" onclick="copyFile('/static/LOGIN.txt')">Copy</a></li>
-    </ul>
   </div>
 
 </div>
@@ -353,16 +353,21 @@ function showSection(id, e) {
   if (e) e.target.classList.add('active');
   if (id === 'show') refreshUsers();
 }
+
 async function copyFile(url) {
     try {
         const res = await fetch(url);
         const text = await res.text();
+
         await navigator.clipboard.writeText(text);
+
         showToast("Copied to clipboard");
-    } catch {
+    } catch (e) {
         showToast("Copy failed");
     }
 }
+
+
 
 function showToast(msg) {
   const toast = document.getElementById('toast');
