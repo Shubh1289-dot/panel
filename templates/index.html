@@ -247,56 +247,20 @@
 <!-- Project Name -->
 <div id="project" class="section">
   <h4>📁 Project Name</h4>
-  <div class="mb-3 position-relative">
-    <pre id="loginCode" class="p-3 rounded" style="background:#080808; color:white; border:1px solid #444; font-family: monospace; min-height:180px;">
-FRCONSOLE.login(guna2TextBox1.Text, guna2TextBox2.Text);
 
-var response = FRCONSOLE.response;
-
-if (response.TryGetProperty("status", out var statusElement) &&
-    statusElement.GetString() == "success")
-{
-    string message = FRCONSOLE.GetLatestMessage(guna2TextBox1.Text);
-
-    if (!string.IsNullOrEmpty(message))
-    {
-        var msgDialog = new Guna2MessageDialog();
-        msgDialog.Caption = "Admin Message";
-        msgDialog.Text = message;
-        msgDialog.Icon = MessageDialogIcon.Warning;
-        msgDialog.Buttons = MessageDialogButtons.OK;
-        msgDialog.Show();
-    }
-
-    status.Text = "Status: Login Success!";
-    await Task.Delay(300);
-
-    MAIN main = new MAIN();
-    main.Show();
-    this.Hide();
-}
-else
-{
-    // ✅ SAFE error message read
-    if (response.TryGetProperty("message", out var msgElement))
-        status.Text = "Status: " + msgElement.GetString();
-    else
-        status.Text = "Status: Login failed";
-}
-
-
-    </pre>
-    <button class="btn btn-light btn-sm position-absolute top-0 end-0 m-2" onclick="copyCode()">📋</button>
-  </div>
   <p class="developer">Developer: SHUBH</p>
-<a href="/static/FRCONSOLE.cs" download class="btn btn-danger btn-sm me-2">
-  ⬇ Download FRCONSOLE.cs
-</a>
 
-<a href="/static/MAIN.txt" download class="btn btn-danger btn-sm">
-  ⬇ Download MAIN.txt
-</a>
+  <a href="/static/FRCONSOLE.cs" download class="btn btn-danger btn-sm me-2">
+    ⬇ Download FRCONSOLE.cs
+  </a>
 
+  <a href="/static/MAIN.txt" download class="btn btn-danger btn-sm me-2">
+    ⬇ Download MAIN.txt
+  </a>
+
+  <a href="/static/login_code.txt" download class="btn btn-danger btn-sm">
+    ⬇ Download LOGIN.txt
+  </a>
 
 
 </div>
