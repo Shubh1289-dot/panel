@@ -318,7 +318,12 @@ def client_login():
             if user["HWID"] != hwid:
                 return jsonify({"status": "error", "message": "HWID mismatch / already used"})
 
-            return jsonify({"status": "success", "message": "Login success"})
+            return jsonify({
+    "status": "success",
+    "message": "Login success",
+    "expiry": user["Expiry"]     # ✅ REQUIRED HERE ALSO
+})
+
 
     # ✅ USER NOT FOUND
     return jsonify({"status": "error", "message": "Username does not exist"})
