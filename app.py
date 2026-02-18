@@ -136,6 +136,9 @@ def login():
     return render_template("login.html")
 import os
 
+from flask import Response
+import os
+
 @app.route("/view/<path:filename>")
 def view_file(filename):
     file_path = os.path.join("static", filename)
@@ -146,10 +149,61 @@ def view_file(filename):
     with open(file_path, "r", encoding="utf-8", errors="ignore") as f:
         content = f.read()
 
-    return Response(
-        content,
-        mimetype="text/plain"   # ✅ FORCE OPEN IN BROWSER
-    )
+    html = f"""
+    <html>
+    <head>
+        <title>{filename}</title>
+        <style>
+            body {{
+                background:black;
+                color:white;
+                font-family: monospace;
+                padding:20px;
+            }}
+            pre {{
+                background:#050505;
+                border:1px solid #222;
+                padding:15px;
+                white-space: pre-wrap;
+            }}
+            .topbar {{
+                margin-bottom:15px;
+            }}
+            button {{
+                background:red;
+                color:white;
+                border:none;
+                padding:8px 14px;
+                margin-right:10px;
+                cursor:pointer;
+            }}
+        </style>
+    </head>
+    <body>
+
+        <div class="topbar">
+            <button onclick="copyText()">📋 Copy</button>
+            <a href="/static/{filename}" download>
+                <button>⬇ Download</button>
+            </a>
+        </div>
+
+        <pre id="code">{content}</pre>
+
+        <script>
+            function copyText() {{
+                const text = document.getElementById("code").innerText;
+                navigator.clipboard.writeText(text);
+                alert("Copied");
+            }}
+        </script>
+
+    </body>
+    </html>
+    """
+
+    return Response(html, mimetype="text/html")
+
 
 
 @app.route("/logout")
