@@ -352,44 +352,45 @@ def client_login():
     password = request.form["password"]
     hwid = request.form["hwid"]
 
+    # ✅ CATEGORY MUST EXIST
     if category not in data:
-    data[category] = []
-    save_data(data)
+        return jsonify({"status": "error", "message": "Application not found"})
 
-    for user in data[category]:
+    users = data.get(category, [])
 
-        if user["Username"] == username:
+    # ✅ SEARCH ONLY INSIDE SELECTED APPLICATION
+    for user in users:
 
-            if user["Password"] != password:
-                return jsonify({"status": "error", "message": "Wrong password"})
+        if user["Username"] != username:
+            continue
 
-            if is_expired(user["Expiry"]):
-                data[category] = [u for u in data[category] if u["Username"] != username]
-                save_data(data)
-                return jsonify({"status": "error", "message": "Account expired"})
+        # ✅ PASSWORD CHECK
+        if user["Password"] != password:
+            return jsonify({"status": "error", "message": "Wrong password"})
 
-            if user["Status"] != "Active":
-                return jsonify({"status": "error", "message": "Account paused"})
+        # ✅ EXPIRY CHECK
+        if is_expired(user["Expiry"]):
+            data[category] = [u for u in users if u["Username"] != username]
+            save_data(data)
+            return jsonify({"status": "error", "message": "Account expired"})
 
-            if not user["HWID"]:
-                user["HWID"] = hwid
-                save_data(data)
+        # ✅ STATUS CHECK
+        if user["Status"] != "Active":
+            return jsonify({"status": "error", "message": "Account paused"})
 
-                return jsonify({
-                    "status": "success",
-                    "message": "HWID bound. Login success",
-                    "expiry": user["Expiry"]   # ✅ FIXED
-                })
+        # ✅ HWID FIRST BIND
+        if not user["HWID"]:
+            user["HWID"] = hwid
+            save_data(data)
+            return jsonify({"status": "success", "message": "HWID bound. Login success"})
 
-            if user["HWID"] != hwid:
-                return jsonify({"status": "error", "message": "HWID mismatch"})
+        # ✅ HWID MISMATCH
+        if user["HWID"] != hwid:
+            return jsonify({"status": "error", "message": "HWID mismatch / already used"})
 
-            return jsonify({
-                "status": "success",
-                "message": "Login success",
-                "expiry": user["Expiry"]       # ✅ FIXED
-            })
+        return jsonify({"status": "success", "message": "Login success"})
 
+    # ✅ USER NOT FOUND IN THIS APPLICATION
     return jsonify({"status": "error", "message": "Username does not exist"})
 
 @app.route("/reset_hwid", methods=["POST"])
