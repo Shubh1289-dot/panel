@@ -353,7 +353,8 @@ def client_login():
     hwid = request.form["hwid"]
 
     if category not in data:
-        return jsonify({"status": "error", "message": "Application not found"})
+    data[category] = []
+    save_data(data)
 
     for user in data[category]:
 
