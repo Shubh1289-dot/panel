@@ -7,7 +7,7 @@ app = Flask(__name__)
 app.secret_key = os.urandom(24)
 
 ADMIN_USERNAME = "FR"
-ADMIN_PASSWORD = "CONSOLE"
+ADMIN_PASSWORD = "PUSSY"
 
 JSONBIN_API_KEY = "$2a$10$R74G8pPzaRy0kLrcmfIYO.jvMl0T8JA3XQVaRHQNqYWsyO8ltxLr."
 BIN_ID = "68fef44843b1c97be983b559"
@@ -352,45 +352,43 @@ def client_login():
     password = request.form["password"]
     hwid = request.form["hwid"]
 
-    # ✅ CATEGORY MUST EXIST
     if category not in data:
         return jsonify({"status": "error", "message": "Application not found"})
 
-    users = data.get(category, [])
+    for user in data[category]:
 
-    # ✅ SEARCH ONLY INSIDE SELECTED APPLICATION
-    for user in users:
+        if user["Username"] == username:
 
-        if user["Username"] != username:
-            continue
+            if user["Password"] != password:
+                return jsonify({"status": "error", "message": "Wrong password"})
 
-        # ✅ PASSWORD CHECK
-        if user["Password"] != password:
-            return jsonify({"status": "error", "message": "Wrong password"})
+            if is_expired(user["Expiry"]):
+                data[category] = [u for u in data[category] if u["Username"] != username]
+                save_data(data)
+                return jsonify({"status": "error", "message": "Account expired"})
 
-        # ✅ EXPIRY CHECK
-        if is_expired(user["Expiry"]):
-            data[category] = [u for u in users if u["Username"] != username]
-            save_data(data)
-            return jsonify({"status": "error", "message": "Account expired"})
+            if user["Status"] != "Active":
+                return jsonify({"status": "error", "message": "Account paused"})
 
-        # ✅ STATUS CHECK
-        if user["Status"] != "Active":
-            return jsonify({"status": "error", "message": "Account paused"})
+            if not user["HWID"]:
+                user["HWID"] = hwid
+                save_data(data)
 
-        # ✅ HWID FIRST BIND
-        if not user["HWID"]:
-            user["HWID"] = hwid
-            save_data(data)
-            return jsonify({"status": "success", "message": "HWID bound. Login success"})
+                return jsonify({
+                    "status": "success",
+                    "message": "HWID bound. Login success",
+                    "expiry": user["Expiry"]   # ✅ FIXED
+                })
 
-        # ✅ HWID MISMATCH
-        if user["HWID"] != hwid:
-            return jsonify({"status": "error", "message": "HWID mismatch / already used"})
+            if user["HWID"] != hwid:
+                return jsonify({"status": "error", "message": "HWID mismatch"})
 
-        return jsonify({"status": "success", "message": "Login success"})
+            return jsonify({
+                "status": "success",
+                "message": "Login success",
+                "expiry": user["Expiry"]       # ✅ FIXED
+            })
 
-    # ✅ USER NOT FOUND IN THIS APPLICATION
     return jsonify({"status": "error", "message": "Username does not exist"})
 
 @app.route("/reset_hwid", methods=["POST"])
