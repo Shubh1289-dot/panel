@@ -346,6 +346,7 @@ async function copyFile(url) {
         showToast("Copy failed");
     }
 }
+<script>
 function protectedOpen(url) {
 
     const pass = prompt("Enter password");
@@ -361,17 +362,14 @@ function protectedOpen(url) {
     })
     .then(r => r.json())
     .then(d => {
-
         if (d.status === 'success') {
             window.location.href = url;
         } else {
             showToast("Wrong password");
         }
-
-    })
-    .catch(() => showToast("Server error"));
+    });
 }
-
+</script>
 
 function showToast(msg) {
   const toast = document.getElementById('toast');
