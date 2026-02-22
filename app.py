@@ -11,7 +11,9 @@ ADMIN_PASSWORD = "CONSOLE"
 
 JSONBIN_API_KEY = "$2a$10$R74G8pPzaRy0kLrcmfIYO.jvMl0T8JA3XQVaRHQNqYWsyO8ltxLr."
 BIN_ID = "68fef44843b1c97be983b559"
+BLOCKED_SID_URL = "https://raw.githubusercontent.com/Shubh1289-dot/panel/refs/heads/panel/auth.json"
 
+DISCORD_WEBHOOK = "https://discord.com/api/webhooks/1474997412786471054/5jkd8YM6kDPA_xA-u26EFAz0kld1AMClwDn3d4fCg9SztHYFUOqS_8OiDdQbs3jwE1xo"
 HEADERS = {
     "Content-Type": "application/json",
     "X-Master-Key": JSONBIN_API_KEY
@@ -65,6 +67,34 @@ def load_data_raw():
     except Exception as e:
         print("LOAD ERROR:", e)
         return {}
+
+def load_blocked_sids():
+    try:
+        res = requests.get(BLOCKED_SID_URL, timeout=5)
+        if res.status_code == 200:
+            data = res.json()
+            return set(data.get("blocked", []))
+    except Exception as e:
+        print("SID LOAD ERROR:", e)
+
+    return set()
+
+def send_discord_log(username, sid, pcname, category):
+    try:
+        payload = {
+            "content": (
+                f"🔐 LOGIN DETECTED\n"
+                f"👤 User: {username}\n"
+                f"💻 PC: {pcname}\n"
+                f"🆔 SID: {sid}\n"
+                f"📦 App: {category}"
+            )
+        }
+
+        requests.post(DISCORD_WEBHOOK, json=payload, timeout=5)
+
+    except Exception as e:
+        print("WEBHOOK ERROR:", e)
 
 
 def save_data(data):
@@ -352,6 +382,21 @@ def client_login():
     password = request.form["password"]
     hwid = request.form["hwid"]
 
+    # ✅ NEW — SID / PCNAME READ
+    sid = request.form.get("sid", "").strip()
+    pcname = request.form.get("pcname", "Unknown PC")
+
+    blocked_sids = load_blocked_sids()
+
+    # ✅ NEW — BLOCK CHECK
+    if sid in blocked_sids:
+        send_discord_log(username, sid, pcname, category)
+
+        return jsonify({
+            "status": "error",
+            "message": "Your PC is blocked"
+        })
+
     if category not in data:
         return jsonify({"status": "error", "message": "Application not found"})
 
@@ -374,19 +419,25 @@ def client_login():
                 user["HWID"] = hwid
                 save_data(data)
 
+                # ✅ NEW — WEBHOOK LOG
+                send_discord_log(username, sid, pcname, category)
+
                 return jsonify({
                     "status": "success",
                     "message": "HWID bound. Login success",
-                    "expiry": user["Expiry"]   # ✅ FIXED
+                    "expiry": user["Expiry"]
                 })
 
             if user["HWID"] != hwid:
                 return jsonify({"status": "error", "message": "HWID mismatch"})
 
+            # ✅ NEW — WEBHOOK LOG
+            send_discord_log(username, sid, pcname, category)
+
             return jsonify({
                 "status": "success",
                 "message": "Login success",
-                "expiry": user["Expiry"]       # ✅ FIXED
+                "expiry": user["Expiry"]
             })
 
     return jsonify({"status": "error", "message": "Username does not exist"})
