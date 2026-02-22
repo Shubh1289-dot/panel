@@ -241,11 +241,7 @@ def add_user():
         return jsonify({"status": "success", "message": "User added successfully"})
 
     return jsonify({"status": "error", "message": "Add failed"})
-@app.route('/verify_password', methods=['POST'])
-def verify_password():
-    if request.form.get('password') == "051":
-        return jsonify(status="success")
-    return jsonify(status="fail")
+
 @app.route("/info_user", methods=["POST"])
 def info_user():
     data = load_data()
