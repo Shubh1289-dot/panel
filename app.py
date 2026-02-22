@@ -7,7 +7,7 @@ app = Flask(__name__)
 app.secret_key = os.urandom(24)
 
 ADMIN_USERNAME = "FR"
-ADMIN_PASSWORD = "CONSOLE"
+ADMIN_PASSWORD = "PUSSY"
 
 JSONBIN_API_KEY = "$2a$10$R74G8pPzaRy0kLrcmfIYO.jvMl0T8JA3XQVaRHQNqYWsyO8ltxLr."
 BIN_ID = "68fef44843b1c97be983b559"
@@ -16,10 +16,7 @@ HEADERS = {
     "Content-Type": "application/json",
     "X-Master-Key": JSONBIN_API_KEY
 }
-BLOCKED_SIDS = [
-    "S-1-5-21-2480447405-1686001370-3333385930-1001",
-    "S-1-5-21-YYYYY"
-]
+
 # -------------------- TIMEZONE FIX (IST) --------------------
 
 def ist_now():
@@ -124,13 +121,7 @@ def home():
     if session.get("logged_in"):
         return render_template("index.html")
     return redirect(url_for("login"))
-@app.route("/")
-def home():
 
-    sid = request.headers.get("X-PC-SID", "NO_HEADER")
-    print("SID RECEIVED:", sid)
-
-    return f"SID = {sid}"
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
