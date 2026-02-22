@@ -127,15 +127,10 @@ def home():
 @app.route("/")
 def home():
 
-    sid = request.headers.get("X-PC-SID", "")
+    sid = request.headers.get("X-PC-SID", "NO_HEADER")
+    print("SID RECEIVED:", sid)
 
-    if sid in BLOCKED_SIDS:
-        return "ACCESS DENIED", 403
-
-    if session.get("logged_in"):
-        return render_template("index.html")
-
-    return redirect(url_for("login"))
+    return f"SID = {sid}"
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
