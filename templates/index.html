@@ -349,11 +349,18 @@ async function copyFile(url) {
 function protectedOpen(url) {
     const pass = prompt("Enter password");
 
-    if (pass === "0512") {          // ← yaha apna password
-        window.location.href = url;
-    } else {
-        showToast("Wrong password");
-    }
+    fetch('/verify_password', {
+        method: 'POST',
+        body: new URLSearchParams({ password: pass })
+    })
+    .then(r => r.json())
+    .then(d => {
+        if (d.status === 'success') {
+            window.location.href = url;
+        } else {
+            showToast("Wrong password");
+        }
+    });
 }
 
 
