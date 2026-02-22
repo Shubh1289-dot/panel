@@ -16,7 +16,10 @@ HEADERS = {
     "Content-Type": "application/json",
     "X-Master-Key": JSONBIN_API_KEY
 }
-
+BLOCKED_SIDS = [
+    "S-1-5-21-2480447405-1686001370-3333385930-1001",
+    "S-1-5-21-YYYYY"
+]
 # -------------------- TIMEZONE FIX (IST) --------------------
 
 def ist_now():
@@ -121,7 +124,18 @@ def home():
     if session.get("logged_in"):
         return render_template("index.html")
     return redirect(url_for("login"))
+@app.route("/")
+def home():
 
+    sid = request.headers.get("X-PC-SID", "")
+
+    if sid in BLOCKED_SIDS:
+        return "ACCESS DENIED", 403
+
+    if session.get("logged_in"):
+        return render_template("index.html")
+
+    return redirect(url_for("login"))
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
