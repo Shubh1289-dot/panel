@@ -122,7 +122,7 @@ def verify_password():
 
     password = request.form.get('password')
 
-    if password == "1234":          # ← apna password
+    if password == "0512":          # ← apna password
         session['verified'] = True
         return jsonify(status="success")
 
