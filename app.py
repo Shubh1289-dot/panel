@@ -115,7 +115,18 @@ def load_data():
     return clean_expired_users(data)
 
 # -------------------- AUTH --------------------
+# -------------------- AUTH --------------------
 
+@app.route('/verify_password', methods=['POST'])
+def verify_password():
+
+    password = request.form.get('password')
+
+    if password == "1234":          # ← apna password
+        session['verified'] = True
+        return jsonify(status="success")
+
+    return jsonify(status="fail")
 @app.route("/")
 def home():
     if session.get("logged_in"):
@@ -141,6 +152,10 @@ import os
 
 @app.route("/view/<path:filename>")
 def view_file(filename):
+
+    if not session.get("verified"):
+        return "Unauthorized", 403
+
     file_path = os.path.join("static", filename)
 
     if not os.path.exists(file_path):
