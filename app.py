@@ -372,13 +372,13 @@ def client_login():
 
     for user in data[category]:
 
-        if user["Username"] == username:
+        if user["Username"].lower() == username.lower():
 
-            if user["Password"] != password:
+            if user["Password"].lower() != password.lower():
                 return jsonify({"status": "error", "message": "Wrong password"})
 
             if is_expired(user["Expiry"]):
-                data[category] = [u for u in data[category] if u["Username"] != username]
+                data[category] = [u for u in data[category] if u["Username"] != user["Username"]]
                 save_data(data)
                 return jsonify({"status": "error", "message": "Account expired"})
 
@@ -392,7 +392,7 @@ def client_login():
                 return jsonify({
                     "status": "success",
                     "message": "HWID bound. Login success",
-                    "expiry": user["Expiry"]   # ✅ FIXED
+                    "expiry": user["Expiry"]
                 })
 
             if user["HWID"] != hwid:
@@ -401,7 +401,7 @@ def client_login():
             return jsonify({
                 "status": "success",
                 "message": "Login success",
-                "expiry": user["Expiry"]       # ✅ FIXED
+                "expiry": user["Expiry"]
             })
 
     return jsonify({"status": "error", "message": "Username does not exist"})
