@@ -164,47 +164,48 @@ body {
 
 <div class="flip-container">
   <div class="flipper">
+
+    <!-- FRONT SIDE -->
     <div class="login-card front">
 
-    <div class="logo">FR <span>CONSOLE</span></div>
-    <div class="subtitle">Secure authentication required</div>
+      <div class="logo">FR <span>CONSOLE</span></div>
+      <div class="subtitle">Secure authentication required</div>
 
-    <form method="POST">
-        <input type="hidden" name="type" value="user">
-        <input type="text" class="form-control" placeholder="Username" name="username" required>
-        <input type="password" class="form-control" placeholder="Password" name="password" required>
+      <form method="POST">
+          <input type="hidden" name="type" value="user">
 
-        <div class="links">
-            <a href="#">Create account</a>
-            <a href="#">Forgot password?</a>
-        </div>
+          <input type="text" class="form-control" placeholder="Username" name="username" required>
+          <input type="password" class="form-control" placeholder="Password" name="password" required>
 
-        <button class="btn btn-danger w-100 btn-login">Log In →</button>
+          <button class="btn btn-danger w-100 btn-login">Log In →</button>
 
-        {% if error %}
-        <div class="alert alert-danger mt-3">{{ error }}</div>
-        {% endif %}
-    </form>
-<div class="divider">OR</div>
+          {% if error %}
+          <div class="alert alert-danger mt-3">{{ error }}</div>
+          {% endif %}
+      </form>
 
-<button type="button" class="btn btn-outline-danger w-100" onclick="flipCard()">
-    Enter License Key
-</button>
-    <div class="divider">COMMUNITY</div>
+      <div class="divider">OR</div>
 
-    <div class="socials">
-        <button class="social-btn" onclick="window.open('https://discord.gg/JjdDagrkvX', '_blank')">
-            <i class="fa-brands fa-discord"></i>
-        </button>
+      <button type="button" class="btn btn-outline-danger w-100" onclick="flipCard()">
+          Enter License Key
+      </button>
 
-        <button class="social-btn" onclick="window.open('https://guns.lol/shubh.', '_blank')">
-            <i class="fa-solid fa-gun"></i>
-        </button>
-       </div> <!-- socials close -->
+      <div class="divider">COMMUNITY</div>
+
+      <div class="socials">
+          <button class="social-btn" onclick="window.open('https://discord.gg/JjdDagrkvX', '_blank')">
+              <i class="fa-brands fa-discord"></i>
+          </button>
+
+          <button class="social-btn" onclick="window.open('https://guns.lol/shubh.', '_blank')">
+              <i class="fa-solid fa-gun"></i>
+          </button>
+      </div>
 
     </div> <!-- FRONT CLOSE -->
 
-    <!-- BACK SIDE START -->
+
+    <!-- BACK SIDE -->
     <div class="login-card back">
 
         <div class="logo">FR <span>CONSOLE</span></div>
@@ -236,4 +237,3 @@ function flipCard(){
 </script>
 
 </body>
-</html>
