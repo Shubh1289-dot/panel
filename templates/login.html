@@ -130,17 +130,44 @@ body {
     border-color: #ff2b2b;
     color: #ff2b2b;
 }
+    .flip-container {
+  perspective: 1000px;
+}
+
+.flipper {
+  position: relative;
+  width: 420px;
+  transition: 0.8s;
+  transform-style: preserve-3d;
+}
+
+.flipped {
+  transform: rotateY(180deg);
+}
+
+.front, .back {
+  backface-visibility: hidden;
+  position: absolute;
+  width: 100%;
+}
+
+.back {
+  transform: rotateY(180deg);
+}
 </style>
 </head>
 
 <body>
 
-<div class="login-card">
+<div class="flip-container">
+  <div class="flipper">
+    <div class="login-card front">
 
     <div class="logo">FR <span>CONSOLE</span></div>
     <div class="subtitle">Secure authentication required</div>
 
     <form method="POST">
+        <input type="hidden" name="type" value="user">
         <input type="text" class="form-control" placeholder="Username" name="username" required>
         <input type="password" class="form-control" placeholder="Password" name="password" required>
 
@@ -155,7 +182,11 @@ body {
         <div class="alert alert-danger mt-3">{{ error }}</div>
         {% endif %}
     </form>
+<div class="divider">OR</div>
 
+<button type="button" class="btn btn-outline-danger w-100" onclick="flipCard()">
+    Enter License Key
+</button>
     <div class="divider">COMMUNITY</div>
 
     <div class="socials">
@@ -166,9 +197,44 @@ body {
         <button class="social-btn" onclick="window.open('https://guns.lol/shubh.', '_blank')">
             <i class="fa-solid fa-gun"></i>
         </button>
-    </div>
+       </div> <!-- socials close -->
 
-</div>
+    </div> <!-- FRONT CLOSE -->
 
+    <!-- BACK SIDE START -->
+    <div class="login-card back">
+
+        <div class="logo">FR <span>CONSOLE</span></div>
+        <div class="subtitle">License Authentication</div>
+
+        <form method="POST">
+            <input type="hidden" name="type" value="license">
+
+            <input type="text" class="form-control" placeholder="Enter License Key" name="license" required>
+
+            <button class="btn btn-danger w-100 btn-login">Login →</button>
+        </form>
+
+        <div class="divider">OR</div>
+
+        <button type="button" class="btn btn-outline-danger w-100" onclick="flipCard()">
+            Back to Username Login
+        </button>
+
+    </div> <!-- BACK CLOSE -->
+
+  </div> <!-- FLIPPER CLOSE -->
+</div> <!-- FLIP CONTAINER CLOSE -->
+
+<script>
+function flipCard(){
+    document.querySelector(".flipper").classList.toggle("flipped");
+}
+</script>
+<script>
+function flipCard(){
+    document.querySelector(".flipper").classList.toggle("flipped");
+}
+</script>
 </body>
 </html>
