@@ -6,157 +6,94 @@
 
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@700;900&family=Inter:wght@400;600&display=swap" rel="stylesheet">
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+<!-- ICONS -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
 <style>
-
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-
 body {
+    margin: 0;
     height: 100vh;
+    background: radial-gradient(circle at center, #1a0000 0%, #000 60%);
     font-family: "Inter", sans-serif;
-    background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
     display: flex;
-    justify-content: center;
     align-items: center;
-    overflow: hidden;
+    justify-content: center;
     color: white;
 }
 
-/* Animated Background Glow */
-body::before {
-    content: "";
-    position: absolute;
-    width: 600px;
-    height: 600px;
-    background: radial-gradient(circle, rgba(255,0,100,0.3), transparent 70%);
-    animation: float 6s ease-in-out infinite alternate;
-}
-
-@keyframes float {
-    from { transform: translate(-50px, -50px); }
-    to { transform: translate(50px, 50px); }
-}
-
-/* Login Card */
 .login-card {
     width: 420px;
-    padding: 45px;
-    border-radius: 20px;
-    background: rgba(15, 15, 20, 0.75);
-    backdrop-filter: blur(25px);
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    box-shadow: 0 0 60px rgba(255, 0, 80, 0.3);
+    background: rgba(20, 20, 20, 0.95);
+    border-radius: 18px;
+    padding: 35px;
+    box-shadow: 0 0 40px rgba(255, 0, 0, 0.15);
+    border: 1px solid rgba(255, 0, 0, 0.15);
     text-align: center;
-    position: relative;
-    z-index: 2;
 }
 
-/* Logo */
 .logo {
     font-family: "Poppins", sans-serif;
-    font-size: 36px;
+    font-size: 34px;
     font-weight: 900;
     letter-spacing: 1px;
+    margin-bottom: 6px;
+    color: white;
 }
 
 .logo span {
-    background: linear-gradient(45deg, #ff004c, #ff7300);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
+    color: #ff2b2b;
 }
 
 .subtitle {
+    color: #777;
     font-size: 14px;
-    color: #aaa;
     margin-bottom: 30px;
 }
 
-/* Floating Input */
-.form-group {
-    position: relative;
-    margin-bottom: 20px;
-}
-
-.form-group input {
-    width: 100%;
-    height: 55px;
-    background: #111;
-    border: 1px solid #222;
-    border-radius: 12px;
+.form-control {
+    height: 52px;
+    background: #0b0b0b;
+    border: 1px solid #1f1f1f;
+    border-radius: 10px;
     color: white;
-    padding: 0 15px;
-    outline: none;
-    transition: 0.3s;
+    margin-bottom: 15px;
 }
 
-.form-group label {
-    position: absolute;
-    top: 17px;
-    left: 15px;
-    color: #777;
-    transition: 0.3s;
-    pointer-events: none;
+.form-control:focus {
+    background: #0b0b0b;
+    color: white;
+    border-color: #ff2b2b;
+    box-shadow: 0 0 0 1px rgba(255,0,0,0.2);
 }
 
-.form-group input:focus {
-    border-color: #ff004c;
+.btn-login {
+    height: 52px;
+    border-radius: 10px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    background: linear-gradient(90deg, #ff1a1a, #b30000);
+    border: none;
+    margin-top: 5px;
 }
 
-.form-group input:focus + label,
-.form-group input:valid + label {
-    top: -8px;
-    left: 12px;
-    font-size: 12px;
-    color: #ff004c;
-    background: #111;
-    padding: 0 6px;
-}
-
-/* Links */
 .links {
     display: flex;
     justify-content: space-between;
     font-size: 13px;
-    margin-bottom: 20px;
+    margin-top: 8px;
+    margin-bottom: 18px;
 }
 
 .links a {
-    color: #aaa;
+    color: #888;
     text-decoration: none;
-    transition: 0.3s;
 }
 
-.links a:hover {
-    color: #ff004c;
-}
-
-/* Login Button */
-.btn-login {
-    height: 55px;
-    width: 100%;
-    border-radius: 12px;
-    font-weight: 600;
-    letter-spacing: 0.5px;
-    background: linear-gradient(45deg, #ff004c, #ff7300);
-    border: none;
-    transition: 0.3s;
-}
-
-.btn-login:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 10px 25px rgba(255, 0, 80, 0.4);
-}
-
-/* Divider */
 .divider {
-    margin: 25px 0;
+    margin: 22px 0;
+    color: #444;
     font-size: 13px;
-    color: #666;
     position: relative;
 }
 
@@ -167,13 +104,12 @@ body::before {
     top: 50%;
     width: 40%;
     height: 1px;
-    background: #333;
+    background: #222;
 }
 
 .divider::before { left: 0; }
 .divider::after { right: 0; }
 
-/* Social Buttons */
 .socials {
     display: flex;
     gap: 10px;
@@ -181,25 +117,19 @@ body::before {
 
 .social-btn {
     flex: 1;
-    height: 48px;
-    border-radius: 12px;
-    background: #111;
-    border: 1px solid #222;
+    height: 45px;
+    border-radius: 10px;
+    background: #0b0b0b;
+    border: 1px solid #1f1f1f;
     color: #aaa;
+    transition: 0.2s;
     font-size: 18px;
-    transition: 0.3s;
 }
 
 .social-btn:hover {
-    border-color: #ff004c;
-    color: #ff004c;
-    transform: translateY(-3px);
+    border-color: #ff2b2b;
+    color: #ff2b2b;
 }
-
-.alert {
-    margin-top: 15px;
-}
-
 </style>
 </head>
 
@@ -211,28 +141,19 @@ body::before {
     <div class="subtitle">Secure authentication required</div>
 
     <form method="POST">
-
-        <div class="form-group">
-            <input type="text" name="username" required>
-            <label>Username</label>
-        </div>
-
-        <div class="form-group">
-            <input type="password" name="password" required>
-            <label>Password</label>
-        </div>
+        <input type="text" class="form-control" placeholder="Username" name="username" required>
+        <input type="password" class="form-control" placeholder="Password" name="password" required>
 
         <div class="links">
             <a href="#">Create account</a>
             <a href="#">Forgot password?</a>
         </div>
 
-        <button class="btn btn-login">Log In →</button>
+        <button class="btn btn-danger w-100 btn-login">Log In →</button>
 
         {% if error %}
-        <div class="alert alert-danger">{{ error }}</div>
+        <div class="alert alert-danger mt-3">{{ error }}</div>
         {% endif %}
-
     </form>
 
     <div class="divider">COMMUNITY</div>
