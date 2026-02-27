@@ -2,6 +2,8 @@ from flask import Flask, request, jsonify, render_template, session, redirect, u
 import requests
 from datetime import datetime, timedelta
 import os
+import random
+import string
 
 app = Flask(__name__)
 app.secret_key = os.urandom(24)
@@ -21,7 +23,10 @@ HEADERS = {
 
 def ist_now():
     return datetime.utcnow() + timedelta(hours=5, minutes=30)
+# -------------------- LICENSE GENERATOR --------------------
 
+def generate_key():
+    return "FR-" + ''.join(random.choices(string.ascii_uppercase + string.digits, k=16))
 # -------------------- EXPIRY LOGIC --------------------
 
 def parse_expiry(expiry_str):
@@ -102,7 +107,20 @@ def clean_expired_users(data):
 
             valid_users.append(user)
 
+        # Update users list
         data[category] = valid_users
+
+        # ---------------- LICENSE CLEAN (ADD HERE) ----------------
+        for user in data.get(category, []):
+            if "licenses" in user:
+                valid_licenses = []
+                for lic in user["licenses"]:
+                    expiry = parse_expiry(lic.get("Expiry", ""))
+                    if expiry and now > expiry:
+                        changed = True
+                        continue
+                    valid_licenses.append(lic)
+                user["licenses"] = valid_licenses
 
     if changed:
         save_data(data)
@@ -138,11 +156,37 @@ def home():
 def login():
     if request.method == "POST":
 
-        if request.form.get("username") == ADMIN_USERNAME and request.form.get("password") == ADMIN_PASSWORD:
-            session["logged_in"] = True
-            return redirect(url_for("home"))
+        login_type = request.form.get("type")
 
-        return render_template("login.html", error="Invalid credentials")
+        # ---------------- USERNAME LOGIN ----------------
+        if login_type == "user":
+            if request.form.get("username") == ADMIN_USERNAME and request.form.get("password") == ADMIN_PASSWORD:
+                session["logged_in"] = True
+                return redirect(url_for("home"))
+
+            return render_template("login.html", error="Invalid credentials")
+
+        # ---------------- LICENSE LOGIN ----------------
+        if login_type == "license":
+
+            data = load_data()
+            license_key = request.form.get("license")
+
+            for category in data:
+                for user in data.get(category, []):
+                    for lic in user.get("licenses", []):
+                        if lic["Key"] == license_key:
+
+                            if is_expired(lic["Expiry"]):
+                                return render_template("login.html", error="License expired")
+
+                            if lic["Status"] != "Active":
+                                return render_template("login.html", error="License paused")
+
+                            session["logged_in"] = True
+                            return redirect(url_for("home"))
+
+            return render_template("login.html", error="License not found")
 
     return render_template("login.html")
 import os
@@ -250,14 +294,77 @@ def add_user():
         "Status": "Active",
         "Expiry": expiry,
         "CreatedAt": ist_now().strftime("%Y-%m-%d %H:%M")
+         "licenses": []   # ADD THIS LINE
     })
 
     if save_data(data):
         return jsonify({"status": "success", "message": "User added successfully"})
 
     return jsonify({"status": "error", "message": "Add failed"})
+@app.route("/create_license", methods=["POST"])
+def create_license():
+    data = load_data()
+    category = request.form["category"]
+    expiry = request.form["expiry"]
 
+    if category not in data or not data[category]:
+        return jsonify({"status":"error","message":"Create user first"})
+
+    new_key = generate_key()
+
+    user = data[category][0]
+
+    if "licenses" not in user:
+        user["licenses"] = []
+
+    user["licenses"].append({
+        "Key": new_key,
+        "HWID": "",
+        "Status": "Active",
+        "Expiry": expiry,
+        "CreatedAt": ist_now().strftime("%Y-%m-%d %H:%M")
+    })
+
+    save_data(data)
+
+    return jsonify({"status":"success","key":new_key})
+    @app.route("/get_licenses", methods=["POST"])
+def get_licenses():
+    data = load_data()
+    category = request.form["category"]
+
+    if category not in data or not data[category]:
+        return jsonify([])
+
+    user = data[category][0]
+    return jsonify(user.get("licenses", []))
 @app.route("/info_user", methods=["POST"])
+@app.route("/update_license", methods=["POST"])
+def update_license():
+    data = load_data()
+    category = request.form["category"]
+    key = request.form["key"]
+    action = request.form["action"]
+
+    if category not in data or not data[category]:
+        return jsonify({"status":"error"})
+
+    user = data[category][0]
+
+    for lic in user.get("licenses", []):
+        if lic["Key"] == key:
+
+            if action == "delete":
+                user["licenses"].remove(lic)
+            elif action == "pause":
+                lic["Status"] = "Paused"
+            elif action == "unpause":
+                lic["Status"] = "Active"
+
+            save_data(data)
+            return jsonify({"status":"success"})
+
+    return jsonify({"status":"error","message":"Key not found"})
 def info_user():
     data = load_data()
 
