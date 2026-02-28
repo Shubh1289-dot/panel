@@ -252,6 +252,7 @@ def view_file(filename):
 @app.route("/logout")
 def logout():
     session.pop("logged_in", None)
+    session.pop("verified", None)
     return redirect(url_for("login"))
 import secrets
 import string
@@ -296,6 +297,10 @@ def generate_license():
     return jsonify({"status": "error", "message": "Generation failed"})
 @app.route("/add_user", methods=["POST"])
 def add_user():
+
+    if not session.get("logged_in"):
+        return jsonify({"status": "error", "message": "Unauthorized"})
+
     data = load_data()
 
     category = request.form["category"]
@@ -359,7 +364,7 @@ def delete_user():
         return jsonify({"status": "success", "message": "User deleted"})
 
     return jsonify({"status": "error", "message": "Delete failed"})
-    @app.route("/update_license", methods=["POST"])
+@app.route("/update_license", methods=["POST"])
 def update_license():
     data = load_data()
 
