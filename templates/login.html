@@ -130,110 +130,45 @@ body {
     border-color: #ff2b2b;
     color: #ff2b2b;
 }
-    .flip-container {
-  perspective: 1000px;
-}
-
-.flipper {
-  position: relative;
-  width: 420px;
-  min-height: 520px;   /* ADD THIS */
-  transition: 0.8s;
-  transform-style: preserve-3d;
-}
-
-.flipped {
-  transform: rotateY(180deg);
-}
-
-.front, .back {
-  backface-visibility: hidden;
-  position: absolute;
-  width: 100%;
-  top: 0;
-  left: 0;
-}
-
-.back {
-  transform: rotateY(180deg);
-}
 </style>
 </head>
 
 <body>
 
-<div class="flip-container">
-  <div class="flipper">
+<div class="login-card">
 
-    <!-- FRONT SIDE -->
-    <div class="login-card front">
+    <div class="logo">FR <span>CONSOLE</span></div>
+    <div class="subtitle">Secure authentication required</div>
 
-      <div class="logo">FR <span>CONSOLE</span></div>
-      <div class="subtitle">Secure authentication required</div>
+    <form method="POST">
+        <input type="text" class="form-control" placeholder="Username" name="username" required>
+        <input type="password" class="form-control" placeholder="Password" name="password" required>
 
-      <form method="POST">
-          <input type="hidden" name="type" value="user">
+        <div class="links">
+            <a href="#">Create account</a>
+            <a href="#">Forgot password?</a>
+        </div>
 
-          <input type="text" class="form-control" placeholder="Username" name="username" required>
-          <input type="password" class="form-control" placeholder="Password" name="password" required>
+        <button class="btn btn-danger w-100 btn-login">Log In →</button>
 
-          <button class="btn btn-danger w-100 btn-login">Log In →</button>
+        {% if error %}
+        <div class="alert alert-danger mt-3">{{ error }}</div>
+        {% endif %}
+    </form>
 
-          {% if error %}
-          <div class="alert alert-danger mt-3">{{ error }}</div>
-          {% endif %}
-      </form>
+    <div class="divider">COMMUNITY</div>
 
-      <div class="divider">OR</div>
-
-      <button type="button" class="btn btn-outline-danger w-100" onclick="flipCard()">
-          Enter License Key
-      </button>
-
-      <div class="divider">COMMUNITY</div>
-
-      <div class="socials">
-          <button class="social-btn" onclick="window.open('https://discord.gg/JjdDagrkvX', '_blank')">
-              <i class="fa-brands fa-discord"></i>
-          </button>
-
-          <button class="social-btn" onclick="window.open('https://guns.lol/shubh.', '_blank')">
-              <i class="fa-solid fa-gun"></i>
-          </button>
-      </div>
-
-    </div> <!-- FRONT CLOSE -->
-
-
-    <!-- BACK SIDE -->
-    <div class="login-card back">
-
-        <div class="logo">FR <span>CONSOLE</span></div>
-        <div class="subtitle">License Authentication</div>
-
-        <form method="POST">
-            <input type="hidden" name="type" value="license">
-
-            <input type="text" class="form-control" placeholder="Enter License Key" name="license" required>
-
-            <button class="btn btn-danger w-100 btn-login">Login →</button>
-        </form>
-
-        <div class="divider">OR</div>
-
-        <button type="button" class="btn btn-outline-danger w-100" onclick="flipCard()">
-            Back to Username Login
+    <div class="socials">
+        <button class="social-btn" onclick="window.open('https://discord.gg/JjdDagrkvX', '_blank')">
+            <i class="fa-brands fa-discord"></i>
         </button>
 
-    </div> <!-- BACK CLOSE -->
+        <button class="social-btn" onclick="window.open('https://guns.lol/shubh.', '_blank')">
+            <i class="fa-solid fa-gun"></i>
+        </button>
+    </div>
 
-  </div> <!-- FLIPPER CLOSE -->
-</div> <!-- FLIP CONTAINER CLOSE -->
-
-<script>
-function flipCard(){
-    document.querySelector(".flipper").classList.toggle("flipped");
-}
-</script>
+</div>
 
 </body>
+</html>
