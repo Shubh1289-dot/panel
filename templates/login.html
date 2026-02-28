@@ -140,35 +140,60 @@ body {
     <div class="logo">FR <span>CONSOLE</span></div>
     <div class="subtitle">Secure authentication required</div>
 
-    <form method="POST">
+    <form method="POST" id="userForm">
         <input type="text" class="form-control" placeholder="Username" name="username" required>
         <input type="password" class="form-control" placeholder="Password" name="password" required>
 
-        <div class="links">
-            <a href="#">Create account</a>
-            <a href="#">Forgot password?</a>
-        </div>
+       <div class="links">
+  <a href="#" onclick="toggleLogin()">Use License Key</a>
+</div>
 
         <button class="btn btn-danger w-100 btn-login">Log In →</button>
 
         {% if error %}
         <div class="alert alert-danger mt-3">{{ error }}</div>
         {% endif %}
-    </form>
+   </form>
 
-    <div class="divider">COMMUNITY</div>
+<!-- 🔑 LICENSE LOGIN FORM -->
+<form method="POST" id="licenseForm" style="display:none;">
 
-    <div class="socials">
-        <button class="social-btn" onclick="window.open('https://discord.gg/JjdDagrkvX', '_blank')">
-            <i class="fa-brands fa-discord"></i>
-        </button>
+    <input type="text"
+           class="form-control"
+           placeholder="Enter License Key"
+           name="license_key"
+           required>
 
-        <button class="social-btn" onclick="window.open('https://guns.lol/shubh.', '_blank')">
-            <i class="fa-solid fa-gun"></i>
-        </button>
-    </div>
+    <button class="btn btn-danger w-100 btn-login">
+        Login with License →
+    </button>
+
+    {% if error %}
+    <div class="alert alert-danger mt-3">{{ error }}</div>
+    {% endif %}
+
+</form>
+
+<div class="divider">COMMUNITY</div>
+
+<div class="socials">
+    <button class="social-btn" onclick="window.open('https://discord.gg/JjdDagrkvX', '_blank')">
+        <i class="fa-brands fa-discord"></i>
+    </button>
+
+    <button class="social-btn" onclick="window.open('https://guns.lol/shubh.', '_blank')">
+        <i class="fa-solid fa-gun"></i>
+    </button>
+</div>
 
 </div>
+
+<script>
+function toggleLogin(){
+    document.getElementById("userForm").style.display = "none";
+    document.getElementById("licenseForm").style.display = "block";
+}
+</script>
 
 </body>
 </html>
