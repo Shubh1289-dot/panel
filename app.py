@@ -136,8 +136,36 @@ def home():
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
+
     if request.method == "POST":
 
+        # 🔑 License Login
+        if request.form.get("license_key"):
+
+            key = request.form.get("license_key")
+            data = load_data()
+
+            # check all categories
+            if "licenses" in data:
+                for category in data["licenses"]:
+                    for lic in data["licenses"][category]:
+
+                        if lic["Key"] == key:
+
+                            if is_expired(lic["Expiry"]):
+                                data["licenses"][category].remove(lic)
+                                save_data(data)
+                                return render_template("login.html", error="Key expired")
+
+                            if lic["Status"] != "Active":
+                                return render_template("login.html", error="Key paused")
+
+                            session["logged_in"] = True
+                            return redirect(url_for("home"))
+
+            return render_template("login.html", error="Key not found")
+
+        # 👤 Username Login
         if request.form.get("username") == ADMIN_USERNAME and request.form.get("password") == ADMIN_PASSWORD:
             session["logged_in"] = True
             return redirect(url_for("home"))
