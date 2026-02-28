@@ -339,6 +339,7 @@ function showSection(id, e) {
   document.querySelectorAll('.sidebar a').forEach(a => a.classList.remove('active'));
   if (e) e.target.classList.add('active');
   if (id === 'show') refreshUsers();
+  if(id === 'license') loadLicenses();
 }
 
 async function copyFile(url) {
