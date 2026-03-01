@@ -148,7 +148,6 @@
   <a href="#" onclick="showSection('reset', event)">🔄 Reset HWID</a>
   <a href="#" onclick="showSection('sendmsg', event)">✉️ Send Message</a>
   <a href="#" onclick="showSection('project', event)">📁 Project</a>
-  <a href="#" onclick="protectedOpen(() => showSection('license', event))">🔑 License Manager</a>
   <a href="/logout" style="margin-top:auto;">🚪 Logout</a>
 </div>
 
@@ -241,23 +240,14 @@
     </div>
   </form>
 
-  <form onsubmit="sendMessage(event)" class="mb-3">
+  <form onsubmit="sendMessage(event)" classs="mb-3">
     <textarea required class="form-control mb-2" rows="2" placeholder="Type message..." id="message_text"></textarea>
     <button class="btn btn-primary">Send</button>
   </form>
 
   <div id="messageList" style="max-height: 400px; overflow-y: auto; border: 1px solid #333; padding: 10px; border-radius: 8px;"></div>
 </div>
-<div id="license" class="section">
-  <h4>🔑 License Manager</h4>
 
-  <form onsubmit="generateLicense(event)">
-    <input required type="datetime-local" id="license_expiry" class="form-control mb-2 white-datetime">
-    <button class="btn btn-success">Create Key</button>
-  </form>
-
-  <div id="licenseList" class="mt-3"></div>
-</div>
 <!-- Project Name -->
 <div id="project" class="section">
   <h4>📁 Project Status</h4>
@@ -339,7 +329,6 @@ function showSection(id, e) {
   document.querySelectorAll('.sidebar a').forEach(a => a.classList.remove('active'));
   if (e) e.target.classList.add('active');
   if (id === 'show') refreshUsers();
-  if(id === 'license') loadLicenses();
 }
 
 async function copyFile(url) {
@@ -531,59 +520,6 @@ function resetHWID(e){
   fetch('/reset_hwid',{method:'POST',body:new URLSearchParams({
     category:getCategory(),username:reset_username.value})})
   .then(r=>r.json()).then(d=>showToast(d.message));
-}
-  function generateLicense(e){
-  e.preventDefault();
-  fetch('/generate_license',{
-    method:'POST',
-    body:new URLSearchParams({
-      category:getCategory(),
-      expiry:license_expiry.value
-    })
-  }).then(r=>r.json()).then(d=>{
-    showToast(d.message);
-    loadLicenses();
-  });
-}
-
-function loadLicenses(){
-  fetch('/get_licenses',{
-    method:'POST',
-    body:new URLSearchParams({category:getCategory()})
-  })
-  .then(r=>r.json())
-  .then(data=>{
-    licenseList.innerHTML="";
-    data.forEach(l=>{
-      licenseList.innerHTML+=`
-      <div class="border p-2 mb-2 d-flex justify-content-between">
-        <div>
-          <b>${l.Key}</b><br>
-          Expiry: ${l.Expiry}<br>
-          Status: ${l.Status}
-        </div>
-        <div>
-          <button class="btn btn-sm btn-warning" onclick="updateLicense('${l.Key}','pause')">Pause</button>
-          <button class="btn btn-sm btn-secondary" onclick="updateLicense('${l.Key}','unpause')">Unpause</button>
-          <button class="btn btn-sm btn-danger" onclick="updateLicense('${l.Key}','delete')">Delete</button>
-        </div>
-      </div>`;
-    });
-  });
-}
-
-function updateLicense(key,action){
-  fetch('/update_license',{
-    method:'POST',
-    body:new URLSearchParams({
-      category:getCategory(),
-      key:key,
-      action:action
-    })
-  }).then(r=>r.json()).then(d=>{
-    showToast(d.message);
-    loadLicenses();
-  });
 }
 
 function copyCode(){ navigator.clipboard.writeText(loginCode.innerText).then(()=>showToast("Copied!")); }
