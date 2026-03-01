@@ -136,36 +136,8 @@ def home():
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
-
     if request.method == "POST":
 
-        # 🔑 License Login
-        if request.form.get("license_key"):
-
-            key = request.form.get("license_key")
-            data = load_data()
-
-            # check all categories
-            if "licenses" in data:
-                for category in data["licenses"]:
-                    for lic in data["licenses"][category]:
-
-                        if lic["Key"] == key:
-
-                            if is_expired(lic["Expiry"]):
-                                data["licenses"][category].remove(lic)
-                                save_data(data)
-                                return render_template("login.html", error="Key expired")
-
-                            if lic["Status"] != "Active":
-                                return render_template("login.html", error="Key paused")
-
-                            session["logged_in"] = True
-                            return redirect(url_for("home"))
-
-            return render_template("login.html", error="Key not found")
-
-        # 👤 Username Login
         if request.form.get("username") == ADMIN_USERNAME and request.form.get("password") == ADMIN_PASSWORD:
             session["logged_in"] = True
             return redirect(url_for("home"))
@@ -252,55 +224,12 @@ def view_file(filename):
 @app.route("/logout")
 def logout():
     session.pop("logged_in", None)
-    session.pop("verified", None)
     return redirect(url_for("login"))
-import secrets
-import string
 
-def generate_license_key():
-    chars = string.ascii_uppercase + string.digits
-    return "-".join(
-        ''.join(secrets.choice(chars) for _ in range(4))
-        for _ in range(4)
-    )
 # -------------------- USER MANAGEMENT --------------------
-@app.route("/generate_license", methods=["POST"])
-def generate_license():
-    data = load_data()
 
-    category = request.form["category"]
-    expiry = request.form["expiry"]
-
-    if category not in data:
-        data[category] = []
-
-    # Ensure licenses list
-    if "licenses" not in data:
-        data["licenses"] = {}
-
-    if category not in data["licenses"]:
-        data["licenses"][category] = []
-
-    key = generate_license_key()
-
-    data["licenses"][category].append({
-        "Key": key,
-        "HWID": "",
-        "Status": "Active",
-        "Expiry": expiry,
-        "CreatedAt": ist_now().strftime("%Y-%m-%d %H:%M")
-    })
-
-    if save_data(data):
-        return jsonify({"status": "success", "message": f"Key Created: {key}"})
-
-    return jsonify({"status": "error", "message": "Generation failed"})
 @app.route("/add_user", methods=["POST"])
 def add_user():
-
-    if not session.get("logged_in"):
-        return jsonify({"status": "error", "message": "Unauthorized"})
-
     data = load_data()
 
     category = request.form["category"]
@@ -364,34 +293,6 @@ def delete_user():
         return jsonify({"status": "success", "message": "User deleted"})
 
     return jsonify({"status": "error", "message": "Delete failed"})
-@app.route("/update_license", methods=["POST"])
-def update_license():
-    data = load_data()
-
-    category = request.form["category"]
-    key = request.form["key"]
-    action = request.form["action"]
-
-    if "licenses" not in data or category not in data["licenses"]:
-        return jsonify({"status": "error", "message": "No licenses"})
-
-    for lic in data["licenses"][category]:
-
-        if lic["Key"] == key:
-
-            if action == "pause":
-                lic["Status"] = "Paused"
-
-            elif action == "unpause":
-                lic["Status"] = "Active"
-
-            elif action == "delete":
-                data["licenses"][category].remove(lic)
-
-            if save_data(data):
-                return jsonify({"status": "success", "message": f"License {action}d"})
-
-    return jsonify({"status": "error", "message": "License not found"})
 @app.route("/pause_user", methods=["POST"])
 def pause_user():
     data = load_data()
@@ -449,55 +350,14 @@ def update_message_status():
             return jsonify({"status": "error", "message": "Save failed"})
 
     return jsonify({"status": "error", "message": "User not found"})
-@app.route("/get_licenses", methods=["POST"])
-def get_licenses():
-    data = load_data()
-    category = request.form["category"]
 
-    if "licenses" not in data or category not in data["licenses"]:
-        return jsonify([])
-
-    return jsonify(data["licenses"][category])
 
 @app.route("/get_users", methods=["POST"])
 def get_users():
     data = load_data()
     return jsonify(data.get(request.form["category"], []))
 
-@app.route("/license_login", methods=["POST"])
-def license_login():
-    data = load_data()
 
-    category = request.form["category"]
-    key = request.form["license_key"]
-    hwid = request.form["hwid"]
-
-    if "licenses" not in data or category not in data["licenses"]:
-        return jsonify({"status": "error", "message": "Invalid application"})
-
-    for lic in data["licenses"][category]:
-
-        if lic["Key"] == key:
-
-            if is_expired(lic["Expiry"]):
-                data["licenses"][category].remove(lic)
-                save_data(data)
-                return jsonify({"status": "error", "message": "Key expired"})
-
-            if lic["Status"] != "Active":
-                return jsonify({"status": "error", "message": "Key paused"})
-
-            if not lic["HWID"]:
-                lic["HWID"] = hwid
-                save_data(data)
-                return jsonify({"status": "success", "message": "HWID bound"})
-
-            if lic["HWID"] != hwid:
-                return jsonify({"status": "error", "message": "HWID mismatch"})
-
-            return jsonify({"status": "success", "message": "Login success"})
-
-    return jsonify({"status": "error", "message": "Key not found"})
 @app.route("/client_login", methods=["POST"])
 def client_login():
     data = load_data()
