@@ -76,7 +76,13 @@ body {
     border: none;
     margin-top: 5px;
 }
+.btn-login:hover {
 
+transform: scale(1.03);
+
+box-shadow: 0 0 15px red;
+
+}
 .links {
     display: flex;
     justify-content: space-between;
@@ -142,14 +148,46 @@ body {
 
     <form method="POST">
         <input type="text" class="form-control" placeholder="Username" name="username" required>
-        <input type="password" class="form-control" placeholder="Password" name="password" required>
+        <div class="input-group mb-3">
+
+<input type="password"
+class="form-control"
+placeholder="Password"
+name="password"
+id="password"
+required>
+
+<span class="input-group-text"
+onclick="togglePassword()"
+style="cursor:pointer;background:#0b0b0b;border:1px solid #1f1f1f;color:#aaa;">
+
+<i class="fa-solid fa-eye"></i>
+
+</span>
+
+</div>
 
         <div class="links">
             <a href="#">Create account</a>
             <a href="#">Forgot password?</a>
         </div>
+        <div style="text-align:left;font-size:13px;margin-bottom:10px;">
 
-        <button class="btn btn-danger w-100 btn-login">Log In →</button>
+<input type="checkbox" name="remember">
+
+ Remember me
+
+</div>
+
+       <button id="loginBtn" class="btn btn-danger w-100 btn-login">
+
+<span id="btnText">Log In →</span>
+
+<span id="loader" style="display:none;">
+<i class="fa-solid fa-spinner fa-spin"></i>
+</span>
+
+</button>
 
         {% if error %}
         <div class="alert alert-danger mt-3">{{ error }}</div>
@@ -169,6 +207,31 @@ body {
     </div>
 
 </div>
+<script>
 
+function togglePassword(){
+
+let pass = document.getElementById("password");
+
+if(pass.type === "password"){
+pass.type = "text";
+}else{
+pass.type = "password";
+}
+
+}
+
+</script>
+    <script>
+
+document.querySelector("form").addEventListener("submit", function(){
+
+document.getElementById("btnText").style.display="none";
+
+document.getElementById("loader").style.display="inline";
+
+});
+
+</script>
 </body>
 </html>
