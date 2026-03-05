@@ -21,20 +21,7 @@ body {
     justify-content: center;
     color: white;
 }
-#password{
-border-right:0;
-}
 
-.input-group-text.eye-btn{
-background:white;
-border:1px solid #1f1f1f;
-border-left:0;
-color:black;
-cursor:pointer;
-display:flex;
-align-items:center;
-padding:0 15px;
-}
 .login-card {
     width: 420px;
     background: rgba(20, 20, 20, 0.95);
@@ -70,7 +57,7 @@ padding:0 15px;
     border: 1px solid #1f1f1f;
     border-radius: 10px;
     color: white;
-   
+    margin-bottom: 15px;
 }
 
 .form-control:focus {
@@ -89,13 +76,7 @@ padding:0 15px;
     border: none;
     margin-top: 5px;
 }
-.btn-login:hover {
 
-transform: scale(1.03);
-
-box-shadow: 0 0 15px red;
-
-}
 .links {
     display: flex;
     justify-content: space-between;
@@ -149,20 +130,6 @@ box-shadow: 0 0 15px red;
     border-color: #ff2b2b;
     color: #ff2b2b;
 }
-.input-group-text.eye-btn{
-background:#0b0b0b;   /* same as password box */
-border:1px solid #1f1f1f;
-border-left:0;
-color:#aaa;
-cursor:pointer;
-display:flex;
-align-items:center;
-padding:0 15px;
-}
-.input-group-text.eye-btn:hover{
-color:#ff2b2b;
-border-color:#ff2b2b;
-}
 </style>
 </head>
 
@@ -175,45 +142,14 @@ border-color:#ff2b2b;
 
     <form method="POST">
         <input type="text" class="form-control" placeholder="Username" name="username" required>
-        <div class="input-group mb-3">
-
-<input type="password"
-class="form-control"
-placeholder="Password"
-name="password"
-id="password"
-required>
-
-<span class="input-group-text eye-btn"
-onclick="togglePassword()">
-
-<i class="fa-solid fa-eye"></i>
-
-</span>
-
-</div>
+        <input type="password" class="form-control" placeholder="Password" name="password" required>
 
         <div class="links">
             <a href="#">Create account</a>
             <a href="#">Forgot password?</a>
         </div>
-        <div style="text-align:left;font-size:13px;margin-bottom:10px;">
 
-<input type="checkbox" name="remember">
-
- Remember me
-
-</div>
-
-       <button id="loginBtn" class="btn btn-danger w-100 btn-login">
-
-<span id="btnText">Log In →</span>
-
-<span id="loader" style="display:none;">
-<i class="fa-solid fa-spinner fa-spin"></i>
-</span>
-
-</button>
+        <button class="btn btn-danger w-100 btn-login">Log In →</button>
 
         {% if error %}
         <div class="alert alert-danger mt-3">{{ error }}</div>
@@ -233,31 +169,6 @@ onclick="togglePassword()">
     </div>
 
 </div>
-<script>
 
-function togglePassword(){
-
-let pass = document.getElementById("password");
-
-if(pass.type === "password"){
-pass.type = "text";
-}else{
-pass.type = "password";
-}
-
-}
-
-</script>
-    <script>
-
-document.querySelector("form").addEventListener("submit", function(){
-
-document.getElementById("btnText").style.display="none";
-
-document.getElementById("loader").style.display="inline";
-
-});
-
-</script>
 </body>
 </html>
