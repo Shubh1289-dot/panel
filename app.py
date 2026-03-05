@@ -12,10 +12,6 @@ ADMIN_PASSWORD = "CONSOLE"
 JSONBIN_API_KEY = "$2a$10$R74G8pPzaRy0kLrcmfIYO.jvMl0T8JA3XQVaRHQNqYWsyO8ltxLr."
 BIN_ID = "68fef44843b1c97be983b559"
 
-BLOCKED_SIDS = [
-"S-1-5-21-2480447405-1686001370-3333385930-1001"
-]
-
 HEADERS = {
     "Content-Type": "application/json",
     "X-Master-Key": JSONBIN_API_KEY
@@ -141,10 +137,6 @@ def home():
 @app.route("/login", methods=["GET", "POST"])
 def login():
     if request.method == "POST":
-        sid = request.form.get("sid")
-
-if sid in BLOCKED_SIDS:
-    return render_template("login.html", error="Your PC Blocked")
 
         if request.form.get("username") == ADMIN_USERNAME and request.form.get("password") == ADMIN_PASSWORD:
             session["logged_in"] = True
