@@ -57,7 +57,7 @@ body {
     border: 1px solid #1f1f1f;
     border-radius: 10px;
     color: white;
-    margin-bottom: 15px;
+   
 }
 
 .form-control:focus {
@@ -136,6 +136,20 @@ box-shadow: 0 0 15px red;
     border-color: #ff2b2b;
     color: #ff2b2b;
 }
+    .input-group-text.eye-btn{
+background:#0b0b0b;
+border:1px solid #1f1f1f;
+color:#aaa;
+cursor:pointer;
+display:flex;
+align-items:center;
+padding:0 15px;
+}
+
+.input-group-text.eye-btn:hover{
+color:#ff2b2b;
+border-color:#ff2b2b;
+}
 </style>
 </head>
 
@@ -157,9 +171,8 @@ name="password"
 id="password"
 required>
 
-<span class="input-group-text"
-onclick="togglePassword()"
-style="cursor:pointer;background:#0b0b0b;border:1px solid #1f1f1f;color:#aaa;">
+<span class="input-group-text eye-btn"
+onclick="togglePassword()">
 
 <i class="fa-solid fa-eye"></i>
 
