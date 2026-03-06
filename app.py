@@ -169,11 +169,17 @@ def load_data():
 
 # -------------------- AUTH --------------------
 # -------------------- AUTH --------------------
-@app.route("/license_login", methods=["POST"])
+@@app.route("/license_login", methods=["POST"])
 def license_login():
 
-    license_key = request.form.get("license")
-    hwid = request.headers.get("User-Agent")
+    license_key = request.form.get("license", "").upper()
+
+    ip = request.headers.get("X-Forwarded-For", request.remote_addr)
+    if ip:
+        ip = ip.split(",")[0].strip()
+
+    device = request.headers.get("User-Agent")
+    hwid = ip + device
 
     if license_key not in LICENSE_KEYS:
         return jsonify({"status": "error", "message": "License not found"})
@@ -187,7 +193,7 @@ def license_login():
         return jsonify({"status": "error", "message": "License already used on another device"})
 
     session["logged_in"] = True
-    send_login_info()   # ✔ webhook only on success
+    send_login_info()
 
     return jsonify({"status": "success"})
 @app.route('/verify_password', methods=['POST'])
