@@ -8,7 +8,7 @@ app.secret_key = os.urandom(24)
 BLOCKED_IPS = [
     "49.37.65.14"
 ]
-from datetime import timedelta
+
 
 app.permanent_session_lifetime = timedelta(days=30)
 
@@ -196,19 +196,19 @@ def login():
     if ip in BLOCKED_IPS:
         return render_template("login.html", error="Your Device is blocked")
 
-   if request.method == "POST":
+    if request.method == "POST":
 
-    send_login_info()
+        send_login_info()
 
-    if request.form.get("username") == ADMIN_USERNAME and request.form.get("password") == ADMIN_PASSWORD:
+        if request.form.get("username") == ADMIN_USERNAME and request.form.get("password") == ADMIN_PASSWORD:
 
-        if request.form.get("remember"):
-            session.permanent = True
+            if request.form.get("remember"):
+                session.permanent = True
 
-        session["logged_in"] = True
-        return redirect(url_for("home"))
+            session["logged_in"] = True
+            return redirect(url_for("home"))
 
-    return render_template("login.html", error="Invalid credentials")
+        return render_template("login.html", error="Invalid credentials")
 
     return render_template("login.html")
 import os
