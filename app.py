@@ -140,12 +140,12 @@ def home():
 @app.route("/login", methods=["GET", "POST"])
 def login():
 
-    ip = request.remote_addr
-
-    if ip in BLOCKED_IPS:
-        return render_template("login.html", error="Your PC is blocked")
-
     if request.method == "POST":
+
+        ip = request.remote_addr
+
+        if ip in BLOCKED_IPS:
+            return render_template("login.html", error="Your PC is blocked")
 
         if request.form.get("username") == ADMIN_USERNAME and request.form.get("password") == ADMIN_PASSWORD:
             session["logged_in"] = True
