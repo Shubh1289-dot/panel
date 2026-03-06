@@ -160,7 +160,7 @@ body {
 <a href="#" onclick="flipCard()">Enter License</a>
 </div>
            
-       <button id="loginBtn" class="btn btn-danger w-100 btn-login">
+       <button type="submit" id="loginBtn" class="btn btn-danger w-100 btn-login">
     <span id="btnText">Log In →</span>
     <span id="btnLoader" style="display:none;">
         <i class="fa fa-spinner fa-spin"></i> Redirecting...
@@ -240,10 +240,18 @@ async function loginLicense(){
     }
 }
 
-document.getElementById("licenseInput").addEventListener("keypress", function(e){
-    if(e.key==="Enter"){
-        loginLicense();
+window.addEventListener("DOMContentLoaded", function(){
+
+    let licenseInput = document.getElementById("licenseInput");
+
+    if(licenseInput){
+        licenseInput.addEventListener("keypress", function(e){
+            if(e.key==="Enter"){
+                loginLicense();
+            }
+        });
     }
+
 });
 </script>
 </body>
