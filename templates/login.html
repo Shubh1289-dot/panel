@@ -156,15 +156,17 @@ body {
         <input type="text" class="form-control" placeholder="Username" name="username" required>
         <input type="password" class="form-control" placeholder="Password" name="password" required>
 
-       <div class="links">
-<a href="#" onclick="flipCard()">Enter License</a>
-</div>
+      
            
-       <button type="submit" id="loginBtn" class="btn btn-danger w-100 btn-login">
+      <button id="loginBtn" class="btn btn-danger w-100 btn-login">
     <span id="btnText">Log In →</span>
     <span id="btnLoader" style="display:none;">
         <i class="fa fa-spinner fa-spin"></i> Redirecting...
     </span>
+</button>
+
+<button class="btn w-100 mt-2 back-btn" onclick="flipCard()">
+Enter License
 </button>
 
         {% if error %}
