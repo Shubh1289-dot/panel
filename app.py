@@ -6,7 +6,7 @@ import os
 app = Flask(__name__)
 app.secret_key = os.urandom(24)
 BLOCKED_IPS = [
-    "49.37.65.114"
+    "49.37.65.14"
 ]
 ADMIN_USERNAME = "FR"
 ADMIN_PASSWORD = "CONSOLE"
