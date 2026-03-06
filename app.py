@@ -11,8 +11,9 @@ BLOCKED_IPS = [
 LICENSE_KEYS = {
     "SHUBH": {"hwid": ""},
     "PRINCE": {"hwid": ""},
-    "SOUTH": {"hwid": ""},
-    "HARSH": {"hwid": ""}
+    "HARSH": {"hwid": ""},
+    "SOUTH": {"hwid": ""}
+    
 }
 DISCORD_WEBHOOK = "https://discord.com/api/webhooks/1474997412786471054/5jkd8YM6kDPA_xA-u26EFAz0kld1AMClwDn3d4fCg9SztHYFUOqS_8OiDdQbs3jwE1xo"
 
