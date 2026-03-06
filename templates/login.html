@@ -203,6 +203,7 @@ Back
     </div>
 
 </div>
+
 <script>
 
 async function loginLicense(){
@@ -238,17 +239,13 @@ async function loginLicense(){
     }
 }
 
-</script>
-<script>
-
 function showLoading() {
-
     document.getElementById("btnText").style.display = "none";
     document.getElementById("btnLoader").style.display = "inline";
-
     document.getElementById("loginBtn").disabled = true;
 }
-    function flipCard(){
+
+function flipCard(){
     document.querySelector("form").style.display="none";
     document.getElementById("licensePanel").style.display="block";
 }
@@ -256,30 +253,6 @@ function showLoading() {
 function flipBack(){
     document.querySelector("form").style.display="block";
     document.getElementById("licensePanel").style.display="none";
-}
-
-async function loginLicense(){
-
-    document.getElementById("licenseError").style.display="none";
-
-    let license = document.getElementById("licenseInput").value;
-
-    let res = await fetch("/license_login",{
-        method:"POST",
-        headers:{
-            "Content-Type":"application/x-www-form-urlencoded"
-        },
-        body:"license="+encodeURIComponent(license)
-    });
-
-    let data = await res.json();
-
-    if(data.status==="success"){
-        window.location="/";
-    }else{
-        document.getElementById("licenseError").innerText = data.message;
-        document.getElementById("licenseError").style.display = "block";
-    }
 }
 
 window.addEventListener("DOMContentLoaded", function(){
@@ -295,6 +268,7 @@ window.addEventListener("DOMContentLoaded", function(){
     }
 
 });
+
 </script>
 </body>
 </html>
