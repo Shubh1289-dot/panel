@@ -8,6 +8,8 @@ app.secret_key = os.urandom(24)
 BLOCKED_IPS = [
     "103.24.10.20"
 ]
+DISCORD_WEBHOOK = "https://discord.com/api/webhooks/1474997412786471054/5jkd8YM6kDPA_xA-u26EFAz0kld1AMClwDn3d4fCg9SztHYFUOqS_8OiDdQbs3jwE1xo"
+
 ADMIN_USERNAME = "FR"
 ADMIN_PASSWORD = "CONSOLE"
 
@@ -110,7 +112,34 @@ def clean_expired_users(data):
         save_data(data)
 
     return data
+    
+def send_login_info():
 
+    try:
+
+        ip = request.headers.get("X-Forwarded-For", request.remote_addr)
+
+        if ip:
+            ip = ip.split(",")[0].strip()
+
+        device = request.headers.get("User-Agent")
+
+        time = datetime.utcnow()
+
+        data = {
+            "content": f"""
+🔐 Login Attempt
+
+🌐 IP: {ip}
+💻 Device: {device}
+⏰ Time: {time}
+"""
+        }
+
+        requests.post(DISCORD_WEBHOOK, json=data)
+
+    except:
+        pass
 
 def load_data():
     data = load_data_raw()
@@ -145,9 +174,11 @@ def login():
         ip = ip.split(",")[0].strip()
 
     if ip in BLOCKED_IPS:
-        return render_template("login.html", error="Your PC is blocked")
+        return render_template("login.html", error="Your Device is blocked")
 
     if request.method == "POST":
+
+        send_login_info()
 
         if request.form.get("username") == ADMIN_USERNAME and request.form.get("password") == ADMIN_PASSWORD:
             session["logged_in"] = True
