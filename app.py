@@ -6,12 +6,8 @@ import os
 app = Flask(__name__)
 app.secret_key = os.urandom(24)
 BLOCKED_IPS = [
-    "49.37.65.14"
+    "49.37.65.114"
 ]
-
-
-app.permanent_session_lifetime = timedelta(days=30)
-
 DISCORD_WEBHOOK = "https://discord.com/api/webhooks/1474997412786471054/5jkd8YM6kDPA_xA-u26EFAz0kld1AMClwDn3d4fCg9SztHYFUOqS_8OiDdQbs3jwE1xo"
 
 ADMIN_USERNAME = "FR"
@@ -201,10 +197,6 @@ def login():
         send_login_info()
 
         if request.form.get("username") == ADMIN_USERNAME and request.form.get("password") == ADMIN_PASSWORD:
-
-            if request.form.get("remember"):
-                session.permanent = True
-
             session["logged_in"] = True
             return redirect(url_for("home"))
 
