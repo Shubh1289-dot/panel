@@ -218,6 +218,8 @@ function flipBack(){
 
 async function loginLicense(){
 
+    document.getElementById("licenseError").style.display="none";
+
     let license = document.getElementById("licenseInput").value;
 
     let res = await fetch("/license_login",{
@@ -237,6 +239,12 @@ async function loginLicense(){
         document.getElementById("licenseError").style.display = "block";
     }
 }
+
+document.getElementById("licenseInput").addEventListener("keypress", function(e){
+    if(e.key==="Enter"){
+        loginLicense();
+    }
+});
 </script>
 </body>
 </html>
