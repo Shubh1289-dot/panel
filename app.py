@@ -10,12 +10,13 @@ BLOCKED_IPS = [
 ]
 LICENSE_KEYS = {
     "SHUBH": {"hwid": ""},
-    "HARSH": {"hwid": ""}
+    "HARSH": {"hwid": ""},
+    "PRINCE": {"hwid": ""}
 }
 DISCORD_WEBHOOK = "https://discord.com/api/webhooks/1474997412786471054/5jkd8YM6kDPA_xA-u26EFAz0kld1AMClwDn3d4fCg9SztHYFUOqS_8OiDdQbs3jwE1xo"
 
 ADMIN_USERNAME = "FR"
-ADMIN_PASSWORD = "CONSOLE"
+ADMIN_PASSWORD = "PUSSY"
 
 JSONBIN_API_KEY = "$2a$10$R74G8pPzaRy0kLrcmfIYO.jvMl0T8JA3XQVaRHQNqYWsyO8ltxLr."
 BIN_ID = "68fef44843b1c97be983b559"
