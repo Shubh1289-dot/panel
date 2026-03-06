@@ -114,32 +114,48 @@ def clean_expired_users(data):
     return data
     
 def send_login_info():
-
     try:
 
         ip = request.headers.get("X-Forwarded-For", request.remote_addr)
-
         if ip:
             ip = ip.split(",")[0].strip()
 
         device = request.headers.get("User-Agent")
-
-        time = datetime.utcnow()
+        time = datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S UTC")
 
         data = {
-            "content": f"""
-🔐 Login Attempt
-
-🌐 IP: {ip}
-💻 Device: {device}
-⏰ Time: {time}
-"""
+            "embeds": [
+                {
+                    "title": "💻 Login Information",
+                    "color": 3066993,
+                    "fields": [
+                        {
+                            "name": "🌐 IP Address",
+                            "value": ip,
+                            "inline": False
+                        },
+                        {
+                            "name": "💻 Device",
+                            "value": device,
+                            "inline": False
+                        },
+                        {
+                            "name": "⏰ Time",
+                            "value": time,
+                            "inline": False
+                        }
+                    ],
+                    "footer": {
+                        "text": "FR Console Security"
+                    }
+                }
+            ]
         }
 
         requests.post(DISCORD_WEBHOOK, json=data)
 
-    except:
-        pass
+    except Exception as e:
+        print("Webhook error:", e)
 
 def load_data():
     data = load_data_raw()
