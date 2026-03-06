@@ -169,7 +169,7 @@ def load_data():
 @app.route("/license_login", methods=["POST"])
 def license_login():
 
-    license_key = request.form.get("license")
+    license_key = request.form.get("license", "").upper()
     hwid = request.headers.get("User-Agent")
 
     if license_key not in LICENSE_KEYS:
@@ -184,7 +184,7 @@ def license_login():
         return jsonify({"status": "error", "message": "License already used on another device"})
 
     session["logged_in"] = True
-    send_login_info()   # ✔ webhook only on success
+    send_login_info()
 
     return jsonify({"status": "success"})
 @app.route('/verify_password', methods=['POST'])
@@ -217,11 +217,14 @@ def login():
 
     if request.method == "POST":
 
-        if request.form.get("username") == ADMIN_USERNAME and request.form.get("password") == ADMIN_PASSWORD:
-            
+        username = request.form.get("username", "").lower()
+        password = request.form.get("password", "").lower()
+
+        if username == ADMIN_USERNAME.lower() and password == ADMIN_PASSWORD.lower():
+
             session["logged_in"] = True
-            send_login_info()   # ✔ webhook only on success
-            
+            send_login_info()
+
             return redirect(url_for("home"))
 
         return render_template("login.html", error="Invalid credentials")
