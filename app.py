@@ -168,7 +168,9 @@ def load_data():
 # -------------------- AUTH --------------------
 @app.route("/license_login", methods=["POST"])
 def license_login():
-
+    
+  send_login_info()
+    
     license_key = request.form.get("license")
     hwid = request.headers.get("User-Agent")
 
