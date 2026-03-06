@@ -179,10 +179,12 @@ Enter License
 <input type="text" class="form-control" placeholder="Enter License Key" id="licenseInput">
     <div id="licenseError" class="alert alert-danger mt-3" style="display:none;"></div>
 
-<button class="btn btn-danger w-100 btn-login mt-2" onclick="loginLicense()">
-Activate License
+<button id="licenseBtn" class="btn btn-danger w-100 btn-login mt-2" onclick="loginLicense()">
+    <span id="licenseText">Activate License</span>
+    <span id="licenseLoader" style="display:none;">
+        <i class="fa fa-spinner fa-spin"></i> Checking...
+    </span>
 </button>
-
 <button class="btn w-100 mt-2 back-btn" onclick="flipBack()">
 Back
 </button>
@@ -202,6 +204,43 @@ Back
 
 </div>
 <script>
+
+async function loginLicense(){
+
+    document.getElementById("licenseError").style.display="none";
+
+    document.getElementById("licenseText").style.display="none";
+    document.getElementById("licenseLoader").style.display="inline";
+    document.getElementById("licenseBtn").disabled = true;
+
+    let license = document.getElementById("licenseInput").value;
+
+    let res = await fetch("/license_login",{
+        method:"POST",
+        headers:{
+            "Content-Type":"application/x-www-form-urlencoded"
+        },
+        body:"license="+encodeURIComponent(license)
+    });
+
+    let data = await res.json();
+
+    if(data.status==="success"){
+        window.location="/";
+    }else{
+
+        document.getElementById("licenseText").style.display="inline";
+        document.getElementById("licenseLoader").style.display="none";
+        document.getElementById("licenseBtn").disabled = false;
+
+        document.getElementById("licenseError").innerText = data.message;
+        document.getElementById("licenseError").style.display = "block";
+    }
+}
+
+</script>
+<script>
+
 function showLoading() {
 
     document.getElementById("btnText").style.display = "none";
