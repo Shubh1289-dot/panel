@@ -168,9 +168,9 @@ def load_data():
 # -------------------- AUTH --------------------
 @app.route("/license_login", methods=["POST"])
 def license_login():
-    
-  send_login_info()
-    
+
+    send_login_info()
+
     license_key = request.form.get("license")
     hwid = request.headers.get("User-Agent")
 
@@ -228,10 +228,9 @@ def login():
         return render_template("login.html", error="Invalid credentials")
 
     return render_template("login.html")
-import os
 
-from flask import Response
-import os
+
+
 
 @app.route("/view/<path:filename>")
 def view_file(filename):
