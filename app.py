@@ -8,6 +8,9 @@ app.secret_key = os.urandom(24)
 BLOCKED_IPS = [
     "49.37.65.14"
 ]
+LICENSE_KEYS = {
+    "frajajhs": {"hwid": ""}
+}
 DISCORD_WEBHOOK = "https://discord.com/api/webhooks/1474997412786471054/5jkd8YM6kDPA_xA-u26EFAz0kld1AMClwDn3d4fCg9SztHYFUOqS_8OiDdQbs3jwE1xo"
 
 ADMIN_USERNAME = "FR"
@@ -163,7 +166,27 @@ def load_data():
 
 # -------------------- AUTH --------------------
 # -------------------- AUTH --------------------
+@app.route("/license_login", methods=["POST"])
+def license_login():
 
+    license_key = request.form.get("license")
+    hwid = request.headers.get("User-Agent")
+
+    if license_key not in LICENSE_KEYS:
+        return jsonify({"status": "error", "message": "License not found"})
+
+    lic = LICENSE_KEYS[license_key]
+
+    if lic["hwid"] == "":
+        lic["hwid"] = hwid
+        session["logged_in"] = True
+        return jsonify({"status": "success"})
+
+    if lic["hwid"] != hwid:
+        return jsonify({"status": "error", "message": "License already used on another device"})
+
+    session["logged_in"] = True
+    return jsonify({"status": "success"})
 @app.route('/verify_password', methods=['POST'])
 def verify_password():
 
