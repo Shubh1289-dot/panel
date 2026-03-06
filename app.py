@@ -170,7 +170,7 @@ def load_data():
 
 # -------------------- AUTH --------------------
 # -------------------- AUTH --------------------
-@@app.route("/license_login", methods=["POST"])
+@app.route("/license_login", methods=["POST"])
 def license_login():
 
     license_key = request.form.get("license", "").upper()
@@ -191,7 +191,10 @@ def license_login():
         lic["hwid"] = hwid
 
     elif lic["hwid"] != hwid:
-        return jsonify({"status": "error", "message": "License already used on another device"})
+        return jsonify({
+            "status": "error",
+            "message": "License already used on another device"
+        })
 
     session["logged_in"] = True
     send_login_info()
