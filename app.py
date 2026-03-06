@@ -6,8 +6,7 @@ import os
 app = Flask(__name__)
 app.secret_key = os.urandom(24)
 BLOCKED_IPS = [
-    "49.37.65.114",
-    "5.6.7.8"
+    "49.37.65.114"
 ]
 ADMIN_USERNAME = "FR"
 ADMIN_PASSWORD = "CONSOLE"
@@ -140,12 +139,15 @@ def home():
 @app.route("/login", methods=["GET", "POST"])
 def login():
 
+    ip = request.headers.get("X-Forwarded-For", request.remote_addr)
+
+    if ip:
+        ip = ip.split(",")[0].strip()
+
+    if ip in BLOCKED_IPS:
+        return render_template("login.html", error="Your PC is blocked")
+
     if request.method == "POST":
-
-        ip = request.remote_addr
-
-        if ip in BLOCKED_IPS:
-            return render_template("login.html", error="Your PC is blocked")
 
         if request.form.get("username") == ADMIN_USERNAME and request.form.get("password") == ADMIN_PASSWORD:
             session["logged_in"] = True
