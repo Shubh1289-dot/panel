@@ -152,22 +152,23 @@ body {
     <div class="logo">FR <span>CONSOLE</span></div>
     <div class="subtitle">Secure authentication required</div>
 
-    <form method="POST" onsubmit="showLoading()">
-        <input type="text" class="form-control" placeholder="Username" name="username" required>
-        <input type="password" class="form-control" placeholder="Password" name="password" required>
+   <form method="POST" onsubmit="showLoading()">
 
-      
-           
-      <button id="loginBtn" class="btn btn-danger w-100 btn-login">
-    <span id="btnText">Log In →</span>
-    <span id="btnLoader" style="display:none;">
-        <i class="fa fa-spinner fa-spin"></i> Redirecting...
-    </span>
+<input type="text" class="form-control" placeholder="Username" name="username" required>
+<input type="password" class="form-control" placeholder="Password" name="password" required>
+
+<button id="loginBtn" class="btn btn-danger w-100 btn-login">
+<span id="btnText">Log In →</span>
+<span id="btnLoader" style="display:none;">
+<i class="fa fa-spinner fa-spin"></i> Redirecting...
+</span>
 </button>
 
-<button class="btn w-100 mt-2 back-btn" onclick="flipCard()">
+<button type="button" class="btn w-100 mt-2 back-btn" onclick="flipCard()">
 Enter License
 </button>
+
+</form>
 
         {% if error %}
         <div class="alert alert-danger mt-3">{{ error }}</div>
