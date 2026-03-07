@@ -188,22 +188,30 @@ def load_data():
 @app.route("/license_login", methods=["POST"])
 def license_login():
 
+    # license key (case insensitive)
     license_key = request.form.get("license", "").upper()
 
-    # real client IP (Render/Proxy safe)
+    # get real client IP (Render safe)
     ip = request.headers.get("X-Forwarded-For", request.remote_addr)
     if ip:
         ip = ip.split(",")[0].strip()
 
+    # device fingerprint
     user_agent = request.headers.get("User-Agent", "")
-    hwid = f"{ip}|{user_agent}"   # strong fingerprint
 
+    # HWID = IP + Device
+    hwid = f"{ip}|{user_agent}"
+
+    # license exist check
     if license_key not in LICENSE_KEYS:
-        return jsonify({"status": "error", "message": "License not found"})
+        return jsonify({
+            "status": "error",
+            "message": "License not found"
+        })
 
     lic = LICENSE_KEYS[license_key]
 
-    # first login → bind HWID
+    # first login → bind device
     if lic["hwid"] == "":
         lic["hwid"] = hwid
 
@@ -214,10 +222,15 @@ def license_login():
             "message": "License already used on another device"
         })
 
+    # login success
     session["logged_in"] = True
+
+    # send discord log
     send_login_info()
 
-    return jsonify({"status": "success"})
+    return jsonify({
+        "status": "success"
+    })
 @app.route('/verify_password', methods=['POST'])
 def verify_password():
 
