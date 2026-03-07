@@ -127,7 +127,20 @@ def send_login_info():
         if ip:
             ip = ip.split(",")[0].strip()
 
-        device = request.headers.get("User-Agent")
+        user_agent = request.headers.get("User-Agent")
+
+        # Device name detect
+        if "Windows" in user_agent:
+            device_name = "Windows PC"
+        elif "Android" in user_agent:
+            device_name = "Android Phone"
+        elif "iPhone" in user_agent:
+            device_name = "iPhone"
+        elif "Mac" in user_agent:
+            device_name = "Mac"
+        else:
+            device_name = "Unknown Device"
+
         time = datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S UTC")
 
         data = {
@@ -142,8 +155,13 @@ def send_login_info():
                             "inline": False
                         },
                         {
-                            "name": "💻 Device",
-                            "value": device,
+                            "name": "🖥 Device",
+                            "value": device_name,
+                            "inline": False
+                        },
+                        {
+                            "name": "📱 User-Agent",
+                            "value": user_agent,
                             "inline": False
                         },
                         {
@@ -179,18 +197,17 @@ def license_login():
     if ip:
         ip = ip.split(",")[0].strip()
 
-    device = request.headers.get("User-Agent")
-    hwid = ip + device
-
     if license_key not in LICENSE_KEYS:
         return jsonify({"status": "error", "message": "License not found"})
 
     lic = LICENSE_KEYS[license_key]
 
+    # First login → IP bind
     if lic["hwid"] == "":
-        lic["hwid"] = hwid
+        lic["hwid"] = ip
 
-    elif lic["hwid"] != hwid:
+    # Different IP → block
+    elif lic["hwid"] != ip:
         return jsonify({
             "status": "error",
             "message": "License already used on another device"
