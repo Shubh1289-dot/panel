@@ -6,7 +6,7 @@ import os
 app = Flask(__name__)
 app.secret_key = os.urandom(24)
 BLOCKED_IPS = [
-    "49.37.65.4"
+    "49.37.67.46"
 ]
 LICENSE_KEYS = {
     "SHUBH": {"hwid": ""},
