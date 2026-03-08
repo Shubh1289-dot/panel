@@ -191,24 +191,28 @@ def license_login():
 
     license_key = request.form.get("license", "").upper()
 
-    # real client IP (Render/Proxy safe)
     ip = request.headers.get("X-Forwarded-For", request.remote_addr)
     if ip:
         ip = ip.split(",")[0].strip()
 
+    # 🔴 ADD THIS
+    if ip in BLOCKED_IPS:
+        return jsonify({
+            "status": "error",
+            "message": "Your device is blocked"
+        })
+
     user_agent = request.headers.get("User-Agent", "")
-    hwid = f"{ip}|{user_agent}"   # strong fingerprint
+    hwid = f"{ip}|{user_agent}"
 
     if license_key not in LICENSE_KEYS:
         return jsonify({"status": "error", "message": "License not found"})
 
     lic = LICENSE_KEYS[license_key]
 
-    # first login → bind HWID
     if lic["hwid"] == "":
         lic["hwid"] = hwid
 
-    # different device → block
     elif lic["hwid"] != hwid:
         return jsonify({
             "status": "error",
