@@ -248,15 +248,17 @@ def login():
     if ip:
         ip = ip.split(",")[0].strip()
 
-    if ip in BLOCKED_IPS:
-        return render_template("login.html", error="Your Device is blocked")
-
+    # Page open pe block message nahi dikhayega
     if request.method == "POST":
+
+        # Login submit pe IP block check
+        if ip in BLOCKED_IPS:
+            return render_template("login.html", error="Your Device is blocked")
 
         if request.form.get("username") == ADMIN_USERNAME and request.form.get("password") == ADMIN_PASSWORD:
             
             session["logged_in"] = True
-            send_login_info()   # ✔ webhook only on success
+            send_login_info()   # webhook only on success
             
             return redirect(url_for("home"))
 
