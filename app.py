@@ -125,8 +125,9 @@ def send_login_info():
         if ip:
             ip = ip.split(",")[0].strip()
 
-        user_agent = request.headers.get("User-Agent", "Unknown")
+        user_agent = request.headers.get("User-Agent")
 
+        # Device name detect
         if "Windows" in user_agent:
             device_name = "Windows PC"
         elif "Android" in user_agent:
@@ -146,18 +147,35 @@ def send_login_info():
                     "title": "💻 Login Information",
                     "color": 3066993,
                     "fields": [
-                        {"name": "🌐 IP Address", "value": ip, "inline": False},
-                        {"name": "🖥 Device", "value": device_name, "inline": False},
-                        {"name": "📱 User-Agent", "value": user_agent, "inline": False},
-                        {"name": "⏰ Time", "value": time, "inline": False}
+                        {
+                            "name": "🌐 IP Address",
+                            "value": ip,
+                            "inline": False
+                        },
+                        {
+                            "name": "🖥 Device",
+                            "value": device_name,
+                            "inline": False
+                        },
+                        {
+                            "name": "📱 User-Agent",
+                            "value": user_agent,
+                            "inline": False
+                        },
+                        {
+                            "name": "⏰ Time",
+                            "value": time,
+                            "inline": False
+                        }
                     ],
-                    "footer": {"text": "FR Console Security"}
+                    "footer": {
+                        "text": "FR Console Security"
+                    }
                 }
             ]
         }
 
-        r = requests.post(DISCORD_WEBHOOK, json=data)
-        print("Discord status:", r.status_code)
+        requests.post(DISCORD_WEBHOOK, json=data)
 
     except Exception as e:
         print("Webhook error:", e)
