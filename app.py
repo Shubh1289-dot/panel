@@ -125,7 +125,7 @@ def send_login_info():
         if ip:
             ip = ip.split(",")[0].strip()
 
-        user_agent = request.headers.get("User-Agent")
+        user_agent = request.headers.get("User-Agent", "Unknown")
 
         # Device name detect
         if "Windows" in user_agent:
@@ -175,7 +175,8 @@ def send_login_info():
             ]
         }
 
-        requests.post(DISCORD_WEBHOOK, json=data)
+        r = requests.post(DISCORD_WEBHOOK, json=data)
+print("Discord status:", r.status_code)
 
     except Exception as e:
         print("Webhook error:", e)
