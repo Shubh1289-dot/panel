@@ -164,7 +164,7 @@ body {
 </span>
 </button>
 
-<button type="button" class="btn w-100 mt-2 back-btn" onclick="flipCard()">
+<button type="button" class="btn w-100 mt-2 back-btn" onclick="flipCard(); return false;">
 Login With License
 </button>
 
@@ -245,12 +245,13 @@ function showLoading() {
     document.getElementById("loginBtn").disabled = true;
 }
 
-function flipCard(){
+function flipCard(e){
+
+    if(e) e.preventDefault();
 
     document.querySelector("form").style.display="none";
     document.getElementById("licensePanel").style.display="block";
 
-    // login error hide
     let err = document.querySelector(".alert-danger");
     if(err){
         err.style.display = "none";
