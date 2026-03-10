@@ -142,12 +142,42 @@ body {
     border-color: #ff2b2b;
     color: #ff2b2b;
 }
+    .login-card{
+    perspective:1000px;
+}
+
+.card-inner{
+    position:relative;
+    width:100%;
+    transition:transform 0.6s;
+    transform-style:preserve-3d;
+}
+
+.card-inner.flip{
+    transform:rotateY(180deg);
+}
+
+.card-front,
+.card-back{
+    position:absolute;
+    width:100%;
+    top:0;
+    left:0;
+    backface-visibility:hidden;
+}
+
+.card-back{
+    transform:rotateY(180deg);
+}
 </style>
 </head>
 
 <body>
 
 <div class="login-card">
+    <div id="cardInner" class="card-inner">
+
+<div class="card-front">
 
     <div class="logo">FR <span>CONSOLE</span></div>
     <div class="subtitle">Secure authentication required</div>
@@ -173,8 +203,11 @@ Log In With License
         {% if error %}
         <div class="alert alert-danger mt-3">{{ error }}</div>
         {% endif %}
-    </form>
-<div id="licensePanel" style="display:none; margin-top:15px;">
+   
+    </div>
+
+<div class="card-back">
+<div id="licensePanel" style="margin-top:15px;">
 
 <input type="text" class="form-control" placeholder="Enter License Key" id="licenseInput">
     <div id="licenseError" class="alert alert-danger mt-3" style="display:none;"></div>
@@ -188,8 +221,9 @@ Log In With License
 <button class="btn w-100 mt-2 back-btn" onclick="flipBack()">
 Admin Login
 </button>
-
 </div>
+</div>
+        </div>
     <div class="divider">COMMUNITY</div>
 
     <div class="socials">
@@ -246,21 +280,11 @@ function showLoading() {
 }
 
 function flipCard(){
-
-    document.querySelector("form").style.display="none";
-    document.getElementById("licensePanel").style.display="block";
-
-    // login error hide
-    let err = document.querySelector(".alert-danger");
-    if(err){
-        err.style.display = "none";
-    }
-
+    document.getElementById("cardInner").classList.add("flip");
 }
 
 function flipBack(){
-    document.querySelector("form").style.display="block";
-    document.getElementById("licensePanel").style.display="none";
+    document.getElementById("cardInner").classList.remove("flip");
 }
 
 window.addEventListener("DOMContentLoaded", function(){
