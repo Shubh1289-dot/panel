@@ -32,15 +32,7 @@ def ist_now():
     return datetime.utcnow() + timedelta(hours=5, minutes=30)
 
 # -------------------- EXPIRY LOGIC --------------------
-import hashlib
 
-def generate_hwid():
-    user_agent = request.headers.get("User-Agent", "")
-    lang = request.headers.get("Accept-Language", "")
-    platform = request.headers.get("Sec-CH-UA-Platform", "")
-
-    raw = f"{user_agent}|{lang}|{platform}"
-    return hashlib.sha256(raw.encode()).hexdigest()
 def parse_expiry(expiry_str):
     formats = [
         "%Y-%m-%dT%H:%M",
@@ -203,57 +195,34 @@ def license_login():
     if ip:
         ip = ip.split(",")[0].strip()
 
+    # 🔴 ADD THIS
     if ip in BLOCKED_IPS:
         return jsonify({
             "status": "error",
             "message": "Your device is blocked"
         })
 
-    hwid = generate_hwid()
+    user_agent = request.headers.get("User-Agent", "")
+    hwid = f"{ip}|{user_agent}"
 
     if license_key not in LICENSE_KEYS:
         return jsonify({"status": "error", "message": "License not found"})
 
     lic = LICENSE_KEYS[license_key]
 
-    # first login → bind device
     if lic["hwid"] == "":
         lic["hwid"] = hwid
 
-    # different device → block
     elif lic["hwid"] != hwid:
         return jsonify({
             "status": "error",
             "message": "License already used on another device"
         })
 
-          session["logged_in"] = True
-    session["license"] = license_key
-
+    session["logged_in"] = True
     send_login_info()
 
     return jsonify({"status": "success"})
-
-
-@app.route("/reset_license_hwid", methods=["POST"])
-def reset_license_hwid():
-
-    license_key = request.form.get("license", "").upper()
-
-    if license_key not in LICENSE_KEYS:
-        return jsonify({
-            "status": "error",
-            "message": "License not found"
-        })
-
-    LICENSE_KEYS[license_key]["hwid"] = ""
-
-    return jsonify({
-        "status": "success",
-        "message": "HWID reset successfully"
-    })
-
-
 @app.route('/verify_password', methods=['POST'])
 def verify_password():
 
