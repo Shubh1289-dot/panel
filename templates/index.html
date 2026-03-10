@@ -161,7 +161,6 @@
   <a href="#" onclick="showSection('reset', event)">🔄 Reset HWID</a>
   <a href="#" onclick="showSection('sendmsg', event)">✉️ Send Message</a>
   <a href="#" onclick="showSection('project', event)">📁 Project</a>
-  <a href="#" onclick="showSection('resetlicense', event)">🔑 Reset License</a>
   <a href="/logout" style="margin-top:auto;">🚪 Logout</a>
 </div>
 
@@ -265,17 +264,6 @@
 <!-- Project Name -->
 <div id="project" class="section">
   <h4>📁 Project Status</h4>
-  <div id="resetlicense" class="section">
-  <h4>🔑 Reset License HWID</h4>
-
-  <form onsubmit="resetLicense(event)">
-    <input required type="text" class="form-control mb-2"
-           placeholder="License Key" id="reset_license">
-
-    <button class="btn btn-danger">Reset License</button>
-  </form>
-
-</div>
 
  
 
@@ -559,20 +547,6 @@ function resetHWID(e){
   fetch('/reset_hwid',{method:'POST',body:new URLSearchParams({
     category:getCategory(),username:reset_username.value})})
   .then(r=>r.json()).then(d=>showToast(d.message));
-}
-  function resetLicense(e){
-
-  e.preventDefault();
-
-  fetch('/reset_license_hwid',{
-    method:'POST',
-    body:new URLSearchParams({
-      license:document.getElementById("reset_license").value
-    })
-  })
-  .then(r=>r.json())
-  .then(d=>showToast(d.message))
-
 }
 
 function copyCode(){ navigator.clipboard.writeText(loginCode.innerText).then(()=>showToast("Copied!")); }
