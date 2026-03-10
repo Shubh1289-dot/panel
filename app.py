@@ -227,7 +227,7 @@ def license_login():
             "message": "License already used on another device"
         })
 
-       session["logged_in"] = True
+          session["logged_in"] = True
     session["license"] = license_key
 
     send_login_info()
