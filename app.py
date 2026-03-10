@@ -232,9 +232,10 @@ def license_login():
 
     send_login_info()
 
-    return jsonify({"status": "success"})
-   @app.route("/reset_license_hwid", methods=["POST"])
-   def reset_license_hwid():
+   return jsonify({"status": "success"})
+
+@app.route("/reset_license_hwid", methods=["POST"])
+def reset_license_hwid():
 
     license_key = request.form.get("license", "").upper()
 
@@ -250,6 +251,8 @@ def license_login():
         "status": "success",
         "message": "HWID reset successfully"
     })
+
+
 @app.route('/verify_password', methods=['POST'])
 def verify_password():
 
