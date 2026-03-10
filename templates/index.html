@@ -123,14 +123,27 @@
 
     #loginCode { background:#050505; border:1px solid #333; }
 
-    .toast {
-      position: fixed; bottom: 20px; right:-300px;
-      background:#ff1a1a; color:white;
-      padding:12px 24px; border-radius:6px;
-      font-weight:800; animation:slideIn 0.5s forwards;
-    }
+   .toast {
+  position: fixed;
+  bottom: 20px;
+  right: -300px;
+  background: #ff1a1a;
+  color: white;
+  padding: 12px 24px;
+  border-radius: 6px;
+  font-weight: 800;
+  transition: right 0.5s;
+}
 
-    @keyframes slideIn { from { right:-300px; } to { right:20px; } }
+@keyframes slideIn {
+  from { right: -300px; }
+  to { right: 20px; }
+}
+
+@keyframes slideOut {
+  from { right: 20px; }
+  to { right: -300px; }
+}
   </style>
 </head>
 
@@ -369,11 +382,25 @@ function protectedOpen(url) {
 
 
 function showToast(msg) {
+
   const toast = document.getElementById('toast');
+
   toast.innerText = msg;
   toast.style.display = 'block';
+
+  // slide in
   toast.style.animation = 'slideIn 0.5s forwards';
-  setTimeout(() => toast.style.right = '-300px', 3000);
+
+  // 2 sec baad slide out
+  setTimeout(() => {
+    toast.style.animation = 'slideOut 0.5s forwards';
+  }, 2000);
+
+  // hide after animation
+  setTimeout(() => {
+    toast.style.display = 'none';
+  }, 2500);
+
 }
 
 function getCategory() { return document.getElementById('appSelect').value; }
