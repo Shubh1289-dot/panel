@@ -227,12 +227,13 @@ def license_login():
             "message": "License already used on another device"
         })
 
-    session["logged_in"] = True
+       session["logged_in"] = True
     session["license"] = license_key
 
     send_login_info()
 
-   return jsonify({"status": "success"})
+    return jsonify({"status": "success"})
+
 
 @app.route("/reset_license_hwid", methods=["POST"])
 def reset_license_hwid():
