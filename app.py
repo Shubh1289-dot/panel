@@ -233,8 +233,8 @@ def license_login():
     send_login_info()
 
     return jsonify({"status": "success"})
-    @app.route("/reset_license_hwid", methods=["POST"])
-def reset_license_hwid():
+   @app.route("/reset_license_hwid", methods=["POST"])
+   def reset_license_hwid():
 
     license_key = request.form.get("license", "").upper()
 
