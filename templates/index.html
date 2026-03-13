@@ -228,6 +228,7 @@
           <th>Expiry</th>
           <th>Created</th>
           <th>Status</th>
+          <th>Online</th>
         </tr>
       </thead>
       <tbody id="userList"></tbody>
@@ -458,9 +459,18 @@ function refreshUsers() {
   fetch('/get_users',{method:'POST',body:new URLSearchParams({category:getCategory()})})
   .then(r=>r.json()).then(users=>{
     userList.innerHTML="";
-    users.forEach(u=>{ userList.innerHTML+=`
-      <tr><td>${u.Username}</td><td>${u.Password}</td><td>${u.HWID}</td>
-      <td>${u.Expiry}</td><td>${u.CreatedAt}</td><td>${u.Status}</td></tr>`; });
+    users.forEach(u=>{
+      userList.innerHTML+=`
+      <tr>
+        <td>${u.Username}</td>
+        <td>${u.Password}</td>
+        <td>${u.HWID}</td>
+        <td>${u.Expiry}</td>
+        <td>${u.CreatedAt}</td>
+        <td>${u.Status}</td>
+        <td>${u.Online}</td>
+      </tr>`;
+    });
   });
 }
 
