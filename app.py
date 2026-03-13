@@ -32,7 +32,16 @@ def ist_now():
     return datetime.utcnow() + timedelta(hours=5, minutes=30)
 
 # -------------------- EXPIRY LOGIC --------------------
+def is_online(last_seen):
 
+    if not last_seen:
+        return False
+
+    try:
+        t = datetime.strptime(last_seen,"%Y-%m-%d %H:%M:%S")
+        return (ist_now() - t).seconds < 120
+    except:
+        return False
 def parse_expiry(expiry_str):
     formats = [
         "%Y-%m-%dT%H:%M",
@@ -186,6 +195,27 @@ def load_data():
 
 # -------------------- AUTH --------------------
 # -------------------- AUTH --------------------
+@app.route("/ping", methods=["POST"])
+def ping():
+
+    data = load_data()
+
+    category = request.form["category"]
+    username = request.form["username"]
+
+    if category not in data:
+        return jsonify({"status":"error"})
+
+    for user in data[category]:
+
+        if user["Username"] == username:
+
+            user["LastSeen"] = ist_now().strftime("%Y-%m-%d %H:%M:%S")
+            save_data(data)
+
+            return jsonify({"status":"ok"})
+
+    return jsonify({"status":"error"})
 @app.route("/license_login", methods=["POST"])
 def license_login():
 
@@ -473,8 +503,20 @@ def update_message_status():
 
 @app.route("/get_users", methods=["POST"])
 def get_users():
+
     data = load_data()
-    return jsonify(data.get(request.form["category"], []))
+    category = request.form["category"]
+
+    users = data.get(category, [])
+
+    for u in users:
+
+        if is_online(u.get("LastSeen")):
+            u["Online"] = "Online"
+        else:
+            u["Online"] = "Offline"
+
+    return jsonify(users)
 
 
 @app.route("/client_login", methods=["POST"])
