@@ -176,6 +176,11 @@
       <option value="TUFFAN">TUFFAN</option>
     </select>
   </div>
+  <div class="mb-3">
+  <h5 style="color:lime;font-weight:800;">
+    🟢 ONLINE USERS : <span id="onlineCount">0</span>
+  </h5>
+</div>
   <!-- Add User -->
   <div id="add" class="section active">
     <h4>➕ Add User</h4>
@@ -458,8 +463,15 @@ function infoUser(e) {
 function refreshUsers() {
   fetch('/get_users',{method:'POST',body:new URLSearchParams({category:getCategory()})})
   .then(r=>r.json()).then(users=>{
+
     userList.innerHTML="";
+
+    let online = 0;
+
     users.forEach(u=>{
+
+      if(u.Online === "Online") online++;
+
       userList.innerHTML+=`
       <tr>
         <td>${u.Username}</td>
@@ -476,6 +488,9 @@ function refreshUsers() {
         </td>
       </tr>`;
     });
+
+    document.getElementById("onlineCount").innerText = online;
+
   });
 }
 setInterval(refreshUsers, 5000);
