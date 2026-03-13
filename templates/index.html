@@ -468,7 +468,12 @@ function refreshUsers() {
         <td>${u.Expiry}</td>
         <td>${u.CreatedAt}</td>
         <td>${u.Status}</td>
-        <td>${u.Online}</td>
+        <td>
+          ${u.Online === "Online"
+            ? "<span style='color:lime;font-weight:700'>Online</span>"
+            : "<span style='color:red;font-weight:700'>Offline</span>"
+          }
+        </td>
       </tr>`;
     });
   });
