@@ -39,7 +39,7 @@ def is_online(last_seen):
 
     try:
         t = datetime.strptime(last_seen,"%Y-%m-%d %H:%M:%S")
-        return (ist_now() - t).seconds < 120
+        return (ist_now() - t).seconds < 15
     except:
         return False
 def parse_expiry(expiry_str):
