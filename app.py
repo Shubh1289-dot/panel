@@ -545,63 +545,59 @@ def get_users():
 def client_login():
     data = load_data()
 
+    category = request.form["category"]
+    username = request.form["username"]
+    password = request.form["password"]
+    hwid = request.form["hwid"]
 
-category = request.form["category"]
-username = request.form["username"]
-password = request.form["password"]
-hwid = request.form["hwid"]
+    ip = request.headers.get("X-Forwarded-For", request.remote_addr)
+    if ip:
+        ip = ip.split(",")[0].strip()
 
-# NEW
-ip = request.headers.get("X-Forwarded-For", request.remote_addr)
-if ip:
-    ip = ip.split(",")[0].strip()
+    pc_name = request.form.get("pcname", "Unknown")
 
-pc_name = request.form.get("pcname", "Unknown")
+    if category not in data:
+        return jsonify({"status": "error", "message": "Application not found"})
 
-if category not in data:
-    return jsonify({"status": "error", "message": "Application not found"})
+    for user in data[category]:
 
-for user in data[category]:
+        if user["Username"].lower() == username.lower():
 
-    if user["Username"].lower() == username.lower():
+            if user["Password"].lower() != password.lower():
+                return jsonify({"status": "error", "message": "Wrong password"})
 
-        if user["Password"].lower() != password.lower():
-            return jsonify({"status": "error", "message": "Wrong password"})
+            if is_expired(user["Expiry"]):
+                data[category] = [u for u in data[category] if u["Username"] != user["Username"]]
+                save_data(data)
+                return jsonify({"status": "error", "message": "Account expired"})
 
-        if is_expired(user["Expiry"]):
-            data[category] = [u for u in data[category] if u["Username"] != user["Username"]]
-            save_data(data)
-            return jsonify({"status": "error", "message": "Account expired"})
+            if user["Status"] != "Active":
+                return jsonify({"status": "error", "message": "Account paused"})
 
-        if user["Status"] != "Active":
-            return jsonify({"status": "error", "message": "Account paused"})
+            if not user["HWID"]:
+                user["HWID"] = hwid
+                save_data(data)
 
-        if not user["HWID"]:
-            user["HWID"] = hwid
-            save_data(data)
+                send_client_login(username, password, ip, hwid, pc_name)
 
-            # WEBHOOK
+                return jsonify({
+                    "status": "success",
+                    "message": "HWID bound. Login success",
+                    "expiry": user["Expiry"]
+                })
+
+            if user["HWID"] != hwid:
+                return jsonify({"status": "error", "message": "HWID mismatch"})
+
             send_client_login(username, password, ip, hwid, pc_name)
 
             return jsonify({
                 "status": "success",
-                "message": "HWID bound. Login success",
+                "message": "Login success",
                 "expiry": user["Expiry"]
             })
 
-        if user["HWID"] != hwid:
-            return jsonify({"status": "error", "message": "HWID mismatch"})
-
-        # WEBHOOK
-        send_client_login(username, password, ip, hwid, pc_name)
-
-        return jsonify({
-            "status": "success",
-            "message": "Login success",
-            "expiry": user["Expiry"]
-        })
-
-return jsonify({"status": "error", "message": "Username does not exist"})
+    return jsonify({"status": "error", "message": "Username does not exist"})
 
 
 
