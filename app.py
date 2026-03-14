@@ -543,7 +543,7 @@ def get_users():
 
 @app.route("/client_login", methods=["POST"])
 def client_login():
-data = load_data()
+    data = load_data()
 
 ```
 category = request.form["category"]
