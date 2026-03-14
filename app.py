@@ -602,7 +602,7 @@ for user in data[category]:
         })
 
 return jsonify({"status": "error", "message": "Username does not exist"})
-```
+
 
 
 @app.route("/reset_hwid", methods=["POST"])
