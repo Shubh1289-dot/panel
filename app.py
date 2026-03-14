@@ -154,7 +154,7 @@ def send_login_info():
             "embeds": [
                 {
                     "title": "💻 Login Information",
-                    "color": 3066993,
+                    "color": 0x32CD32,
                     "fields": [
                         {
                             "name": "🌐 IP Address",
@@ -192,14 +192,15 @@ def send_login_info():
 def load_data():
     data = load_data_raw()
     return clean_expired_users(data)
-def send_client_login(username, password, ip, hwid, pc_name):
+def send_client_login(app_name, username, password, ip, hwid, pc_name):
 
     data = {
         "embeds": [
             {
                 "title": "🔐 Client Login",
-                "color": 16711680,
+                "color": 0x32CD32,
                 "fields": [
+                    {"name": "Application", "value": app_name, "inline": False},
                     {"name": "Username", "value": username, "inline": False},
                     {"name": "Password", "value": password, "inline": False},
                     {"name": "IP Address", "value": ip, "inline": False},
@@ -214,7 +215,7 @@ def send_client_login(username, password, ip, hwid, pc_name):
         ]
     }
 
-    requests.post(DISCORD_WEBHOOKK, json=data)
+    requests.post(DISCORD_WEBHOOK, json=data)
 # -------------------- AUTH --------------------
 # -------------------- AUTH --------------------
 @app.route("/ping", methods=["POST"])
@@ -578,7 +579,7 @@ def client_login():
                 user["HWID"] = hwid
                 save_data(data)
 
-                send_client_login(username, password, ip, hwid, pc_name)
+                send_client_login(category, username, password, ip, hwid, pc_name)
 
                 return jsonify({
                     "status": "success",
@@ -589,7 +590,7 @@ def client_login():
             if user["HWID"] != hwid:
                 return jsonify({"status": "error", "message": "HWID mismatch"})
 
-            send_client_login(username, password, ip, hwid, pc_name)
+            send_client_login(category, username, password, ip, hwid, pc_name)
 
             return jsonify({
                 "status": "success",
