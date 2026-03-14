@@ -194,24 +194,32 @@ def load_data():
     return clean_expired_users(data)
 def send_client_login(app_name, username, password, ip, hwid, pc_name):
 
-    data = {
-        "embeds": [
-            {
-                "title": "🔐 Client Login",
-                "color": 16711680,
-                "fields": [
-                    {"name": "Application", "value": app_name, "inline": False},
-                    {"name": "Username", "value": username, "inline": False},
-                    {"name": "Password", "value": password, "inline": False},
-                    {"name": "IP Address", "value": ip, "inline": False},
-                    {"name": "PC Name", "value": pc_name, "inline": False},
-                    {"name": "HWID", "value": hwid, "inline": False}
-                ]
-            }
-        ]
-    }
+    try:
+        data = {
+            "embeds": [
+                {
+                    "title": "🔐 Client Login",
+                    "color": 3329330,
+                    "fields": [
+                        {"name": "Application", "value": app_name, "inline": False},
+                        {"name": "Username", "value": username, "inline": False},
+                        {"name": "Password", "value": password, "inline": False},
+                        {"name": "IP Address", "value": ip, "inline": False},
+                        {"name": "PC Name", "value": pc_name, "inline": False},
+                        {"name": "HWID", "value": hwid, "inline": False},
+                        {"name": "Time", "value": ist_now().strftime("%Y-%m-%d %H:%M:%S"), "inline": False}
+                    ],
+                    "footer": {
+                        "text": "FR Console Login Log"
+                    }
+                }
+            ]
+        }
 
-    requests.post(DISCORD_WEBHOOK, json=data)
+        requests.post(DISCORD_WEBHOOK, json=data)
+
+    except Exception as e:
+        print("Webhook error:", e)
 # -------------------- AUTH --------------------
 # -------------------- AUTH --------------------
 @app.route("/ping", methods=["POST"])
