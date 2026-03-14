@@ -545,7 +545,7 @@ def get_users():
 def client_login():
     data = load_data()
 
-```
+
 category = request.form["category"]
 username = request.form["username"]
 password = request.form["password"]
