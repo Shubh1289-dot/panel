@@ -31,7 +31,7 @@ HEADERS = {
 def ist_now():
     return datetime.utcnow() + timedelta(hours=5, minutes=30)
 
-# -------------------- EXPIRY LOGIC --------------------
+# ------------------- EXPIRY LOGIC --------------------
 def is_online(last_seen):
 
     if not last_seen:
