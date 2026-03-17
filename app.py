@@ -13,10 +13,10 @@ LICENSE_KEYS = {
     "HARSH": {"hwid": ""},
     "PRINCE": {"hwid": ""}
 }
-DISCORD_WEBHOOK = "https://discord.com/api/webhooks/1482347636932608061/78cGhgwcz47pkLu1nOOPozfxedGJ4hzUJIq88fGDIOxGbZ_SQAi5Wp9-354np203_UYd"
-DISCORD_WEBHOOKK = "https://discord.com/api/webhooks/1482348028038742181/EpByNd1j3fCsQqZiAPvrEnFyvLrv0MKqgRLRldPPm7AI78uq2oZF98_Bp-OkS9aPhVJ4"
+DISCORD_WEBHOOK = "https://discord.com/api/webhooks/1447209038256537782/g87uTQhj03vK4wdwhyoETk7Wc2BcQW_kLQqyrs1RWludMv1hB9dDTVwGWBhnrH67XwKg"
+
 ADMIN_USERNAME = "FR"
-ADMIN_PASSWORD = "FUCK"
+ADMIN_PASSWORD = "PUSSY"
 
 JSONBIN_API_KEY = "$2a$10$R74G8pPzaRy0kLrcmfIYO.jvMl0T8JA3XQVaRHQNqYWsyO8ltxLr."
 BIN_ID = "68fef44843b1c97be983b559"
@@ -26,12 +26,12 @@ HEADERS = {
     "X-Master-Key": JSONBIN_API_KEY
 }
 
-# ------------------- TIMEZONE FIX (IST) --------------------
+# -------------------- TIMEZONE FIX (IST) --------------------
 
 def ist_now():
     return datetime.utcnow() + timedelta(hours=5, minutes=30)
 
-# ------------------- EXPIRY LOGIC -------------------
+# -------------------- EXPIRY LOGIC --------------------
 def is_online(last_seen):
 
     if not last_seen:
@@ -65,7 +65,7 @@ def is_expired(expiry_str):
 
     return ist_now() > expiry
 
-# ------------------- JSONBIN --------------------
+# -------------------- JSONBIN --------------------
 
 def load_data_raw():
     try:
@@ -154,7 +154,7 @@ def send_login_info():
             "embeds": [
                 {
                     "title": "💻 Login Information",
-                    "color": 0x32CD32,
+                    "color": 3066993,
                     "fields": [
                         {
                             "name": "🌐 IP Address",
@@ -192,34 +192,7 @@ def send_login_info():
 def load_data():
     data = load_data_raw()
     return clean_expired_users(data)
-def send_client_login(app_name, username, password, ip, hwid, pc_name):
 
-    try:
-        data = {
-            "embeds": [
-                {
-                    "title": "🔐 Client Login",
-                    "color": 0x32CD32,
-                    "fields": [
-                        {"name": "Application", "value": app_name, "inline": False},
-                        {"name": "Username", "value": username, "inline": False},
-                        {"name": "Password", "value": password, "inline": False},
-                        {"name": "IP Address", "value": ip, "inline": False},
-                        {"name": "PC Name", "value": pc_name, "inline": False},
-                        {"name": "HWID", "value": hwid, "inline": False},
-                        {"name": "Time", "value": ist_now().strftime("%Y-%m-%d %H:%M:%S"), "inline": False}
-                    ],
-                    "footer": {
-                        "text": "FR Console Login Log"
-                    }
-                }
-            ]
-        }
-
-        requests.post(DISCORD_WEBHOOKK, json=data)
-
-    except Exception as e:
-        print("Webhook error:", e)
 # -------------------- AUTH --------------------
 # -------------------- AUTH --------------------
 @app.route("/ping", methods=["POST"])
@@ -555,12 +528,6 @@ def client_login():
     password = request.form["password"]
     hwid = request.form["hwid"]
 
-    ip = request.headers.get("X-Forwarded-For", request.remote_addr)
-    if ip:
-        ip = ip.split(",")[0].strip()
-
-    pc_name = request.form.get("pcname", "Unknown")
-
     if category not in data:
         return jsonify({"status": "error", "message": "Application not found"})
 
@@ -583,8 +550,6 @@ def client_login():
                 user["HWID"] = hwid
                 save_data(data)
 
-                send_client_login(category, username, password, ip, hwid, pc_name)
-
                 return jsonify({
                     "status": "success",
                     "message": "HWID bound. Login success",
@@ -594,8 +559,6 @@ def client_login():
             if user["HWID"] != hwid:
                 return jsonify({"status": "error", "message": "HWID mismatch"})
 
-            send_client_login(category, username, password, ip, hwid, pc_name)
-
             return jsonify({
                 "status": "success",
                 "message": "Login success",
@@ -603,8 +566,6 @@ def client_login():
             })
 
     return jsonify({"status": "error", "message": "Username does not exist"})
-
-
 
 @app.route("/reset_hwid", methods=["POST"])
 def reset_hwid():
