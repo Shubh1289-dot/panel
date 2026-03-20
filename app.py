@@ -677,4 +677,4 @@ def get_messages():
 # -------------------- RUN --------------------
 
 if _name_ == "_main_":
-    app.run()
+    app.run(debug=True)
