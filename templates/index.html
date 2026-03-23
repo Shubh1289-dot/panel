@@ -20,6 +20,7 @@
   display: flex;
   flex-direction: column;
 }
+    
 .glow-red {
   color: #ff1a1a;
   text-shadow:
@@ -28,7 +29,34 @@
     0 0 18px rgba(255,0,0,0.4);
 }
 
+.user-table td {
+  color: white !important;
+}
+    /* 🔥 Table full glow */
+.user-table {
+  border-collapse: separate !important;
+  border-spacing: 0;
+}
 
+/* 🔥 Each cell glow */
+.user-table th,
+.user-table td {
+  border: 1px solid rgba(255,0,0,0.4);
+  box-shadow: 0 0 6px rgba(255,0,0,0.5);
+  transition: 0.2s;
+}
+
+/* 🔥 Hover glow boost */
+.user-table td:hover {
+  box-shadow: 0 0 12px red;
+  border-color: red;
+}
+
+/* 🔥 Header stronger glow */
+.user-table th {
+  box-shadow: 0 0 10px rgba(255,0,0,0.8);
+  border-color: red;
+}
     .sidebar h5 {
       text-align: center;
       font-size: 32px;
@@ -484,7 +512,7 @@ function refreshUsers() {
   <span style="
     font-weight:600;
     letter-spacing:1px;
-    color:white;  /* 👈 same as baki text */
+    color:white !important;   /* 🔥 force override */
   ">
     ${u.HWID ? u.HWID.substring(0, 12) + "..." : "None"}
   </span>
@@ -494,7 +522,7 @@ function refreshUsers() {
       margin-left:6px;
       background:#000;
       border:1px solid #222;
-      color:white;   /* 👈 same white */
+      color:white !important;
       padding:3px 6px;
       border-radius:6px;
       cursor:pointer;
