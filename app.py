@@ -553,7 +553,7 @@ def client_login():
     category = request.form["category"]
     username = request.form["username"]
     password = request.form["password"]
-    hwid = request.form["hwid"]
+    hwid = request.form["hwid"]   # 🔥 yahi SID hai
 
     ip = request.headers.get("X-Forwarded-For", request.remote_addr)
     if ip:
@@ -568,49 +568,42 @@ def client_login():
 
         if user["Username"].lower() == username.lower():
 
+            # ❌ wrong password
             if user["Password"].lower() != password.lower():
                 return jsonify({"status": "error", "message": "Wrong password"})
 
+            # ❌ expired
             if is_expired(user["Expiry"]):
                 data[category] = [u for u in data[category] if u["Username"] != user["Username"]]
                 save_data(data)
                 return jsonify({"status": "error", "message": "Account expired"})
 
+            # ❌ paused
             if user["Status"] != "Active":
                 return jsonify({"status": "error", "message": "Account paused"})
 
-            # 🔥 FIRST LOGIN
+            # 🔥 FIRST LOGIN → SID bind
             if not user["HWID"]:
-                user["HWID"] = hwid
-
-                # sirf valid PC name save karo
-                if pc_name != "Unknown":
-                    user["PCName"] = pc_name
-
+                user["HWID"] = hwid   # SID save
+                user["PCName"] = pc_name
                 save_data(data)
 
                 send_client_login(category, username, password, ip, hwid, pc_name)
 
                 return jsonify({
                     "status": "success",
-                    "message": "HWID bound. Login success",
+                    "message": "SID bound. Login success",
                     "expiry": user["Expiry"]
                 })
 
-            # 🔒 HWID CHECK
+            # 🔒 STRICT SID CHECK
             if user["HWID"] != hwid:
-                return jsonify({"status": "error", "message": "HWID mismatch"})
+                return jsonify({
+                    "status": "error",
+                    "message": "Account already used on another PC"
+                })
 
-            # 🔥 AUTO FIX (old users)
-            if not user.get("PCName") or user["PCName"] in ["None", "Unknown", ""]:
-                if pc_name != "Unknown":
-                    user["PCName"] = pc_name
-                    save_data(data)
-
-            # 🔒 PC CHECK (only if valid)
-            if user.get("PCName") and user["PCName"] != pc_name:
-                return jsonify({"status": "error", "message": "PC Name mismatch"})
-
+            # ✅ SUCCESS (same SID)
             send_client_login(category, username, password, ip, hwid, pc_name)
 
             return jsonify({
