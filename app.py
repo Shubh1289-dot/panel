@@ -420,14 +420,14 @@ def add_user():
         return jsonify({"status": "error", "message": "Username already exists"})
 
     data[category].append({
-        "Username": username,
-        "Password": password,
-        "HWID": "",
-        "Status": "Active",
-        "Expiry": expiry,
-        "CreatedAt": ist_now().strftime("%Y-%m-%d %H:%M")
-    })
-
+    "Username": username,
+    "Password": password,
+    "HWID": "",
+    "PCName": "",
+    "Status": "Active",
+    "Expiry": expiry,
+    "CreatedAt": ist_now().strftime("%Y-%m-%d %H:%M")
+})
     if save_data(data):
         return jsonify({"status": "success", "message": "User added successfully"})
 
@@ -579,21 +579,28 @@ def client_login():
             if user["Status"] != "Active":
                 return jsonify({"status": "error", "message": "Account paused"})
 
+            # 🔥 FIRST TIME LOGIN → BIND HWID + PC NAME
             if not user["HWID"]:
                 user["HWID"] = hwid
+                user["PCName"] = pc_name
                 save_data(data)
 
                 send_client_login(category, username, password, ip, hwid, pc_name)
 
                 return jsonify({
                     "status": "success",
-                    "message": "HWID bound. Login success",
+                    "message": "HWID + PC Name bound. Login success",
                     "expiry": user["Expiry"]
                 })
 
+            # 🔒 SECURITY CHECK
             if user["HWID"] != hwid:
                 return jsonify({"status": "error", "message": "HWID mismatch"})
 
+            if user.get("PCName") != pc_name:
+                return jsonify({"status": "error", "message": "PC Name mismatch"})
+
+            # ✅ SUCCESS LOGIN
             send_client_login(category, username, password, ip, hwid, pc_name)
 
             return jsonify({
@@ -603,7 +610,6 @@ def client_login():
             })
 
     return jsonify({"status": "error", "message": "Username does not exist"})
-
 
 
 @app.route("/reset_hwid", methods=["POST"])
@@ -620,6 +626,7 @@ def reset_hwid():
         if user["Username"] == username:
 
             user["HWID"] = ""
+            user["PCName"] = ""
 
             if save_data(data):
                 return jsonify({"status": "success", "message": "HWID reset"})
