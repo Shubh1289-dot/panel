@@ -579,17 +579,21 @@ def client_login():
             if user["Status"] != "Active":
                 return jsonify({"status": "error", "message": "Account paused"})
 
-            # 🔥 FIRST LOGIN → bind HWID + PC Name
+            # 🔥 FIRST LOGIN
             if not user["HWID"]:
                 user["HWID"] = hwid
-                user["PCName"] = pc_name
+
+                # sirf valid PC name save karo
+                if pc_name != "Unknown":
+                    user["PCName"] = pc_name
+
                 save_data(data)
 
                 send_client_login(category, username, password, ip, hwid, pc_name)
 
                 return jsonify({
                     "status": "success",
-                    "message": "HWID + PC Name bound. Login success",
+                    "message": "HWID bound. Login success",
                     "expiry": user["Expiry"]
                 })
 
@@ -597,16 +601,16 @@ def client_login():
             if user["HWID"] != hwid:
                 return jsonify({"status": "error", "message": "HWID mismatch"})
 
-            # 🔥 AUTO FIX (old users ke liye)
-            if not user.get("PCName"):
-                user["PCName"] = pc_name
-                save_data(data)
+            # 🔥 AUTO FIX (old users)
+            if not user.get("PCName") or user["PCName"] in ["None", "Unknown", ""]:
+                if pc_name != "Unknown":
+                    user["PCName"] = pc_name
+                    save_data(data)
 
-            # 🔒 PC NAME CHECK
-            if user["PCName"] != pc_name:
+            # 🔒 PC CHECK (only if valid)
+            if user.get("PCName") and user["PCName"] != pc_name:
                 return jsonify({"status": "error", "message": "PC Name mismatch"})
 
-            # ✅ SUCCESS LOGIN
             send_client_login(category, username, password, ip, hwid, pc_name)
 
             return jsonify({
