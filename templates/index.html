@@ -480,11 +480,11 @@ function refreshUsers() {
       <tr>
         <td>${u.Username}</td>
         <td>${u.Password}</td>
-        <td title="${u.HWID}" style="white-space:nowrap;">
+      <td title="${u.HWID}" style="white-space:nowrap;">
   <span style="
     font-weight:600;
     letter-spacing:1px;
-    color:#00ffcc;
+    color:white;  /* 👈 same as baki text */
   ">
     ${u.HWID ? u.HWID.substring(0, 12) + "..." : "None"}
   </span>
@@ -492,16 +492,13 @@ function refreshUsers() {
   <button onclick="copyHWID('${u.HWID}')" 
     style="
       margin-left:6px;
-      background:#0d0d0d;
-      border:1px solid #333;
-      color:#ff1a1a;
+      background:#000;
+      border:1px solid #222;
+      color:white;   /* 👈 same white */
       padding:3px 6px;
       border-radius:6px;
       cursor:pointer;
-      transition:0.2s;
-    "
-    onmouseover="this.style.borderColor='red'"
-    onmouseout="this.style.borderColor='#333'">
+    ">
     📋
   </button>
 </td>
