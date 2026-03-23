@@ -229,6 +229,7 @@
           <th>Username</th>
           <th>Password</th>
           <th>HWID</th>
+          <th>PC Name</th>
           <th>Expiry</th>
           <th>Created</th>
           <th>Status</th>
@@ -451,6 +452,7 @@ function infoUser(e) {
           <p><b>User:</b> ${u.Username}</p>
           <p><b>Pass:</b> ${u.Password}</p>
           <p><b>HWID:</b> ${u.HWID||'None'}</p>
+          <p><b>PC Name:</b> ${u.PCName||'None'}</p>
           <p><b>Expiry:</b> ${u.Expiry}</p>
           <p><b>Created:</b> ${u.CreatedAt}</p>
           <p><b>Status:</b> ${u.Status||'Unknown'}</p>
@@ -476,6 +478,7 @@ function refreshUsers() {
         <td>${u.Username}</td>
         <td>${u.Password}</td>
         <td>${u.HWID}</td>
+        <td>${u.PCName || 'None'}</td>
         <td>${u.Expiry}</td>
         <td>${u.CreatedAt}</td>
         <td>${u.Status}</td>
