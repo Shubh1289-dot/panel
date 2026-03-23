@@ -579,7 +579,7 @@ def client_login():
             if user["Status"] != "Active":
                 return jsonify({"status": "error", "message": "Account paused"})
 
-            # 🔥 FIRST TIME LOGIN → BIND HWID + PC NAME
+            # 🔥 FIRST LOGIN → bind HWID + PC Name
             if not user["HWID"]:
                 user["HWID"] = hwid
                 user["PCName"] = pc_name
@@ -593,11 +593,17 @@ def client_login():
                     "expiry": user["Expiry"]
                 })
 
-            # 🔒 SECURITY CHECK
+            # 🔒 HWID CHECK
             if user["HWID"] != hwid:
                 return jsonify({"status": "error", "message": "HWID mismatch"})
 
-            if user.get("PCName") != pc_name:
+            # 🔥 AUTO FIX (old users ke liye)
+            if not user.get("PCName"):
+                user["PCName"] = pc_name
+                save_data(data)
+
+            # 🔒 PC NAME CHECK
+            if user["PCName"] != pc_name:
                 return jsonify({"status": "error", "message": "PC Name mismatch"})
 
             # ✅ SUCCESS LOGIN
@@ -610,7 +616,6 @@ def client_login():
             })
 
     return jsonify({"status": "error", "message": "Username does not exist"})
-
 
 @app.route("/reset_hwid", methods=["POST"])
 def reset_hwid():
