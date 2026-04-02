@@ -478,44 +478,38 @@ function refreshUsers() {
       if(u.Online === "Online") online++;
 
       userList.innerHTML+=`
-      <tr>
-        <td>${u.Username}</td>
-        <td>${u.Password}</td>
-      <td title="${u.HWID}" style="white-space:nowrap;">
-  <span style="
-    font-weight:600;
-    letter-spacing:1px;
-    color:black;   /* 🔥 yahi fix hai */
-  ">
-    ${u.HWID ? u.HWID.substring(0, 12) + "..." : "None"}
-  </span>
+<tr>
+  <td>${u.Username}</td>
+  <td>${u.Password}</td>
 
-  <button onclick="copyHWID('${u.HWID}')" 
-    style="
-      margin-left:6px;
-      background:#000;
-      border:1px solid #222;
-      color:white;
-      padding:3px 6px;
-      border-radius:6px;
-      cursor:pointer;
-    ">
-    📋
-  </button>
-</td>
-        <td>${u.PCName || 'None'}</td>
-        <td>${u.Expiry}</td>
-        <td>${u.CreatedAt}</td>
-        <td>${u.Status}</td>
-        <td>
-          ${u.Online === "Online"
-            <td>${timeAgo(u.LastSeen)}</td>
-            ? "<span style='color:lime;font-weight:700'>Online</span>"
-            : "<span style='color:red;font-weight:700'>Offline</span>"
-          }
-        </td>
-      </tr>`;
-    });
+  <td title="${u.HWID}" style="white-space:nowrap;">
+    <span style="font-weight:600;letter-spacing:1px;color:black;">
+      ${u.HWID ? u.HWID.substring(0, 12) + "..." : "None"}
+    </span>
+
+    <button onclick="copyHWID('${u.HWID}')"
+      style="margin-left:6px;background:#000;border:1px solid #222;color:white;padding:3px 6px;border-radius:6px;cursor:pointer;">
+      📋
+    </button>
+  </td>
+
+  <td>${u.PCName || 'None'}</td>
+  <td>${u.Expiry}</td>
+  <td>${u.CreatedAt}</td>
+  <td>${u.Status}</td>
+
+  <!-- ✅ ONLINE -->
+  <td>
+    ${u.Online === "Online"
+      ? "<span style='color:lime;font-weight:700'>Online</span>"
+      : "<span style='color:red;font-weight:700'>Offline</span>"
+    }
+  </td>
+
+  <!-- ✅ LAST SEEN -->
+  <td>${timeAgo(u.LastSeen)}</td>
+
+</tr>`;
 
     document.getElementById("onlineCount").innerText = online;
 
