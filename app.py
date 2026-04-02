@@ -538,6 +538,10 @@ def get_users():
 
     for u in users:
 
+        # 🔥 ensure LastSeen always exists
+        u["LastSeen"] = u.get("LastSeen", "")
+
+        # 🔥 online/offline check
         if is_online(u.get("LastSeen")):
             u["Online"] = "Online"
         else:
