@@ -475,9 +475,9 @@ function refreshUsers() {
 
     users.forEach(u=>{
 
-      if(u.Online === "Online") online++;
+  if(u.Online === "Online") online++;
 
-      userList.innerHTML+=`
+  userList.innerHTML+=`
 <tr>
   <td>${u.Username}</td>
   <td>${u.Password}</td>
@@ -498,7 +498,6 @@ function refreshUsers() {
   <td>${u.CreatedAt}</td>
   <td>${u.Status}</td>
 
-  <!-- ✅ ONLINE -->
   <td>
     ${u.Online === "Online"
       ? "<span style='color:lime;font-weight:700'>Online</span>"
@@ -506,12 +505,11 @@ function refreshUsers() {
     }
   </td>
 
-  <!-- ✅ LAST SEEN -->
   <td>${timeAgo(u.LastSeen)}</td>
-
 </tr>`;
+});
 
-    document.getElementById("onlineCount").innerText = online;
+document.getElementById("onlineCount").innerText = online;
 
   });
 }
