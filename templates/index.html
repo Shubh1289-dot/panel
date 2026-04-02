@@ -234,6 +234,7 @@
           <th>Created</th>
           <th>Status</th>
           <th>Online</th>
+          <th>Last Online</th>
         </tr>
       </thead>
       <tbody id="userList"></tbody>
@@ -508,6 +509,7 @@ function refreshUsers() {
         <td>${u.Status}</td>
         <td>
           ${u.Online === "Online"
+            <td>${timeAgo(u.LastSeen)}</td>
             ? "<span style='color:lime;font-weight:700'>Online</span>"
             : "<span style='color:red;font-weight:700'>Offline</span>"
           }
@@ -571,7 +573,19 @@ function loadMessages(u){
 
   });
 }
+function timeAgo(time){
+  if(!time) return "Never";
 
+  let now = new Date();
+  let t = new Date(time.replace(" ", "T"));
+  let diff = Math.floor((now - t)/1000);
+
+  if(diff < 60) return "Active now";
+  if(diff < 3600) return Math.floor(diff/60) + " min ago";
+  if(diff < 86400) return Math.floor(diff/3600) + " hr ago";
+
+  return Math.floor(diff/86400) + " days ago";
+}
 function deleteMessage(index){
   fetch('/update_message_status',{
     method:'POST',
