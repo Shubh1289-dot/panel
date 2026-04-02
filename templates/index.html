@@ -513,7 +513,7 @@ document.getElementById("onlineCount").innerText = online;
 
   });
 }
-setInterval(refreshUsers, 5000);
+setInterval(refreshUsers, 1000);
 function loadUserMessages(e){ e.preventDefault(); loadMessages(message_username.value.trim()); }
 document.getElementById("message_username").addEventListener("input",()=>{
   if(message_username.value.trim().length>=3) loadMessages(message_username.value.trim());
