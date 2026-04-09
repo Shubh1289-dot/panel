@@ -27,7 +27,7 @@ HEADERS = {
     "X-Master-Key": JSONBIN_API_KEY
 }
 
-# -------------------- TIMEZONE FIX (IST) --------------------
+# -------------------- TIMEZONE FIX (IST) -------------------
 
 def ist_now():
     return datetime.utcnow() + timedelta(hours=5, minutes=30)
