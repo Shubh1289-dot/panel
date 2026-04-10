@@ -9,10 +9,10 @@ BLOCKED_IPS = [
     "49.37.7.46"
 ]
 LICENSE_KEYS = {
-    "SHUBH": {"hwid": ""},
+    "SHUUBH": {"hwid": ""},
     "HARSH": {"hwid": ""},
-    "TUFFAN": {"hwid": ""},
-    "PRINCE": {"hwid": ""}
+    "ff": {"hwid": ""},
+    "yy": {"hwid": ""}
 }
 DISCORD_WEBHOOK = "https://discord.com/api/webhooks/1482347636932608061/78cGhgwcz47pkLu1nOOPozfxedGJ4hzUJIq88fGDIOxGbZ_SQAi5Wp9-354np203_UYd"
 DISCORD_WEBHOOKK = "https://discord.com/api/webhooks/1482348028038742181/EpByNd1j3fCsQqZiAPvrEnFyvLrv0MKqgRLRldPPm7AI78uq2oZF98_Bp-OkS9aPhVJ4"
