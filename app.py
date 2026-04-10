@@ -410,25 +410,32 @@ def add_user():
     data = load_data()
 
     category = request.form["category"]
-    username = request.form["username"]
-    password = request.form["password"]
+    username = request.form["username"].strip().lower()
+    password = request.form["password"].strip()
     expiry = request.form["expiry"]
 
     if category not in data:
         data[category] = []
 
-    if any(u["Username"] == username for u in data[category]):
-        return jsonify({"status": "error", "message": "Username already exists"})
+    # 🔥 STRONG CHECK (username + password + case insensitive)
+    for u in data[category]:
+        if u["Username"].strip().lower() == username:
+            return jsonify({
+                "status": "error",
+                "message": "Username already exists"
+            })
 
+    # ✅ add user
     data[category].append({
-    "Username": username,
-    "Password": password,
-    "HWID": "",
-    "PCName": "",
-    "Status": "Active",
-    "Expiry": expiry,
-    "CreatedAt": ist_now().strftime("%Y-%m-%d %H:%M")
-})
+        "Username": username,
+        "Password": password,
+        "HWID": "",
+        "PCName": "",
+        "Status": "Active",
+        "Expiry": expiry,
+        "CreatedAt": ist_now().strftime("%Y-%m-%d %H:%M")
+    })
+
     if save_data(data):
         return jsonify({"status": "success", "message": "User added successfully"})
 
